@@ -1,12 +1,20 @@
-import './index.scss';
 import Play from './scenes/play';
+
+import { GAME } from './config';
 
 const gameConfig = {
     type: Phaser.AUTO,
-    width: 400,
-    height: 400,
+    width: GAME.width,
+    height: GAME.height,
     scene: [Play],
-    backgroundColor: '#cccccc'
+    backgroundColor: '#cccccc',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: true
+        }
+    }
 };
 
 new Phaser.Game(gameConfig);
