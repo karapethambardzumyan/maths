@@ -1,3 +1,4 @@
+import './index.scss';
 import Play from './scenes/play';
 
 import { GAME } from './config';

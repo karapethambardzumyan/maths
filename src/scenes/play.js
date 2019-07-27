@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 
-import { GAME, PLAYER } from '../config';
+import {ENEMY, GAME, PLAYER} from '../config';
 
 class Play extends Scene {
     constructor() {
@@ -9,8 +9,8 @@ class Play extends Scene {
 
     preload() {
         this.load.spritesheet('square', './assets/player/square.png', {
-            frameWidth: PLAYER.width,
-            frameHeight: PLAYER.height,
+            frameWidth: 80,
+            frameHeight: 80,
             startFrame: 0,
             endFrame: 7
         });
@@ -20,14 +20,18 @@ class Play extends Scene {
             startFrame: 0,
             endFrame: 11
         });
+        this.load.image('enemy', './assets/enemy/square.png');
     }
 
     create() {
         this.player = this.addPlayer();
+        this.enemies = this.addEnemies();
 
-        this.playerWin(() => {
-            console.log(this.player);
-        });
+        this.addCollision();
+    }
+
+    update() {
+        this.moveEnemies();
     }
 
     addPlayer() {
@@ -55,34 +59,57 @@ class Play extends Scene {
         return container;
     }
 
-    playerWin(callback) {
-        this.player.body.width = 140;
-        this.player.body.height = 140;
-        this.player.list[0].x += (140 - PLAYER.width) / 2;
-        this.player.list[0].y = (140 - PLAYER.height) / 2;
-        this.player.list[1].x += (140 - PLAYER.width) / 2;
-        this.player.list[1].y += (140 - PLAYER.height) / 2;
-        this.player.x -= (140 - PLAYER.width) / 2;
-        this.player.y -= (140 - PLAYER.height) / 2;
-
-        const squareWin = this.add.sprite(0, 0, 'squareWin');
+    playerWin() {
+        const squareWin = this.add.sprite(-(140 - PLAYER.width) / 2, -(140 - PLAYER.height) / 2,'squareWin');
         squareWin.setOrigin(0, 0);
-
-        squareWin.on('animationcomplete', () => {
-            this.player.destroy();
-            this.player = this.addPlayer();
-
-            return callback();
-        }, squareWin);
 
         this.anims.create({
             key: 'win',
             frames: this.anims.generateFrameNumbers('squareWin', { start: 0, end: 11 }),
-            frameRate: 50,
+            frameRate: 40,
             repeat: 0
         });
         squareWin.anims.play('win');
         this.player.add(squareWin);
+    }
+
+    addEnemies() {
+        const enemies = [];
+
+        for (let i = 0; i < 4; i++) {
+            const square = this.physics.scene.add.tileSprite(0, 0, 80, 80, 'enemy');
+            square.setOrigin(0, 0);
+            square.displayWidth = ENEMY.width;
+            square.displayHeight = ENEMY.height;
+
+            const number = this.add.text(0, 0, '2', { fontSize: 36 });
+            number.x = (ENEMY.width - number.width) / 2;
+            number.y = (ENEMY.height - number.height) / 2;
+
+            const container = this.add.container(ENEMY.width * i, 0, [square, number]);
+            this.physics.world.enable(container);
+            container.body.width = ENEMY.width;
+            container.body.height = ENEMY.height;
+
+            enemies.push(container);
+        }
+
+        return enemies;
+    }
+
+    moveEnemies() {
+        for (let i = 0; i < this.enemies.length; i++) {
+            this.enemies[i].y += 10;
+        }
+    }
+
+    addCollision() {
+        for (let i = 0; i < this.enemies.length; i++) {
+            this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
+                enemy.destroy();
+                this.playerWin();
+            });
+        }
     }
 }
 
