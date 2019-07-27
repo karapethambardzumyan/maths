@@ -8,4 +8,5 @@ const gameConfig = {
     scene: [Play],
     backgroundColor: '#cccccc'
 };
-const game = new Phaser.Game(gameConfig);
+
+new Phaser.Game(gameConfig);
