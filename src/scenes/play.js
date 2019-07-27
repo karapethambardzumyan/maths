@@ -14,10 +14,20 @@ class Play extends Scene {
             startFrame: 0,
             endFrame: 7
         });
+        this.load.spritesheet('squareWin', './assets/player/square-win.png', {
+            frameWidth: 140,
+            frameHeight: 140,
+            startFrame: 0,
+            endFrame: 11
+        });
     }
 
     create() {
         this.player = this.addPlayer();
+
+        this.playerWin(() => {
+            console.log(this.player);
+        });
     }
 
     addPlayer() {
@@ -43,6 +53,36 @@ class Play extends Scene {
         container.body.setCollideWorldBounds(true);
 
         return container;
+    }
+
+    playerWin(callback) {
+        this.player.body.width = 140;
+        this.player.body.height = 140;
+        this.player.list[0].x += (140 - PLAYER.width) / 2;
+        this.player.list[0].y = (140 - PLAYER.height) / 2;
+        this.player.list[1].x += (140 - PLAYER.width) / 2;
+        this.player.list[1].y += (140 - PLAYER.height) / 2;
+        this.player.x -= (140 - PLAYER.width) / 2;
+        this.player.y -= (140 - PLAYER.height) / 2;
+
+        const squareWin = this.add.sprite(0, 0, 'squareWin');
+        squareWin.setOrigin(0, 0);
+
+        squareWin.on('animationcomplete', () => {
+            this.player.destroy();
+            this.player = this.addPlayer();
+
+            return callback();
+        }, squareWin);
+
+        this.anims.create({
+            key: 'win',
+            frames: this.anims.generateFrameNumbers('squareWin', { start: 0, end: 11 }),
+            frameRate: 50,
+            repeat: 0
+        });
+        squareWin.anims.play('win');
+        this.player.add(squareWin);
     }
 }
 
