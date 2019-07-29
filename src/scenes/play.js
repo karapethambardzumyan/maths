@@ -1,7 +1,5 @@
 import { Scene, Math } from 'phaser';
 
-import { ENEMY, GAME, PLAYER } from '../config';
-
 class Play extends Scene {
     constructor() {
         super();
