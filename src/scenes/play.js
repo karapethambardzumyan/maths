@@ -38,7 +38,7 @@ class Play extends Scene {
     addPlayer() {
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
-        const playerSize = gameWidth / 4;
+        const playerSize = gameWidth / 5;
 
         this.anims.create({
             key: 'changeColors',
@@ -66,6 +66,8 @@ class Play extends Scene {
     }
 
     playerWin() {
+        const gameWidth = window.innerWidth;
+        const playerSize = gameWidth / 5;
         const squareWin = this.add.sprite(-(140 - playerSize) / 2, -(140 - playerSize) / 2,'squareWin');
         squareWin.setOrigin(0, 0);
 
@@ -81,7 +83,6 @@ class Play extends Scene {
 
     addEnemies() {
         const gameWidth = window.innerWidth;
-        const gameHeight = window.innerHeight;
         const enemySize = gameWidth / 4;
         const enemies = [];
 
@@ -122,10 +123,12 @@ class Play extends Scene {
     }
 
     addControl() {
+        const gameWidth = window.innerWidth;
+        const playerSize = gameWidth / 5;
         const pointer = this.input.activePointer;
 
         if (pointer.isDown) {
-            this.player.x = Math.Clamp(pointer.x, 0, GAME.width - 80);
+            this.player.x = Math.Clamp(pointer.x, 0, gameWidth - playerSize);
         }
     }
 }
