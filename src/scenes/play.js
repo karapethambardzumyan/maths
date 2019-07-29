@@ -36,6 +36,10 @@ class Play extends Scene {
     }
 
     addPlayer() {
+        const gameWidth = window.innerWidth;
+        const gameHeight = window.innerHeight;
+        const playerSize = gameWidth / 4;
+
         this.anims.create({
             key: 'changeColors',
             frames: this.anims.generateFrameNumbers('square', { start: 0, end: 7 }),
@@ -45,23 +49,24 @@ class Play extends Scene {
 
         const square = this.add.sprite(0, 0, 'square');
         square.setOrigin(0, 0);
+        square.setScale(playerSize / 80, playerSize / 80);
         square.anims.play('changeColors');
 
         const number = this.add.text(0, 0, '1', { fontSize: 36 });
-        number.x = (PLAYER.width - number.width) / 2;
-        number.y = (PLAYER.height - number.height) / 2;
+        number.x = (playerSize - number.width) / 2;
+        number.y = (playerSize - number.height) / 2;
 
-        const container = this.physics.scene.add.container((GAME.width - PLAYER.width) / 2, GAME.height - PLAYER.height * 2, [square, number]);
+        const container = this.physics.scene.add.container((gameWidth - playerSize) / 2, gameHeight - playerSize * 2, [square, number]);
         this.physics.world.enable(container);
-        container.body.width = PLAYER.width;
-        container.body.height = PLAYER.height;
+        container.body.width = playerSize;
+        container.body.height = playerSize;
         container.body.setCollideWorldBounds(true);
 
         return container;
     }
 
     playerWin() {
-        const squareWin = this.add.sprite(-(140 - PLAYER.width) / 2, -(140 - PLAYER.height) / 2,'squareWin');
+        const squareWin = this.add.sprite(-(140 - playerSize) / 2, -(140 - playerSize) / 2,'squareWin');
         squareWin.setOrigin(0, 0);
 
         this.anims.create({
@@ -75,22 +80,25 @@ class Play extends Scene {
     }
 
     addEnemies() {
+        const gameWidth = window.innerWidth;
+        const gameHeight = window.innerHeight;
+        const enemySize = gameWidth / 4;
         const enemies = [];
 
         for (let i = 0; i < 4; i++) {
             const square = this.physics.scene.add.tileSprite(0, 0, 80, 80, 'enemy');
             square.setOrigin(0, 0);
-            square.displayWidth = ENEMY.width;
-            square.displayHeight = ENEMY.height;
+            square.displayWidth = enemySize;
+            square.displayHeight = enemySize;
 
             const number = this.add.text(0, 0, '2', { fontSize: 36 });
-            number.x = (ENEMY.width - number.width) / 2;
-            number.y = (ENEMY.height - number.height) / 2;
+            number.x = (enemySize - number.width) / 2;
+            number.y = (enemySize - number.height) / 2;
 
-            const container = this.add.container(ENEMY.width * i, 0, [square, number]);
+            const container = this.add.container(enemySize * i, 0, [square, number]);
             this.physics.world.enable(container);
-            container.body.width = ENEMY.width;
-            container.body.height = ENEMY.height;
+            container.body.width = enemySize;
+            container.body.height = enemySize;
 
             enemies.push(container);
         }

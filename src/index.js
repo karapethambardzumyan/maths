@@ -1,13 +1,11 @@
 import './index.scss';
 import Play from './scenes/play';
 
-import { GAME } from './config';
-
 window.onload = () => {
     const gameConfig = {
         type: Phaser.AUTO,
-        width: GAME.width,
-        height: GAME.height,
+        width: window.innerWidth,
+        height: window.innerHeight,
         scene: [Play],
         backgroundColor: '#cccccc',
         physics: {
