@@ -1,6 +1,6 @@
-import { Scene } from 'phaser';
+import { Scene, Math } from 'phaser';
 
-import {ENEMY, GAME, PLAYER} from '../config';
+import { ENEMY, GAME, PLAYER } from '../config';
 
 class Play extends Scene {
     constructor() {
@@ -32,6 +32,7 @@ class Play extends Scene {
 
     update() {
         this.moveEnemies();
+        this.addControl();
     }
 
     addPlayer() {
@@ -99,7 +100,7 @@ class Play extends Scene {
 
     moveEnemies() {
         for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].y += 10;
+            this.enemies[i].y += 5;
         }
     }
 
@@ -109,6 +110,14 @@ class Play extends Scene {
                 enemy.destroy();
                 this.playerWin();
             });
+        }
+    }
+
+    addControl() {
+        const pointer = this.input.activePointer;
+
+        if (pointer.isDown) {
+            this.player.x = Math.Clamp(pointer.x, 0, GAME.width - 80);
         }
     }
 }
