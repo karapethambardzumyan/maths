@@ -1,23 +1,14 @@
-import './index.scss';
-import Play from './scenes/play';
+import '../src/index.scss';
+import Phaser from 'phaser';
+import config from './config';
+import GameScene from './scenes/game-scene';
 
-window.onload = () => {
-    const gameConfig = {
-        type: Phaser.AUTO,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        scene: [Play],
-        backgroundColor: '#cccccc',
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 0 },
-                debug: true
-            }
-        }
-    };
+class Game extends Phaser.Game {
+    constructor () {
+        super(config);
+        this.scene.add('Game', GameScene);
+        this.scene.start('Game');
+    }
+}
 
-    let game = new Phaser.Game(gameConfig);
-
-    game.scale.startFullscreen();
-};
+window.game = new Game();

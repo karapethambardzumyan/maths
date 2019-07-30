@@ -1,8 +1,8 @@
 import { Scene, Math } from 'phaser';
 
-class Play extends Scene {
+class GameScene extends Scene {
     constructor() {
-        super();
+        super('Game');
     }
 
     preload() {
@@ -131,4 +131,4 @@ class Play extends Scene {
     }
 }
 
-export default Play;
+export default GameScene;
