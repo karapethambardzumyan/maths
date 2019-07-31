@@ -107,7 +107,7 @@ class GameScene extends Scene {
 
     moveEnemies() {
         for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].y += 5;
+            this.enemies[i].y += 1;
         }
     }
 
