@@ -24,10 +24,9 @@ class GameScene extends Scene {
     create() {
         this.player = this.addPlayer();
         this.enemies = this.addEnemies();
+        this.operation = this.addOperation('+', 5, '#303030');
 
         this.addCollision();
-
-        this.updateOperation();
     }
 
     update() {
@@ -108,15 +107,21 @@ class GameScene extends Scene {
         return enemies;
     }
 
-    updateOperation() {
-        this.cameras.main.setBackgroundColor('#303030');
+    addOperation(symbol, number, backgroundColor) {
+        if (this.operation) {
+            this.operation.destroy();
+        }
+
+        this.cameras.main.setBackgroundColor(backgroundColor);
 
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
-        const operation = this.add.text(0, 0, '+2', { fontSize: 236 });
+        const operation = this.add.text(0, 0, `${ symbol }${ number }`, { fontSize: 236 });
         operation.x = (gameWidth - operation.width) / 2;
         operation.y = (gameHeight - operation.height) / 2;
         operation.setDepth(-1);
+
+        return operation;
     }
 
     moveEnemies() {
@@ -130,6 +135,8 @@ class GameScene extends Scene {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
                 enemy.destroy();
                 this.playerWin();
+
+                this.addOperation('/', 2, '#38c7c6');
             });
         }
     }
