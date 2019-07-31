@@ -26,6 +26,8 @@ class GameScene extends Scene {
         this.enemies = this.addEnemies();
 
         this.addCollision();
+
+        this.updateOperation();
     }
 
     update() {
@@ -104,6 +106,17 @@ class GameScene extends Scene {
         }
 
         return enemies;
+    }
+
+    updateOperation() {
+        this.cameras.main.setBackgroundColor('#303030');
+
+        const gameWidth = window.innerWidth;
+        const gameHeight = window.innerHeight;
+        const operation = this.add.text(0, 0, '+2', { fontSize: 236 });
+        operation.x = (gameWidth - operation.width) / 2;
+        operation.y = (gameHeight - operation.height) / 2;
+        operation.setDepth(-1);
     }
 
     moveEnemies() {
