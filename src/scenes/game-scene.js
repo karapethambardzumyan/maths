@@ -66,8 +66,9 @@ class GameScene extends Scene {
     playerWin() {
         const gameWidth = window.innerWidth;
         const playerSize = gameWidth / 5;
-        const squareWin = this.add.sprite(-(140 - playerSize) / 2, -(140 - playerSize) / 2,'squareWin');
+        const squareWin = this.add.sprite(-((140 * playerSize / 80) - this.player.body.width) / 2, -((140 * playerSize / 80) - this.player.body.height) / 2,'squareWin');
         squareWin.setOrigin(0, 0);
+        squareWin.setScale(playerSize / 80, playerSize / 80);
 
         this.anims.create({
             key: 'win',
@@ -107,7 +108,7 @@ class GameScene extends Scene {
 
     moveEnemies() {
         for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].y += 1;
+            this.enemies[i].y += 1.5;
         }
     }
 
