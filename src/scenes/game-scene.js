@@ -64,7 +64,7 @@ class GameScene extends Scene {
         return container;
     }
 
-    playerWin() {
+    playerWin(enemy) {
         const gameWidth = window.innerWidth;
         const playerSize = gameWidth / 5;
         const squareWin = this.add.sprite(-((140 * playerSize / 80) - this.player.body.width) / 2, -((140 * playerSize / 80) - this.player.body.height) / 2,'squareWin');
@@ -79,6 +79,13 @@ class GameScene extends Scene {
         });
         squareWin.anims.play('win');
         this.player.add(squareWin);
+
+        enemy.destroy();
+        this.addOperation('/', 2, '#38c7c6');
+    }
+
+    playerLost() {
+        alert('Game Over');
     }
 
     addEnemies() {
@@ -126,17 +133,18 @@ class GameScene extends Scene {
 
     moveEnemies() {
         for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].y += 1.5;
+            this.enemies[i].y += 5.5;
         }
     }
 
     addCollision() {
         for (let i = 0; i < this.enemies.length; i++) {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
-                enemy.destroy();
-                this.playerWin();
-
-                this.addOperation('/', 2, '#38c7c6');
+                if (true) {
+                    this.playerWin(enemy);
+                } else {
+                    this.playerLost();
+                }
             });
         }
     }
