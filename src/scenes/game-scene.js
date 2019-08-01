@@ -59,12 +59,11 @@ class GameScene extends Scene {
         this.physics.world.enable(container);
         container.body.width = playerSize;
         container.body.height = playerSize;
-        container.body.setCollideWorldBounds(true);
 
         return container;
     }
 
-    playerWin(enemy) {
+    playerWin() {
         const gameWidth = window.innerWidth;
         const playerSize = gameWidth / 5;
         const squareWin = this.add.sprite(-((140 * playerSize / 80) - this.player.body.width) / 2, -((140 * playerSize / 80) - this.player.body.height) / 2,'squareWin');
@@ -80,7 +79,7 @@ class GameScene extends Scene {
         squareWin.anims.play('win');
         this.player.add(squareWin);
 
-        enemy.destroy();
+        this.destroyEnemies();
         this.addOperation('/', 2, '#38c7c6');
     }
 
@@ -112,6 +111,14 @@ class GameScene extends Scene {
         }
 
         return enemies;
+    }
+
+    destroyEnemies() {
+        for (const enemy of this.enemies) {
+            enemy.destroy();
+        }
+
+        this.enemies = [];
     }
 
     addOperation(symbol, number, backgroundColor) {
