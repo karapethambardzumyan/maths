@@ -30,7 +30,6 @@ class GameScene extends Scene {
     }
 
     update() {
-        this.moveEnemies();
         this.addControl();
     }
 
@@ -63,7 +62,7 @@ class GameScene extends Scene {
         return container;
     }
 
-    playerWin() {
+    playerWin(enemy) {
         const gameWidth = window.innerWidth;
         const playerSize = gameWidth / 5;
         const squareWin = this.add.sprite(-((140 * playerSize / 80) - this.player.body.width) / 2, -((140 * playerSize / 80) - this.player.body.height) / 2,'squareWin');
@@ -79,7 +78,10 @@ class GameScene extends Scene {
         squareWin.anims.play('win');
         this.player.add(squareWin);
 
-        this.destroyEnemies();
+        this.player.body.setVelocityY(0);
+        enemy.body.setVelocityY(0);
+        enemy.destroy();
+
         this.addOperation('/', 2, '#38c7c6');
     }
 
@@ -106,6 +108,7 @@ class GameScene extends Scene {
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
+            container.body.setVelocityY(300);
 
             enemies.push(container);
         }
@@ -138,19 +141,15 @@ class GameScene extends Scene {
         return operation;
     }
 
-    moveEnemies() {
-        for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].y += 5.5;
-        }
-    }
-
     addCollision() {
         for (let i = 0; i < this.enemies.length; i++) {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
-                if (true) {
-                    this.playerWin(enemy);
-                } else {
-                    this.playerLost();
+                if (enemy.body.touching.down) {
+                    if (true) {
+                        this.playerWin(enemy);
+                    } else {
+                        this.playerLost();
+                    }
                 }
             });
         }
