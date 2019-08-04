@@ -18,6 +18,24 @@ class GameScene extends Scene {
             startFrame: 0,
             endFrame: 11
         });
+        this.load.spritesheet('squareLost', './assets/player/square-lost.png', {
+            frameWidth: 112,
+            frameHeight: 80,
+            startFrame: 0,
+            endFrame: 9
+        });
+        this.load.spritesheet('lost', './assets/player/lost.png', {
+            frameWidth: 414,
+            frameHeight: 66,
+            startFrame: 0,
+            endFrame: 6
+        });
+        this.load.spritesheet('win', './assets/player/win.png', {
+            frameWidth: 414,
+            frameHeight: 66,
+            startFrame: 0,
+            endFrame: 6
+        });
         this.load.image('enemy', './assets/enemy/square.png');
     }
 
@@ -62,7 +80,7 @@ class GameScene extends Scene {
         return container;
     }
 
-    playerWin(enemy) {
+    playerWin() {
         const gameWidth = window.innerWidth;
         const playerSize = gameWidth / 5;
         const squareWin = this.add.sprite(-((140 * playerSize / 80) - this.player.body.width) / 2, -((140 * playerSize / 80) - this.player.body.height) / 2,'squareWin');
@@ -79,14 +97,45 @@ class GameScene extends Scene {
         this.player.add(squareWin);
 
         this.player.body.setVelocityY(0);
-        enemy.body.setVelocityY(0);
-        enemy.destroy();
+        this.destroyEnemies();
+
+        this.enemies = this.addEnemies();
+        this.addCollision();
 
         this.addOperation('/', 2, '#38c7c6');
     }
 
     playerLost() {
-        alert('Game Over');
+        const gameWidth = window.innerWidth;
+        const playerSize = gameWidth / 5;
+        const squareLost = this.add.sprite((-((112 * playerSize / 80) - this.player.body.width) / 2) * 2, -15,'squareLost');
+        squareLost.setOrigin(0, 0);
+        squareLost.setScale(1.2, 1.2);
+        const lost = this.add.sprite(0, this.player.y - playerSize,'lost');
+        lost.setOrigin(0, 0);
+        lost.setScale(gameWidth / 414, playerSize / 66);
+
+        this.player.list[0] && this.player.list[0].destroy();
+        this.player.list[1] && this.player.list[1].destroy();
+
+        this.anims.create({
+            key: 'squareLost',
+            frames: this.anims.generateFrameNumbers('squareLost', { start: 0, end: 9 }),
+            frameRate: 35,
+            repeat: -1
+        });
+        squareLost.anims.play('squareLost');
+        this.anims.create({
+            key: 'lost',
+            frames: this.anims.generateFrameNumbers('lost', { start: 0, end: 6 }),
+            frameRate: 35,
+            repeat: 0
+        });
+        lost.anims.play('lost');
+        this.player.add(squareLost);
+
+        this.player.body.setVelocityY(0);
+        this.destroyEnemies();
     }
 
     addEnemies() {
@@ -108,7 +157,7 @@ class GameScene extends Scene {
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
-            container.body.setVelocityY(300);
+            container.body.setVelocityY(250);
 
             enemies.push(container);
         }
@@ -118,6 +167,7 @@ class GameScene extends Scene {
 
     destroyEnemies() {
         for (const enemy of this.enemies) {
+            enemy.body.setVelocityY(0);
             enemy.destroy();
         }
 
@@ -145,8 +195,8 @@ class GameScene extends Scene {
         for (let i = 0; i < this.enemies.length; i++) {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
                 if (enemy.body.touching.down) {
-                    if (true) {
-                        this.playerWin(enemy);
+                    if (false) {
+                        this.playerWin();
                     } else {
                         this.playerLost();
                     }
