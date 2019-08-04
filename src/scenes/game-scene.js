@@ -1,5 +1,7 @@
 import { Scene, Math } from 'phaser';
 
+const clearEnemiesRatio = 414 / 66;
+
 class GameScene extends Scene {
     constructor() {
         super('Game');
@@ -24,13 +26,7 @@ class GameScene extends Scene {
             startFrame: 0,
             endFrame: 9
         });
-        this.load.spritesheet('lost', './assets/player/lost.png', {
-            frameWidth: 414,
-            frameHeight: 66,
-            startFrame: 0,
-            endFrame: 6
-        });
-        this.load.spritesheet('win', './assets/player/win.png', {
+        this.load.spritesheet('clearEnemies', './assets/enemy/clear-enemies.png', {
             frameWidth: 414,
             frameHeight: 66,
             startFrame: 0,
@@ -96,6 +92,18 @@ class GameScene extends Scene {
         squareWin.anims.play('win');
         this.player.add(squareWin);
 
+        const clearEnemies = this.add.sprite(0, this.player.y - (gameWidth / clearEnemiesRatio),'lost');
+        clearEnemies.setOrigin(0, 0);
+        clearEnemies.setScale(gameWidth / 414, (gameWidth / clearEnemiesRatio) / 66);
+
+        this.anims.create({
+            key: 'clearEnemies',
+            frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 6 }),
+            frameRate: 25,
+            repeat: 0
+        });
+        clearEnemies.anims.play('clearEnemies');
+
         this.player.body.setVelocityY(0);
         this.destroyEnemies();
 
@@ -111,9 +119,6 @@ class GameScene extends Scene {
         const squareLost = this.add.sprite((-((112 * playerSize / 80) - this.player.body.width) / 2) * 2, -15,'squareLost');
         squareLost.setOrigin(0, 0);
         squareLost.setScale(1.2, 1.2);
-        const lost = this.add.sprite(0, this.player.y - playerSize,'lost');
-        lost.setOrigin(0, 0);
-        lost.setScale(gameWidth / 414, playerSize / 66);
 
         this.player.list[0] && this.player.list[0].destroy();
         this.player.list[1] && this.player.list[1].destroy();
@@ -125,14 +130,19 @@ class GameScene extends Scene {
             repeat: -1
         });
         squareLost.anims.play('squareLost');
+        this.player.add(squareLost);
+
+        const clearEnemies = this.add.sprite(0, this.player.y - (gameWidth / clearEnemiesRatio),'lost');
+        clearEnemies.setOrigin(0, 0);
+        clearEnemies.setScale(gameWidth / 414, (gameWidth / clearEnemiesRatio) / 66);
+
         this.anims.create({
-            key: 'lost',
-            frames: this.anims.generateFrameNumbers('lost', { start: 0, end: 6 }),
-            frameRate: 35,
+            key: 'clearEnemies',
+            frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 6 }),
+            frameRate: 25,
             repeat: 0
         });
-        lost.anims.play('lost');
-        this.player.add(squareLost);
+        clearEnemies.anims.play('clearEnemies');
 
         this.player.body.setVelocityY(0);
         this.destroyEnemies();
@@ -195,7 +205,7 @@ class GameScene extends Scene {
         for (let i = 0; i < this.enemies.length; i++) {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
                 if (enemy.body.touching.down) {
-                    if (false) {
+                    if (!false) {
                         this.playerWin();
                     } else {
                         this.playerLost();
