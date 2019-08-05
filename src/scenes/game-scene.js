@@ -99,7 +99,7 @@ class GameScene extends Scene {
         this.anims.create({
             key: 'clearEnemies',
             frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 6 }),
-            frameRate: 25,
+            frameRate: 15,
             repeat: 0
         });
         clearEnemies.anims.play('clearEnemies');
@@ -163,7 +163,7 @@ class GameScene extends Scene {
             number.x = (enemySize - number.width) / 2;
             number.y = (enemySize - number.height) / 2;
 
-            const container = this.add.container(enemySize * i, 0, [square, number]);
+            const container = this.add.container(enemySize * i, -enemySize, [square, number]);
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
