@@ -1,10 +1,19 @@
 import { Scene, Math } from 'phaser';
+import BACKGROUND_COLORS from '../background-colors';
+import SYMBOLS from '../symbols';
+import { getRandomInt } from '../helpers';
 
 const clearEnemiesRatio = 414 / 66;
 
 class GameScene extends Scene {
     constructor() {
         super('Game');
+
+        this.operation = {
+            symbol: null,
+            number: null,
+            backgroundColor: null
+        };
     }
 
     preload() {
@@ -38,7 +47,7 @@ class GameScene extends Scene {
     create() {
         this.player = this.addPlayer();
         this.enemies = this.addEnemies();
-        this.operation = this.addOperation('+', 5, '#303030');
+        this.operationObject = this.addOperation();
 
         this.addCollision();
     }
@@ -113,7 +122,7 @@ class GameScene extends Scene {
         this.enemies = this.addEnemies();
         this.addCollision();
 
-        this.addOperation('/', 2, '#38c7c6');
+        this.operationObject = this.addOperation();
     }
 
     playerLost() {
@@ -173,7 +182,7 @@ class GameScene extends Scene {
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
-            container.body.setVelocityY(150);
+            container.body.setVelocityY(350);
 
             enemies.push(container);
         }
@@ -190,16 +199,26 @@ class GameScene extends Scene {
         this.enemies = [];
     }
 
-    addOperation(symbol, number, backgroundColor) {
-        if (this.operation) {
-            this.operation.destroy();
+    addOperation() {
+        if (this.operationObject) {
+            this.operationObject.destroy();
         }
 
-        this.cameras.main.setBackgroundColor(backgroundColor);
+        if (!this.operation.symbol || !this.operation.symbol || !this.operation.symbol) {
+            this.operation.symbol = '+';
+            this.operation.number = 2;
+            this.operation.backgroundColor = '#303030';
+        } else {
+            this.operation.symbol = SYMBOLS[getRandomInt(0, 3)];
+            this.operation.number = getRandomInt(0, 10);
+            this.operation.backgroundColor = BACKGROUND_COLORS[getRandomInt(0, 7)];
+        }
+
+        this.cameras.main.setBackgroundColor(this.operation.backgroundColor);
 
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
-        const operation = this.add.text(0, 0, `${ symbol }${ number }`, { fontSize: 236 });
+        const operation = this.add.text(0, 0, `${ this.operation.symbol }${ this.operation.number }`, { fontSize: 200 });
         operation.x = (gameWidth - operation.width) / 2;
         operation.y = (gameHeight - operation.height) / 2;
         operation.setDepth(-1);
