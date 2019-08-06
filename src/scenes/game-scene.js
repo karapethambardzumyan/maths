@@ -3,8 +3,6 @@ import BACKGROUND_COLORS from '../background-colors';
 import SYMBOLS from '../symbols';
 import { getRandomInt } from '../helpers';
 
-const clearEnemiesRatio = 414 / 66;
-
 class GameScene extends Scene {
     constructor() {
         super('Game');
@@ -35,12 +33,6 @@ class GameScene extends Scene {
             startFrame: 0,
             endFrame: 9
         });
-        this.load.spritesheet('clearEnemies', './assets/enemy/clear-enemies.png', {
-            frameWidth: 414,
-            frameHeight: 66,
-            startFrame: 0,
-            endFrame: 11
-        });
         this.load.image('enemy', './assets/enemy/square.png');
     }
 
@@ -53,7 +45,17 @@ class GameScene extends Scene {
     }
 
     update() {
+        const gameWidth = window.innerWidth;
+        const gameHeight = window.innerHeight;
+        const enemySize = gameWidth / 5;
+
         this.addControl();
+
+        if (this.enemies[0].y - enemySize > gameHeight) {
+            this.destroyEnemies();
+            this.enemies = this.addEnemies();
+            this.addCollision();
+        }
     }
 
     addPlayer() {
@@ -101,27 +103,11 @@ class GameScene extends Scene {
         squareWin.anims.play('win');
         this.player.add(squareWin);
 
-        const clearEnemies = this.add.sprite(0, this.player.y - (gameWidth / clearEnemiesRatio),'lost');
-        clearEnemies.setOrigin(0, 0);
-        clearEnemies.setScale(gameWidth / 414, (gameWidth / clearEnemiesRatio) / 66);
-
-        this.anims.create({
-            key: 'clearEnemies',
-            frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 10 }),
-            frameRate: 20,
-            repeat: 0
-        });
-        clearEnemies.anims.play('clearEnemies');
-        clearEnemies.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
-            clearEnemies.destroy();
-        });
+        for (let enemy of this.enemies) {
+            enemy.alpha = 0.1;
+        }
 
         this.player.body.setVelocityY(0);
-        this.destroyEnemies();
-
-        this.enemies = this.addEnemies();
-        this.addCollision();
-
         this.operationObject = this.addOperation();
     }
 
@@ -143,24 +129,7 @@ class GameScene extends Scene {
         });
         squareLost.anims.play('squareLost');
         this.player.add(squareLost);
-
-        const clearEnemies = this.add.sprite(0, this.player.y - (gameWidth / clearEnemiesRatio),'lost');
-        clearEnemies.setOrigin(0, 0);
-        clearEnemies.setScale(gameWidth / 414, (gameWidth / clearEnemiesRatio) / 66);
-
-        this.anims.create({
-            key: 'clearEnemies',
-            frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 10 }),
-            frameRate: 20,
-            repeat: 0
-        });
-        clearEnemies.anims.play('clearEnemies');
-        clearEnemies.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
-            clearEnemies.destroy();
-        });
-
         this.player.body.setVelocityY(0);
-        this.destroyEnemies();
     }
 
     addEnemies() {
@@ -182,7 +151,7 @@ class GameScene extends Scene {
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
-            container.body.setVelocityY(350);
+            container.body.setVelocityY(150);
 
             enemies.push(container);
         }
@@ -192,8 +161,10 @@ class GameScene extends Scene {
 
     destroyEnemies() {
         for (const enemy of this.enemies) {
-            enemy.body.setVelocityY(0);
-            enemy.destroy();
+            if (enemy && enemy.body) {
+                enemy.body.setVelocityY(0);
+                enemy.destroy();
+            }
         }
 
         this.enemies = [];
@@ -231,6 +202,7 @@ class GameScene extends Scene {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
                 if (enemy.body.touching.down) {
                     if (!false) {
+                        enemy.destroy();
                         this.playerWin();
                     } else {
                         this.playerLost();
