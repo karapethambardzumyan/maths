@@ -18,7 +18,7 @@ class GameScene extends Scene {
             frameWidth: 140,
             frameHeight: 140,
             startFrame: 0,
-            endFrame: 11
+            endFrame: 10
         });
         this.load.spritesheet('squareLost', './assets/player/square-lost.png', {
             frameWidth: 112,
@@ -30,7 +30,7 @@ class GameScene extends Scene {
             frameWidth: 414,
             frameHeight: 66,
             startFrame: 0,
-            endFrame: 6
+            endFrame: 11
         });
         this.load.image('enemy', './assets/enemy/square.png');
     }
@@ -50,7 +50,7 @@ class GameScene extends Scene {
     addPlayer() {
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
-        const playerSize = gameWidth / 5;
+        const playerSize = gameWidth / 6;
 
         this.anims.create({
             key: 'changeColors',
@@ -98,11 +98,14 @@ class GameScene extends Scene {
 
         this.anims.create({
             key: 'clearEnemies',
-            frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 6 }),
-            frameRate: 15,
+            frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 10 }),
+            frameRate: 20,
             repeat: 0
         });
         clearEnemies.anims.play('clearEnemies');
+        clearEnemies.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
+            clearEnemies.destroy();
+        });
 
         this.player.body.setVelocityY(0);
         this.destroyEnemies();
@@ -138,11 +141,14 @@ class GameScene extends Scene {
 
         this.anims.create({
             key: 'clearEnemies',
-            frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 6 }),
-            frameRate: 25,
+            frames: this.anims.generateFrameNumbers('clearEnemies', { start: 0, end: 10 }),
+            frameRate: 20,
             repeat: 0
         });
         clearEnemies.anims.play('clearEnemies');
+        clearEnemies.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
+            clearEnemies.destroy();
+        });
 
         this.player.body.setVelocityY(0);
         this.destroyEnemies();
@@ -150,10 +156,10 @@ class GameScene extends Scene {
 
     addEnemies() {
         const gameWidth = window.innerWidth;
-        const enemySize = gameWidth / 4;
+        const enemySize = gameWidth / 5;
         const enemies = [];
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             const square = this.physics.scene.add.tileSprite(0, 0, 80, 80, 'enemy');
             square.setOrigin(0, 0);
             square.displayWidth = enemySize;
@@ -167,7 +173,7 @@ class GameScene extends Scene {
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
-            container.body.setVelocityY(250);
+            container.body.setVelocityY(150);
 
             enemies.push(container);
         }
