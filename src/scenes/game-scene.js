@@ -147,11 +147,13 @@ class GameScene extends Scene {
             number.x = (enemySize - number.width) / 2;
             number.y = (enemySize - number.height) / 2;
 
-            const container = this.add.container(enemySize * i, -enemySize, [square, number]);
+            // const container = this.add.container(enemySize * i, -enemySize, [square, number]);
+            const container = this.add.container(enemySize * i, 0, [square, number]);
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
-            container.body.setVelocityY(150);
+            // container.body.setVelocityY(150);
+            container.body.setVelocityY(0);
 
             enemies.push(container);
         }
@@ -175,15 +177,9 @@ class GameScene extends Scene {
             this.operationObject.destroy();
         }
 
-        if (!this.operation.symbol || !this.operation.symbol || !this.operation.symbol) {
-            this.operation.symbol = '+';
-            this.operation.number = 2;
-            this.operation.backgroundColor = '#303030';
-        } else {
-            this.operation.symbol = SYMBOLS[getRandomInt(0, 3)];
-            this.operation.number = getRandomInt(0, 10);
-            this.operation.backgroundColor = BACKGROUND_COLORS[getRandomInt(0, 7)];
-        }
+        this.operation.symbol = SYMBOLS[getRandomInt(0, 3)];
+        this.operation.number = getRandomInt(0, 10);
+        this.operation.backgroundColor = BACKGROUND_COLORS[getRandomInt(0, 7)];
 
         this.cameras.main.setBackgroundColor(this.operation.backgroundColor);
 
@@ -214,7 +210,7 @@ class GameScene extends Scene {
 
     addControl() {
         const gameWidth = window.innerWidth;
-        const playerSize = gameWidth / 5;
+        const playerSize = gameWidth / 6;
         const pointer = this.input.activePointer;
 
         if (pointer.isDown) {
