@@ -1,7 +1,7 @@
 import { Scene, Math } from 'phaser';
-import BACKGROUND_COLORS from '../background-colors';
-import SYMBOLS from '../symbols';
-import { getRandomInt } from '../helpers';
+import COLORS from '../constants/colors';
+import SYMBOLS from '../constants/symbols';
+import { getRandomInt } from '../helpers/numbers';
 
 class GameScene extends Scene {
     constructor() {
@@ -51,7 +51,7 @@ class GameScene extends Scene {
 
         this.addControl();
 
-        if (this.enemies[0].y - enemySize > gameHeight) {
+        if (window.Math.max(...this.enemies.map(enemy => enemy.y)) - enemySize > gameHeight) {
             this.destroyEnemies();
             this.enemies = this.addEnemies();
             this.addCollision();
@@ -97,7 +97,7 @@ class GameScene extends Scene {
         this.anims.create({
             key: 'win',
             frames: this.anims.generateFrameNumbers('squareWin', { start: 0, end: 11 }),
-            frameRate: 40,
+            frameRate: 45,
             repeat: 0
         });
         squareWin.anims.play('win');
@@ -152,7 +152,7 @@ class GameScene extends Scene {
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
-            container.body.setVelocityY(150);
+            container.body.setVelocityY(250);
 
             enemies.push(container);
         }
@@ -178,13 +178,13 @@ class GameScene extends Scene {
 
         this.operation.symbol = SYMBOLS[getRandomInt(0, 3)];
         this.operation.number = getRandomInt(0, 10);
-        this.operation.backgroundColor = BACKGROUND_COLORS[getRandomInt(0, 7)];
+        this.operation.backgroundColor = COLORS[getRandomInt(0, 7)].background;
 
         this.cameras.main.setBackgroundColor(this.operation.backgroundColor);
 
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
-        const operation = this.add.text(0, 0, `${ this.operation.symbol }${ this.operation.number }`, { fontSize: 200 });
+        const operation = this.add.text(0, 0, `${ this.operation.symbol }${ this.operation.number }`, { fontSize: 200, fill: COLORS[getRandomInt(0, 7)].foreground });
         operation.x = (gameWidth - operation.width) / 2;
         operation.y = (gameHeight - operation.height) / 2;
         operation.setDepth(-1);
@@ -196,7 +196,7 @@ class GameScene extends Scene {
         for (let i = 0; i < this.enemies.length; i++) {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
                 if (enemy.body.touching.down) {
-                    if (!false) {
+                    if (true) {
                         enemy.destroy();
                         this.playerWin();
                     } else {
