@@ -61,7 +61,7 @@ class GameScene extends Scene {
     addPlayer() {
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
-        const playerSize = gameWidth / 6;
+        const playerSize = gameWidth / 5;
 
         this.anims.create({
             key: 'changeColors',
@@ -134,10 +134,11 @@ class GameScene extends Scene {
 
     addEnemies() {
         const gameWidth = window.innerWidth;
-        const enemySize = gameWidth / 5;
+        const enemySize = (gameWidth / 4) * 0.9;
+        const enemyMargin = ((gameWidth) - (enemySize * 4)) / 5;
         const enemies = [];
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 4; i++) {
             const square = this.physics.scene.add.tileSprite(0, 0, 80, 80, 'enemy');
             square.setOrigin(0, 0);
             square.displayWidth = enemySize;
@@ -147,13 +148,11 @@ class GameScene extends Scene {
             number.x = (enemySize - number.width) / 2;
             number.y = (enemySize - number.height) / 2;
 
-            // const container = this.add.container(enemySize * i, -enemySize, [square, number]);
-            const container = this.add.container(enemySize * i, 0, [square, number]);
+            const container = this.add.container((enemyMargin * (i +1)) + (enemySize * i), -enemySize, [square, number]);
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
-            // container.body.setVelocityY(150);
-            container.body.setVelocityY(0);
+            container.body.setVelocityY(150);
 
             enemies.push(container);
         }
