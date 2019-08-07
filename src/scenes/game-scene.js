@@ -209,7 +209,7 @@ class GameScene extends Scene {
 
     addControl() {
         const gameWidth = window.innerWidth;
-        const playerSize = gameWidth / 6;
+        const playerSize = gameWidth / 5;
         const pointer = this.input.activePointer;
 
         if (pointer.isDown) {
