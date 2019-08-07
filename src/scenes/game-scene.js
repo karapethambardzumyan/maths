@@ -213,7 +213,7 @@ class GameScene extends Scene {
         const pointer = this.input.activePointer;
 
         if (pointer.isDown) {
-            this.player.x = Math.Clamp(pointer.x, 0, gameWidth - playerSize);
+            this.player.x = Math.Clamp(pointer.x - playerSize / 2, 0, gameWidth - playerSize);
         }
     }
 }
