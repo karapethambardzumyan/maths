@@ -1,5 +1,4 @@
 import { Scene, Math } from 'phaser';
-import COLORS from '../constants/colors';
 import SYMBOLS from '../constants/symbols';
 import { getRandomInt } from '../helpers/numbers';
 
@@ -96,8 +95,8 @@ class GameScene extends Scene {
 
         this.anims.create({
             key: 'win',
-            frames: this.anims.generateFrameNumbers('squareWin', { start: 0, end: 11 }),
-            frameRate: 60,
+            frames: this.anims.generateFrameNumbers('squareWin', { start: 0, end: 10 }),
+            frameRate: 35,
             repeat: 0
         });
         squareWin.anims.play('win');
@@ -125,7 +124,7 @@ class GameScene extends Scene {
             key: 'squareLost',
             frames: this.anims.generateFrameNumbers('squareLost', { start: 0, end: 9 }),
             frameRate: 35,
-            repeat: -1
+            repeat: 0
         });
         squareLost.anims.play('squareLost');
         this.player.add(squareLost);
@@ -139,10 +138,17 @@ class GameScene extends Scene {
         const enemies = [];
 
         for (let i = 0; i < 4; i++) {
-            const square = this.physics.scene.add.tileSprite(0, 0, 80, 80, 'enemy');
+            this.anims.create({
+                key: 'changeColors',
+                frames: this.anims.generateFrameNumbers('square', { start: 0, end: 7 }),
+                frameRate: 10,
+                repeat: -1
+            });
+
+            const square = this.physics.scene.add.sprite(0, 0,'enemy');
             square.setOrigin(0, 0);
-            square.displayWidth = enemySize;
-            square.displayHeight = enemySize;
+            square.setScale(enemySize / 80, enemySize / 80);
+            square.anims.play('changeColors');
 
             const number = this.add.text(0, 0, '2', { fontSize: 36 });
             number.x = (enemySize - number.width) / 2;
@@ -178,9 +184,6 @@ class GameScene extends Scene {
 
         this.operation.symbol = SYMBOLS[getRandomInt(0, 3)];
         this.operation.number = getRandomInt(0, 10);
-        this.operation.backgroundColor = COLORS[getRandomInt(0, 7)];
-
-        this.cameras.main.setBackgroundColor(this.operation.backgroundColor);
 
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
