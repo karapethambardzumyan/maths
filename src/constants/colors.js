@@ -1,38 +1,19 @@
 export default [
-    {
-        foreground: '#ffffff',
-        background: '#ce06b5'
-    },
-    {
-        foreground: '#ffffff',
-        background: '#8732e6'
-    },
-    {
-        foreground: '#ffffff',
-        background: '#0f45da'
-    },
-    {
-        foreground: '#ffffff',
-        background: '#25d2c1'
-    },
-    {
-        foreground: '#ffffff',
-        background: '#25d27a'
-    },
-    {
-        foreground: '#ffffff',
-        background: '#fd5d43'
-    },
-    {
-        foreground: '#ffffff',
-        background: '#74ec17'
-    },
-    {
-        foreground: '#ffffff',
-        background: '#cadc2c'
-    },
-    {
-        foreground: '#ffffff',
-        background: '#ffc544'
-    }
+    '#7b828c',
+    '#41637c',
+    '#c8cfe1',
+    '#a1a7b5',
+    '#9ce2ee',
+    '#abf5f6',
+    '#82f3ef',
+    '#5fcb99',
+    '#88cc67',
+    '#cdab51',
+    '#dc8d48',
+    '#c04921',
+    '#b2281b',
+    '#c51515',
+    '#841010',
+    '#501414',
+    '#511517'
 ];
