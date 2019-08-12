@@ -90,7 +90,7 @@ class GameScene extends Scene {
         this.player.add(squareWin);
 
         for (let enemy of this.enemies) {
-            enemy.alpha = 0.3;
+            enemy.alpha = 0.6;
         }
 
         this.player.body.setVelocityY(0);
@@ -128,7 +128,7 @@ class GameScene extends Scene {
             const square = this.physics.scene.add.rectangle(0, 0, enemySize, enemySize, Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.answer]).color);
             square.setOrigin(0, 0);
 
-            const number = this.add.text(0, 0, '2', { fontSize: 36 });
+            const number = this.add.text(0, 0, getRandomInt(0, this.level.limit), { fontSize: 36 });
             number.x = (enemySize - number.width) / 2;
             number.y = (enemySize - number.height) / 2;
 
@@ -140,6 +140,11 @@ class GameScene extends Scene {
 
             enemies.push(container);
         }
+
+        this.operation.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
+        this.operation.number = getRandomInt(0, 10);
+
+        enemies[getRandomInt(0, 3)].list[1].text = 1 + this.operation.number;
 
         return enemies;
     }
@@ -163,9 +168,6 @@ class GameScene extends Scene {
             this.operationObject.destroy();
         }
 
-        this.operation.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
-        this.operation.number = getRandomInt(0, 10);
-
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
         const operation = this.add.text(0, 0, `${ this.operation.symbol }${ this.operation.number }`, { fontSize: 200, fill: '#ffffff' });
@@ -183,15 +185,23 @@ class GameScene extends Scene {
     }
 
     addCollision() {
+        let collided = false;
+
         for (let i = 0; i < this.enemies.length; i++) {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
-                if (enemy.body.touching.down) {
+                if (enemy.body.touching.down && !collided) {
                     if (true) {
                         enemy.destroy();
                         this.playerWin();
                     } else {
+                        enemy.destroy();
                         this.playerLost();
                     }
+
+                    collided = true;
+                } else {
+                    enemy.destroy();
+                    this.playerLost();
                 }
             });
         }
