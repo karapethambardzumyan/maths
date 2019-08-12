@@ -1,11 +1,13 @@
 import { Scene, Math } from 'phaser';
-import SYMBOLS from '../constants/symbols';
 import { getRandomInt } from '../helpers/numbers';
+import LEVELS from '../constants/levels/index';
 
 class GameScene extends Scene {
     constructor() {
         super('Game');
 
+        this.level = LEVELS[0];
+        this.answer = 0;
         this.operation = {
             symbol: null,
             number: null,
@@ -14,12 +16,6 @@ class GameScene extends Scene {
     }
 
     preload() {
-        this.load.spritesheet('square', './assets/player/square.png', {
-            frameWidth: 80,
-            frameHeight: 80,
-            startFrame: 0,
-            endFrame: 7
-        });
         this.load.spritesheet('squareWin', './assets/player/square-win.png', {
             frameWidth: 140,
             frameHeight: 140,
@@ -62,17 +58,8 @@ class GameScene extends Scene {
         const gameHeight = window.innerHeight;
         const playerSize = gameWidth / 5;
 
-        this.anims.create({
-            key: 'changeColors',
-            frames: this.anims.generateFrameNumbers('square', { start: 0, end: 7 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        const square = this.add.sprite(0, 0, 'square');
+        const square = this.physics.scene.add.rectangle(0, 0, playerSize, playerSize, Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.answer]).color);
         square.setOrigin(0, 0);
-        square.setScale(playerSize / 80, playerSize / 80);
-        square.anims.play('changeColors');
 
         const number = this.add.text(0, 0, '1', { fontSize: 36 });
         number.x = (playerSize - number.width) / 2;
@@ -103,7 +90,7 @@ class GameScene extends Scene {
         this.player.add(squareWin);
 
         for (let enemy of this.enemies) {
-            enemy.alpha = 0.1;
+            enemy.alpha = 0.3;
         }
 
         this.player.body.setVelocityY(0);
@@ -138,17 +125,8 @@ class GameScene extends Scene {
         const enemies = [];
 
         for (let i = 0; i < 4; i++) {
-            this.anims.create({
-                key: 'changeColors',
-                frames: this.anims.generateFrameNumbers('square', { start: 0, end: 7 }),
-                frameRate: 10,
-                repeat: -1
-            });
-
-            const square = this.physics.scene.add.sprite(0, 0,'enemy');
+            const square = this.physics.scene.add.rectangle(0, 0, enemySize, enemySize, Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.answer]).color);
             square.setOrigin(0, 0);
-            square.setScale(enemySize / 80, enemySize / 80);
-            square.anims.play('changeColors');
 
             const number = this.add.text(0, 0, '2', { fontSize: 36 });
             number.x = (enemySize - number.width) / 2;
@@ -158,7 +136,7 @@ class GameScene extends Scene {
             this.physics.world.enable(container);
             container.body.width = enemySize;
             container.body.height = enemySize;
-            container.body.setVelocityY(250);
+            container.body.setVelocityY(250 * this.level.speed);
 
             enemies.push(container);
         }
@@ -178,11 +156,14 @@ class GameScene extends Scene {
     }
 
     addOperation() {
+        this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.answer]).color;
+        this.cameras.main.setBackgroundColor(this.level.colors.background[this.answer]);
+
         if (this.operationObject) {
             this.operationObject.destroy();
         }
 
-        this.operation.symbol = SYMBOLS[getRandomInt(0, 3)];
+        this.operation.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
         this.operation.number = getRandomInt(0, 10);
 
         const gameWidth = window.innerWidth;
@@ -191,6 +172,12 @@ class GameScene extends Scene {
         operation.x = (gameWidth - operation.width) / 2;
         operation.y = (gameHeight - operation.height) / 2;
         operation.setDepth(-1);
+
+        if (this.answer >= this.level.answersCount) {
+            this.scene.pause();
+        } else {
+            this.answer++;
+        }
 
         return operation;
     }
