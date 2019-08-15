@@ -50,6 +50,12 @@ class GameScene extends Scene {
             this.enemies = this.addEnemies();
             this.addCollision();
         }
+
+        if (this.enemies.length !== 0) {
+            for (const enemy of this.enemies) {
+                enemy.y += 3.5 * this.level.speed;
+            }
+        }
     }
 
     addPlayer() {
@@ -161,7 +167,7 @@ class GameScene extends Scene {
             this.physics.world.enable(containerObject);
             containerObject.body.width = enemySize;
             containerObject.body.height = enemySize;
-            containerObject.body.setVelocityY(250 * this.level.speed);
+            // containerObject.body.setVelocityY(200 * this.level.speed);
             containerObject.number = number;
 
             enemyObjects.push(containerObject);
@@ -239,24 +245,50 @@ class GameScene extends Scene {
     }
 
     addCollision() {
-        let collided = false;
+        // let collided = false;
+        //
+        // for (let i = 0; i < this.enemies.length; i++) {
+        //     this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
+        //         if (enemy.body.touching.down) {
+        //             if (!collided) {
+        //                 const rightAnswer = this.calcAnswer();
+        //
+        //                 if (rightAnswer === enemy.number) {
+        //                     enemy.destroy();
+        //                     this.playerWin(rightAnswer);
+        //                 } else {
+        //                     enemy.destroy();
+        //                     this.playerLost();
+        //                 }
+        //
+        //                 collided = true;
+        //             } else {
+        //                 enemy.destroy();
+        //                 this.playerLost();
+        //             }
+        //         }
+        //     });
+        // }
 
         for (let i = 0; i < this.enemies.length; i++) {
             this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
-                if (enemy.body.touching.down) {
-                    if (!collided) {
-                        const rightAnswer = this.calcAnswer();
+                const playerY = parseInt(player.y);
+                const enemyY = parseInt(enemy.y + enemy.body.height);
+                const rightAnswer = this.calcAnswer();
 
-                        if (rightAnswer === enemy.number) {
-                            enemy.destroy();
-                            this.playerWin(rightAnswer);
-                        } else {
-                            enemy.destroy();
-                            this.playerLost();
-                        }
-
-                        collided = true;
-                    } else {
+                if (window.Math.abs(playerY - enemyY) > 0 && window.Math.abs(playerY - enemyY) < 3) {
+                    if (
+                        rightAnswer === enemy.number &&
+                        player.x + (player.body.width / 2) > enemy.x &&
+                        player.x + (player.body.width / 2) < enemy.x + enemy.x + enemy.body.width
+                    ) {
+                        enemy.destroy();
+                        this.playerWin(rightAnswer);
+                    } else if (
+                        rightAnswer !== enemy.number &&
+                        player.x + (player.body.width / 2) > enemy.x &&
+                        player.x + (player.body.width / 2) < enemy.x + enemy.x + enemy.body.width
+                    ) {
                         enemy.destroy();
                         this.playerLost();
                     }
