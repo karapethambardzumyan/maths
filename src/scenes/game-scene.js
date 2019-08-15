@@ -7,7 +7,8 @@ class GameScene extends Scene {
         super('Game');
 
         this.level = LEVELS[0];
-        this.operation = {
+        this.score = 0;
+        this.operationOptions = {
             symbol: null,
             number: null,
             answerNumber: 0
@@ -15,13 +16,13 @@ class GameScene extends Scene {
     }
 
     preload() {
-        this.load.spritesheet('squareWin', './assets/player/square-win.png', {
+        this.load.spritesheet('playerWin', './assets/player-win.png', {
             frameWidth: 140,
             frameHeight: 140,
             startFrame: 0,
             endFrame: 10
         });
-        this.load.spritesheet('squareLost', './assets/player/square-lost.png', {
+        this.load.spritesheet('playerLost', './assets/player-lost.png', {
             frameWidth: 112,
             frameHeight: 80,
             startFrame: 0,
@@ -30,9 +31,9 @@ class GameScene extends Scene {
     }
 
     create() {
-        this.playerObject = this.addPlayer();
-        this.operationObject = this.addOperation();
-        this.enemyObjects = this.addEnemies();
+        this.player = this.addPlayer();
+        this.operation = this.addOperation();
+        this.enemies = this.addEnemies();
 
         this.addCollision();
     }
@@ -44,9 +45,9 @@ class GameScene extends Scene {
 
         this.addControl();
 
-        if (window.Math.max(...this.enemyObjects.map(enemy => enemy.y)) - enemySize > gameHeight) {
+        if (window.Math.max(...this.enemies.map(enemy => enemy.y)) - enemySize > gameHeight) {
             this.destroyEnemies();
-            this.enemyObjects = this.addEnemies();
+            this.enemies = this.addEnemies();
             this.addCollision();
         }
     }
@@ -61,7 +62,7 @@ class GameScene extends Scene {
             0,
             playerSize,
             playerSize,
-            Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operation.answerNumber]).color
+            Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operationOptions.answerNumber]).color
         );
         squareObject.setOrigin(0, 0);
 
@@ -81,53 +82,58 @@ class GameScene extends Scene {
     playerWin(rightAnswer) {
         const gameWidth = window.innerWidth;
         const playerSize = gameWidth / 5;
-        const squareWin = this.add.sprite(-((140 * playerSize / 80) - this.playerObject.body.width) / 2, -((140 * playerSize / 80) - this.playerObject.body.height) / 2,'squareWin');
-        squareWin.setOrigin(0, 0);
-        squareWin.setScale(playerSize / 80, playerSize / 80);
+        const playerWin = this.add.sprite(-((140 * playerSize / 80) - this.player.body.width) / 2, -((140 * playerSize / 80) - this.player.body.height) / 2,'playerWin');
+        playerWin.setOrigin(0, 0);
+        playerWin.setScale(playerSize / 80, playerSize / 80);
 
         this.anims.create({
-            key: 'win',
-            frames: this.anims.generateFrameNumbers('squareWin', { start: 0, end: 10 }),
+            key: 'playerWin',
+            frames: this.anims.generateFrameNumbers('playerWin', { start: 0, end: 10 }),
             frameRate: 35,
             repeat: 0
         });
-        squareWin.anims.play('win');
-        this.playerObject.add(squareWin);
+        playerWin.anims.play('playerWin');
+        this.player.add(playerWin);
 
-        for (let enemy of this.enemyObjects) {
+        for (let enemy of this.enemies) {
             enemy.alpha = 0.6;
         }
 
-        this.playerObject.body.setVelocityY(0);
-        this.playerObject.number = rightAnswer;
-        this.playerObject.list[1].text = rightAnswer;
-        this.playerObject.list[1].x = (playerSize - this.playerObject.list[1].width) / 2;
-        this.playerObject.list[1].y = (playerSize - this.playerObject.list[1].height) / 2;
+        this.player.body.setVelocityY(0);
+        this.player.number = rightAnswer;
+        this.player.list[1].text = rightAnswer;
+        this.player.list[1].x = (playerSize - this.player.list[1].width) / 2;
+        this.player.list[1].y = (playerSize - this.player.list[1].height) / 2;
 
-        this.operationObject = this.addOperation();
+        this.operation = this.addOperation();
+
+        this.score += 1;
     }
 
     playerLost() {
         const gameWidth = window.innerWidth;
         const playerSize = gameWidth / 5;
-        const squareLost = this.add.sprite((-((112 * playerSize / 80) - this.playerObject.body.width) / 2) * 2, -15,'squareLost');
-        squareLost.setOrigin(0, 0);
-        squareLost.setScale(1.2, 1.2);
+        const playerLost = this.add.sprite((-((112 * playerSize / 80) - this.player.body.width) / 2) * 2, -15,'playerLost');
+        playerLost.setOrigin(0, 0);
+        playerLost.setScale(1.2, 1.2);
 
-        this.playerObject.list[0] && this.playerObject.list[0].destroy();
-        this.playerObject.list[1] && this.playerObject.list[1].destroy();
+        this.player.list[0] && this.player.list[0].destroy();
+        this.player.list[1] && this.player.list[1].destroy();
 
         this.anims.create({
-            key: 'squareLost',
-            frames: this.anims.generateFrameNumbers('squareLost', { start: 0, end: 9 }),
+            key: 'playerLost',
+            frames: this.anims.generateFrameNumbers('playerLost', { start: 0, end: 9 }),
             frameRate: 35,
             repeat: 0
         });
-        squareLost.anims.play('squareLost');
-        this.playerObject.add(squareLost);
-        this.playerObject.body.setVelocityY(0);
+        playerLost.anims.play('playerLost');
+        this.player.add(playerLost);
+        this.player.body.setVelocityY(0);
 
-        this.scene.pause();
+        setTimeout(() => {
+            this.scene.pause();
+            console.log('Score:', this.score);
+        }, 1000);
     }
 
     addEnemies() {
@@ -142,7 +148,7 @@ class GameScene extends Scene {
                 0,
                 enemySize,
                 enemySize,
-                Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operation.answerNumber]).color
+                Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operationOptions.answerNumber]).color
             );
             squareObject.setOrigin(0, 0);
 
@@ -173,31 +179,31 @@ class GameScene extends Scene {
     }
 
     destroyEnemies() {
-        for (const enemy of this.enemyObjects) {
+        for (const enemy of this.enemies) {
             if (enemy && enemy.body) {
                 enemy.body.setVelocityY(0);
                 enemy.destroy();
             }
         }
 
-        this.enemyObjects = [];
+        this.enemies = [];
     }
 
     calcAnswer() {
         let answer;
 
-        switch (this.operation.symbol) {
+        switch (this.operationOptions.symbol) {
             case '-':
-                answer = this.playerObject.number - this.operation.number;
+                answer = this.player.number - this.operationOptions.number;
                 break;
             case '+':
-                answer = this.playerObject.number + this.operation.number;
+                answer = this.player.number + this.operationOptions.number;
                 break;
             case '/':
-                answer = this.playerObject.number / this.operation.number;
+                answer = this.player.number / this.operationOptions.number;
                 break;
             case '*':
-                answer = this.playerObject.number * this.operation.number;
+                answer = this.player.number * this.operationOptions.number;
                 break;
         }
 
@@ -205,37 +211,38 @@ class GameScene extends Scene {
     }
 
     addOperation() {
-        this.operation.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
-        this.operation.number = getRandomInt(0, 10);
+        this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
+        this.operationOptions.number = getRandomInt(0, 10);
 
-        this.playerObject.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operation.answerNumber]).color;
-        this.cameras.main.setBackgroundColor(this.level.colors.background[this.operation.answerNumber]);
+        this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operationOptions.answerNumber]).color;
+        this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
 
-        if (this.operationObject) {
-            this.operationObject.destroy();
+        if (this.operation) {
+            this.operation.destroy();
         }
 
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
-        const operationObject = this.add.text(0, 0, `${ this.operation.symbol }${ this.operation.number }`, { fontSize: 200, fill: '#ffffff' });
-        operationObject.x = (gameWidth - operationObject.width) / 2;
-        operationObject.y = (gameHeight - operationObject.height) / 2;
-        operationObject.setDepth(-1);
+        const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, { fontSize: 200, fill: '#ffffff' });
+        operation.x = (gameWidth - operation.width) / 2;
+        operation.y = (gameHeight - operation.height) / 2;
+        operation.setDepth(-1);
 
-        if (this.answer >= this.level.answersCount) {
+        if (this.operationOptions.answerNumber >= this.level.answersCount) {
             this.scene.pause();
+            console.log('Score:', this.score);
         } else {
-            this.answer++;
+            this.operationOptions.answerNumber++;
         }
 
-        return operationObject;
+        return operation;
     }
 
     addCollision() {
         let collided = false;
 
-        for (let i = 0; i < this.enemyObjects.length; i++) {
-            this.physics.add.collider(this.playerObject, this.enemyObjects[i], (player, enemy) => {
+        for (let i = 0; i < this.enemies.length; i++) {
+            this.physics.add.collider(this.player, this.enemies[i], (player, enemy) => {
                 if (enemy.body.touching.down) {
                     if (!collided) {
                         const rightAnswer = this.calcAnswer();
@@ -264,7 +271,7 @@ class GameScene extends Scene {
         const pointer = this.input.activePointer;
 
         if (pointer.isDown) {
-            this.playerObject.x = Math.Clamp(pointer.x - playerSize / 2, 0, gameWidth - playerSize);
+            this.player.x = Math.Clamp(pointer.x - playerSize / 2, 0, gameWidth - playerSize);
         }
     }
 }
