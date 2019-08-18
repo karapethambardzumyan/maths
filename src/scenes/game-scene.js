@@ -68,7 +68,7 @@ class GameScene extends Scene {
             0,
             playerSize,
             playerSize,
-            Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operationOptions.answerNumber]).color
+            Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color
         );
         squareObject.setOrigin(0, 0);
 
@@ -105,7 +105,6 @@ class GameScene extends Scene {
             enemy.alpha = 0.6;
         }
 
-        this.player.body.setVelocityY(0);
         this.player.number = rightAnswer;
         this.player.list[1].text = rightAnswer;
         this.player.list[1].x = (playerSize - this.player.list[1].width) / 2;
@@ -134,7 +133,6 @@ class GameScene extends Scene {
         });
         playerLost.anims.play('playerLost');
         this.player.add(playerLost);
-        this.player.body.setVelocityY(0);
 
         setTimeout(() => {
             this.scene.pause();
@@ -147,6 +145,7 @@ class GameScene extends Scene {
         const enemySize = (gameWidth / 4) * 0.9;
         const enemyMargin = ((gameWidth) - (enemySize * 4)) / 5;
         const enemyObjects = [];
+        const rightAnswer = this.calcAnswer();
 
         for (let i = 0; i < 4; i++) {
             const squareObject = this.physics.scene.add.rectangle(
@@ -154,11 +153,11 @@ class GameScene extends Scene {
                 0,
                 enemySize,
                 enemySize,
-                Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operationOptions.answerNumber]).color
+                Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color
             );
             squareObject.setOrigin(0, 0);
 
-            const number = getRandomInt(0, this.level.limit);
+            const number = getRandomInt(rightAnswer - 10, rightAnswer + 10);
             const numberObject = this.add.text(0, 0, number, { fontSize: 36 });
             numberObject.x = (enemySize - numberObject.width) / 2;
             numberObject.y = (enemySize - numberObject.height) / 2;
@@ -167,14 +166,12 @@ class GameScene extends Scene {
             this.physics.world.enable(containerObject);
             containerObject.body.width = enemySize;
             containerObject.body.height = enemySize;
-            // containerObject.body.setVelocityY(200 * this.level.speed);
             containerObject.number = number;
 
             enemyObjects.push(containerObject);
         }
 
         const randomEnemyObject = enemyObjects[getRandomInt(0, enemyObjects.length - 1)];
-        const rightAnswer = this.calcAnswer();
 
         randomEnemyObject.number = rightAnswer;
         randomEnemyObject.list[1].text = rightAnswer;
@@ -187,7 +184,6 @@ class GameScene extends Scene {
     destroyEnemies() {
         for (const enemy of this.enemies) {
             if (enemy && enemy.body) {
-                enemy.body.setVelocityY(0);
                 enemy.destroy();
             }
         }
@@ -218,9 +214,9 @@ class GameScene extends Scene {
 
     addOperation() {
         this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
-        this.operationOptions.number = getRandomInt(0, 10);
+        this.operationOptions.number = getRandomInt(1, 9);
 
-        this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground[this.operationOptions.answerNumber]).color;
+        this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
         this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
 
         if (this.operation) {
