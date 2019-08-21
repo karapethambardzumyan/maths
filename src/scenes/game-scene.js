@@ -267,7 +267,7 @@ class GameScene extends Scene {
                 const arrayX = [];
 
                 if (
-                    window.Math.abs(playerY - enemyY) > 0 && window.Math.abs(playerY - enemyY) < 5 &&
+                    window.Math.abs(playerY - enemyY) &&
                     !collided
                 ) {
                     collided = true;
