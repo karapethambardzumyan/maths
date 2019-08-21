@@ -13,21 +13,26 @@ class GameScene extends Scene {
             number: null,
             answerNumber: 0
         };
+
+        this.lowTimeAudio = null;
     }
 
     preload() {
-        this.load.spritesheet('playerWin', './assets/player-win.png', {
+        this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
             frameWidth: 140,
             frameHeight: 140,
             startFrame: 0,
             endFrame: 10
         });
-        this.load.spritesheet('playerLost', './assets/player-lost.png', {
+        this.load.spritesheet('playerLost', './assets/sprites/player-lost.png', {
             frameWidth: 112,
             frameHeight: 80,
             startFrame: 0,
             endFrame: 9
         });
+
+        this.load.audio('lowTimeAudio', ['./assets/audio/low-time.wav']);
+        this.load.audio('winAudio', ['./assets/audio/win.wav']);
     }
 
     create() {
@@ -54,6 +59,11 @@ class GameScene extends Scene {
         if (this.enemies.length !== 0) {
             for (const enemy of this.enemies) {
                 enemy.y += 3.5 * this.level.speed;
+            }
+
+            if (this.lowTimeAudio === null && this.enemies[0].y > gameHeight / 3) {
+                this.lowTimeAudio = this.sound.add('lowTimeAudio', { loop: false });
+                this.lowTimeAudio.play();
             }
         }
     }
@@ -100,6 +110,9 @@ class GameScene extends Scene {
         });
         playerWin.anims.play('playerWin');
         this.player.add(playerWin);
+        this.lowTimeAudio.stop();
+        const winAudio = this.sound.add('winAudio', { loop: false });
+        winAudio.play();
 
         for (let enemy of this.enemies) {
             enemy.alpha = 0.6;
@@ -146,6 +159,8 @@ class GameScene extends Scene {
         const enemyMargin = ((gameWidth) - (enemySize * 4)) / 5;
         const enemyObjects = [];
         const rightAnswer = this.calcAnswer();
+
+        this.lowTimeAudio = null;
 
         for (let i = 0; i < 4; i++) {
             const squareObject = this.physics.scene.add.rectangle(
