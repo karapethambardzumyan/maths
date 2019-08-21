@@ -58,7 +58,7 @@ class GameScene extends Scene {
 
         if (this.enemies.length !== 0) {
             for (const enemy of this.enemies) {
-                enemy.y += 3.5 * this.level.speed;
+                enemy.y += 3 * this.level.speed;
             }
 
             if (this.lowTimeAudio === null && this.enemies[0].y > gameHeight / 3) {
@@ -71,7 +71,7 @@ class GameScene extends Scene {
     addPlayer() {
         const gameWidth = window.innerWidth;
         const gameHeight = window.innerHeight;
-        const playerSize = gameWidth / 5;
+        const playerSize = gameWidth / 6;
 
         const squareObject = this.physics.scene.add.rectangle(
             0,
@@ -82,7 +82,7 @@ class GameScene extends Scene {
         );
         squareObject.setOrigin(0, 0);
 
-        const numberObject = this.add.text(0, 0, '2', { fontSize: 36 });
+        const numberObject = this.add.text(0, 0, '2', { fontSize: 30 });
         numberObject.x = (playerSize - numberObject.width) / 2;
         numberObject.y = (playerSize - numberObject.height) / 2;
 
@@ -97,7 +97,7 @@ class GameScene extends Scene {
 
     playerWin(rightAnswer) {
         const gameWidth = window.innerWidth;
-        const playerSize = gameWidth / 5;
+        const playerSize = gameWidth / 6;
         const playerWin = this.add.sprite(-((140 * playerSize / 80) - this.player.body.width) / 2, -((140 * playerSize / 80) - this.player.body.height) / 2,'playerWin');
         playerWin.setOrigin(0, 0);
         playerWin.setScale(playerSize / 80, playerSize / 80);
@@ -130,7 +130,7 @@ class GameScene extends Scene {
 
     playerLost() {
         const gameWidth = window.innerWidth;
-        const playerSize = gameWidth / 5;
+        const playerSize = gameWidth / 6;
         const playerLost = this.add.sprite((-((112 * playerSize / 80) - this.player.body.width) / 2) * 2, -15,'playerLost');
         playerLost.setOrigin(0, 0);
         playerLost.setScale(1.2, 1.2);
@@ -155,14 +155,14 @@ class GameScene extends Scene {
 
     addEnemies() {
         const gameWidth = window.innerWidth;
-        const enemySize = (gameWidth / 4) * 0.9;
-        const enemyMargin = ((gameWidth) - (enemySize * 4)) / 5;
+        const enemySize = (gameWidth / 5) * 0.9;
+        const enemyMargin = (gameWidth - (enemySize * 5)) / 6;
         const enemyObjects = [];
         const rightAnswer = this.calcAnswer();
 
         this.lowTimeAudio = null;
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             const squareObject = this.physics.scene.add.rectangle(
                 0,
                 0,
@@ -173,11 +173,11 @@ class GameScene extends Scene {
             squareObject.setOrigin(0, 0);
 
             const number = getRandomInt(rightAnswer - 10, rightAnswer + 10);
-            const numberObject = this.add.text(0, 0, number, { fontSize: 36 });
+            const numberObject = this.add.text(0, 0, number, { fontSize: 30 });
             numberObject.x = (enemySize - numberObject.width) / 2;
             numberObject.y = (enemySize - numberObject.height) / 2;
 
-            const containerObject = this.add.container((enemyMargin * (i +1)) + (enemySize * i), -enemySize, [squareObject, numberObject]);
+            const containerObject = this.add.container((enemyMargin * (i + 1)) + (enemySize * i), -enemySize, [squareObject, numberObject]);
             this.physics.world.enable(containerObject);
             containerObject.body.width = enemySize;
             containerObject.body.height = enemySize;
@@ -294,7 +294,7 @@ class GameScene extends Scene {
 
     addControl() {
         const gameWidth = window.innerWidth;
-        const playerSize = gameWidth / 5;
+        const playerSize = gameWidth / 6;
         const pointer = this.input.activePointer;
 
         if (pointer.isDown) {
