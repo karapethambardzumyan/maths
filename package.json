@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --env.NODE_ENV=development --mode=development --watch=true",
+    "start": "concurrently \"npm run serve\" \"webpack --env.NODE_ENV=development --mode=development --watch=true\"",
+    "serve": "node server.js",
     "build": "webpack --env.NODE_ENV=production --mode=production"
   },
   "devDependencies": {
@@ -18,10 +19,12 @@
     "style-loader": "^0.23.1",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "concurrently": "^4.1.0"
   },
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "phaser": "^3.18.1"
   }
 }
