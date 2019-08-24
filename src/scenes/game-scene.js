@@ -7,8 +7,7 @@ class GameScene extends Scene {
     constructor() {
         super('Game');
 
-        this.level = LEVELS[0];
-        this.score = 0;
+        this.level = LEVELS[1];
         this.operationOptions = {
             symbol: null,
             number: null,
@@ -107,8 +106,6 @@ class GameScene extends Scene {
         this.player.list[1].y = (playerSize - this.player.list[1].height) / 2;
 
         this.operation = this.addOperation();
-
-        this.score += 1;
     }
 
     playerLost() {
@@ -132,7 +129,6 @@ class GameScene extends Scene {
 
         setTimeout(() => {
             this.scene.pause();
-            console.log('Score:', this.score);
         }, 1000);
     }
 
@@ -142,6 +138,7 @@ class GameScene extends Scene {
         const enemyMargin = (gameWidth - (enemySize * 5)) / 6;
         const enemyObjects = [];
         const rightAnswer = this.calcAnswer();
+        const generatedNumbers = [rightAnswer];
 
         this.lowTimeAudio = null;
 
@@ -155,7 +152,8 @@ class GameScene extends Scene {
             );
             squareObject.setOrigin(0, 0);
 
-            const number = getRandomInt(rightAnswer - 10, rightAnswer + 10);
+            const number = getRandomInt(rightAnswer - 10, rightAnswer + 10, generatedNumbers);
+            generatedNumbers.push(number);
             const numberObject = this.add.text(0, 0, number, { fontSize: 30 });
             numberObject.x = (enemySize - numberObject.width) / 2;
             numberObject.y = (enemySize - numberObject.height) / 2;
@@ -230,7 +228,6 @@ class GameScene extends Scene {
 
         if (this.operationOptions.answerNumber >= this.level.answersCount) {
             this.scene.pause();
-            console.log('Score:', this.score);
         } else {
             this.operationOptions.answerNumber++;
         }
