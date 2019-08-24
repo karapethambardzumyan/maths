@@ -1,4 +1,4 @@
-import {Math, Scene} from 'phaser';
+import { Math, Scene } from 'phaser';
 import { SPEED_RATIO } from '../constants';
 import LEVELS from '../constants/levels';
 import { getRandomInt } from '../helpers/numbers';
