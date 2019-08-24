@@ -25,21 +25,15 @@ class LoadingScene extends Scene {
         this.load.audio('lowTimeAudio', ['./assets/audio/low-time.wav']);
         this.load.audio('winAudio', ['./assets/audio/win.wav']);
 
-        let progressBar;
-        let progressBox;
+        this.load.on('fileprogress', file => {
+            this.loading && this.loading.destroy();
 
-        this.load.on('progress', value => {
-            progressBar = this.add.graphics();
-            progressBox = this.add.graphics();
-
-            progressBox.fillStyle(0x222222, 0.8);
-            progressBox.fillRect(240, 270, 320, 50);
+            this.loading = this.add.text(0, 0, file.src, { fontSize: 16 });
+            this.loading.x = (this.game.config.width - this.loading.width) / 2;
+            this.loading.y = (this.game.config.height - this.loading.height) / 2;
         });
 
         this.load.on('complete', () => {
-            progressBar.destroy();
-            progressBox.destroy();
-
             this.scene.start('Menu');
         });
     }

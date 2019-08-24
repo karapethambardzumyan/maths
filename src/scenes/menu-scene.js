@@ -12,10 +12,6 @@ class MenuScene extends Scene {
         this.addPlayButton();
     }
 
-    update() {
-
-    }
-
     addLogo() {
         const logo = this.add.image(0, 0, 'logo');
         logo.setScale(this.game.config.width / logo.width * 0.8);
