@@ -1,6 +1,7 @@
 import {Math, Scene} from 'phaser';
+import { SPEED_RATIO } from '../constants';
 import LEVELS from '../constants/levels';
-import {getRandomInt} from '../helpers/numbers';
+import { getRandomInt } from '../helpers/numbers';
 
 class GameScene extends Scene {
     constructor() {
