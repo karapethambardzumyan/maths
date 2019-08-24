@@ -6,8 +6,8 @@ class MenuScene extends Scene {
     }
 
     preload() {
-        this.load.image('logo', './img/logo.png');
-        this.load.image('playButton', './img/play.png');
+        this.load.image('logo', './assets/menu/logo.png');
+        this.load.image('playButton', './assets/menu/play.png');
 
         this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
             frameWidth: 140,
