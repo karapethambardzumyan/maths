@@ -5,27 +5,6 @@ class MenuScene extends Scene {
         super('Menu');
     }
 
-    preload() {
-        this.load.image('logo', './assets/menu/logo.png');
-        this.load.image('playButton', './assets/menu/play.png');
-
-        this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
-            frameWidth: 140,
-            frameHeight: 140,
-            startFrame: 0,
-            endFrame: 10
-        });
-        this.load.spritesheet('playerLost', './assets/sprites/player-lost.png', {
-            frameWidth: 112,
-            frameHeight: 80,
-            startFrame: 0,
-            endFrame: 9
-        });
-
-        this.load.audio('lowTimeAudio', ['./assets/audio/low-time.wav']);
-        this.load.audio('winAudio', ['./assets/audio/win.wav']);
-    }
-
     create() {
         this.cameras.main.setBackgroundColor('#3b5d73');
 
