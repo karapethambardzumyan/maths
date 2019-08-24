@@ -8,11 +8,12 @@ class Game extends Phaser.Game {
         super(config);
 
         this.scene.add('Game', GameScene);
+        document.querySelector('.wrapper').style.zIndex = '-1';
+        this.scene.start('Game');
     }
 
     startGameScene() {
         document.querySelector('.wrapper').style.zIndex = '-1';
-
         this.scene.start('Game');
     }
 }

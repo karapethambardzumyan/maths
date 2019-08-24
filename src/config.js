@@ -1,12 +1,21 @@
+import { MAX_WIDTH, MAX_HEIGHT } from './constants';
+
+const width = window.innerWidth > MAX_WIDTH ? MAX_WIDTH : window.innerWidth;
+const height = window.innerWidth > MAX_WIDTH ? MAX_HEIGHT : window.innerHeight;
+
 export default {
     type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: width,
+    height: height,
     backgroundColor: '#cccccc',
     physics: {
         default: 'arcade',
         arcade: {
-            debug: !true
+            debug: false
         }
+    },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
     }
 };

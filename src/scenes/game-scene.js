@@ -44,8 +44,8 @@ class GameScene extends Scene {
     }
 
     update() {
-        const gameWidth = window.innerWidth;
-        const gameHeight = window.innerHeight;
+        const gameWidth = this.game.config.width;
+        const gameHeight = this.game.config.height;
         const enemySize = gameWidth / 5;
 
         this.addControl();
@@ -58,7 +58,7 @@ class GameScene extends Scene {
 
         if (this.enemies.length !== 0) {
             for (const enemy of this.enemies) {
-                enemy.y += 3 * this.level.speed;
+                enemy.y += (gameHeight / SPEED_RATIO) * this.level.speed;
             }
 
             if (this.lowTimeAudio === null && this.enemies[0].y > gameHeight / 3) {
@@ -69,8 +69,8 @@ class GameScene extends Scene {
     }
 
     addPlayer() {
-        const gameWidth = window.innerWidth;
-        const gameHeight = window.innerHeight;
+        const gameWidth = this.game.config.width;
+        const gameHeight = this.game.config.height;
         const playerSize = gameWidth / 6;
 
         const squareObject = this.physics.scene.add.rectangle(
@@ -96,7 +96,7 @@ class GameScene extends Scene {
     }
 
     playerWin(rightAnswer) {
-        const gameWidth = window.innerWidth;
+        const gameWidth = this.game.config.width;
         const playerSize = gameWidth / 6;
         const playerWin = this.add.sprite(-((140 * playerSize / 80) - this.player.body.width) / 2, -((140 * playerSize / 80) - this.player.body.height) / 2,'playerWin');
         playerWin.setOrigin(0, 0);
@@ -129,7 +129,7 @@ class GameScene extends Scene {
     }
 
     playerLost() {
-        const gameWidth = window.innerWidth;
+        const gameWidth = this.game.config.width;
         const playerSize = gameWidth / 6;
         const playerLost = this.add.sprite((-((112 * playerSize / 80) - this.player.body.width) / 2) * 2, -15,'playerLost');
         playerLost.setOrigin(0, 0);
@@ -154,7 +154,7 @@ class GameScene extends Scene {
     }
 
     addEnemies() {
-        const gameWidth = window.innerWidth;
+        const gameWidth = this.game.config.width;
         const enemySize = (gameWidth / 5) * 0.9;
         const enemyMargin = (gameWidth - (enemySize * 5)) / 6;
         const enemyObjects = [];
@@ -238,8 +238,8 @@ class GameScene extends Scene {
             this.operation.destroy();
         }
 
-        const gameWidth = window.innerWidth;
-        const gameHeight = window.innerHeight;
+        const gameWidth = this.game.config.width;
+        const gameHeight = this.game.config.height;
         const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, { fontSize: 200, fill: '#ffffff' });
         operation.x = (gameWidth - operation.width) / 2;
         operation.y = (gameHeight - operation.height) / 2;
@@ -293,7 +293,7 @@ class GameScene extends Scene {
     }
 
     addControl() {
-        const gameWidth = window.innerWidth;
+        const gameWidth = this.game.config.width;
         const playerSize = gameWidth / 6;
         const pointer = this.input.activePointer;
 
