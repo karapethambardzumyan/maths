@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import LEVELS from '../constants/levels';
 
 class GameOverScene extends Scene {
     constructor() {
@@ -7,11 +8,14 @@ class GameOverScene extends Scene {
 
     init(data) {
         this.levelId = data.levelId;
+        this.level = LEVELS[this.levelId];
     }
 
     create() {
         this.gameOver = this.addGameOver();
         this.addTryAgainButton();
+
+        this.cameras.main.setBackgroundColor(this.level.colors.background[0]);
     }
 
     addGameOver() {

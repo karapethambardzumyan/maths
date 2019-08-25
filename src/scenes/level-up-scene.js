@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import LEVELS from '../constants/levels';
 
 class LevelUpScene extends Scene {
     constructor() {
@@ -7,6 +8,7 @@ class LevelUpScene extends Scene {
 
     init(data) {
         this.levelId = data.levelId + 1;
+        this.level = LEVELS[this.levelId - 1];
     }
 
     create() {
@@ -14,6 +16,8 @@ class LevelUpScene extends Scene {
 
         this.header = this.addHeader();
         this.nextButton = this.addNextButton();
+
+        this.cameras.main.setBackgroundColor(this.level.colors.background[0]);
     }
 
     addHeader() {
@@ -32,7 +36,11 @@ class LevelUpScene extends Scene {
         nextButton.setInteractive();
 
         nextButton.on('pointerdown', () => {
-            this.scene.start('Game', { levelId: this.levelId });
+            if (this.levelId <= LEVELS.length - 1) {
+                this.scene.start('Game', { levelId: this.levelId });
+            } else {
+                alert('Yoi win the Game!!!');
+            }
         });
 
         return nextButton;
