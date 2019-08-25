@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import LEVELS from '../constants/levels';
 
 class MenuScene extends Scene {
     constructor() {
@@ -9,7 +10,8 @@ class MenuScene extends Scene {
         this.cameras.main.setBackgroundColor('#3b5d73');
 
         this.logo = this.addLogo();
-        this.addPlayButton();
+        this.playButton = this.addPlayButton();
+        this.levelObjects = this.addLevels();
     }
 
     addLogo() {
@@ -32,10 +34,37 @@ class MenuScene extends Scene {
         playButton.setInteractive();
 
         playButton.on('pointerdown', () => {
-            this.scene.start('Game');
+            this.playButton.visible = false;
+
+            for (const level of this.levelObjects) {
+                level.visible = true;
+            }
         });
 
         return playButton;
+    }
+
+    addLevels() {
+        const levelObjects = [];
+
+        for (let i = 0; i < LEVELS.length; i++) {
+            const level = LEVELS[i];
+
+            const levelObject = this.add.text(0, 0, `Level ${ level.level }`, { fontSize: 32 });
+            levelObject.x = (this.game.config.width - levelObject.displayWidth) / 2;
+            levelObject.y = (this.logo.y + this.logo.displayHeight + 10) + (levelObject.height * i);
+            levelObject.visible = false;
+
+            levelObject.setInteractive();
+
+            levelObject.on('pointerdown', () => {
+                this.scene.start('Game', { level: level.level - 1 });
+            });
+
+            levelObjects.push(levelObject);
+        }
+
+        return levelObjects;
     }
 }
 

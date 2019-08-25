@@ -7,7 +7,6 @@ class GameScene extends Scene {
     constructor() {
         super('Game');
 
-        this.level = LEVELS[1];
         this.operationOptions = {
             symbol: null,
             number: null,
@@ -15,6 +14,10 @@ class GameScene extends Scene {
         };
 
         this.lowTimeAudio = null;
+    }
+
+    init(data) {
+        this.level = LEVELS[data.level];
     }
 
     create() {
@@ -127,9 +130,8 @@ class GameScene extends Scene {
         playerLost.anims.play('playerLost');
         this.player.add(playerLost);
 
-        setTimeout(() => {
-            this.scene.pause();
-        }, 1000);
+        this.scene.stop('Game');
+        this.scene.start('GameOver');
     }
 
     addEnemies() {
