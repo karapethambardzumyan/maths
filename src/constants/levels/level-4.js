@@ -1,10 +1,10 @@
 const LEVEL_1 = {
-    level: 2,
+    level: 4,
     colors: {
-        background: ['#943737', '#88371b'],
-        foreground: '#6f5c5c'
+        background: ['#d874e6', '#c550d6'],
+        foreground: '#452f48'
     },
-    operations: ['+', '-'],
+    operations: ['+', '-', '*', '/'],
     limit: 150,
     speed: 1
 };

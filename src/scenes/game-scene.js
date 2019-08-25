@@ -17,10 +17,13 @@ class GameScene extends Scene {
     }
 
     init(data) {
-        this.level = LEVELS[data.level];
+        console.log('levelId:', data.levelId);
+        this.levelId = data.levelId;
+        this.level = LEVELS[this.levelId];
     }
 
     create() {
+        console.log('create');
         this.player = this.addPlayer();
         this.operation = this.addOperation();
         this.enemies = this.addEnemies();
@@ -131,7 +134,9 @@ class GameScene extends Scene {
         this.player.add(playerLost);
 
         this.scene.stop('Game');
-        this.scene.start('GameOver');
+        this.scene.start('GameOver', { levelId: this.levelId });
+
+        this.operationOptions.answerNumber = 0;
     }
 
     addEnemies() {
@@ -229,7 +234,15 @@ class GameScene extends Scene {
         operation.setDepth(-1);
 
         if (this.operationOptions.answerNumber >= this.level.answersCount) {
-            this.scene.pause();
+            this.operationOptions = {
+                symbol: null,
+                number: null,
+                answerNumber: 0
+            };
+
+            this.lowTimeAudio = null;
+            this.scene.stop();
+            this.scene.start('LevelUp', { levelId: this.levelId });
         } else {
             this.operationOptions.answerNumber++;
         }

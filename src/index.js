@@ -5,6 +5,7 @@ import LoadingScene from './scenes/loading-scene';
 import MenuScene from './scenes/menu-scene';
 import GameScene from './scenes/game-scene';
 import GameOverScene from './scenes/game-over-scene';
+import LevelUpScene from './scenes/level-up-scene';
 
 class Game extends Phaser.Game {
     constructor () {
@@ -14,6 +15,7 @@ class Game extends Phaser.Game {
         this.scene.add('Menu', MenuScene);
         this.scene.add('Game', GameScene);
         this.scene.add('GameOver', GameOverScene);
+        this.scene.add('LevelUp', LevelUpScene);
 
         this.scene.start('Loading');
     }

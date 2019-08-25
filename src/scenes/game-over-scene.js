@@ -5,6 +5,10 @@ class GameOverScene extends Scene {
         super('GameOver');
     }
 
+    init(data) {
+        this.levelId = data.levelId;
+    }
+
     create() {
         this.gameOver = this.addGameOver();
         this.addTryAgainButton();
@@ -26,7 +30,7 @@ class GameOverScene extends Scene {
         tryAgainButton.setInteractive();
 
         tryAgainButton.on('pointerdown', () => {
-            this.scene.start('Game');
+            this.scene.start('Game', { levelId: this.levelId });
         });
 
         return tryAgainButton;

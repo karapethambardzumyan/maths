@@ -58,7 +58,7 @@ class MenuScene extends Scene {
             levelObject.setInteractive();
 
             levelObject.on('pointerdown', () => {
-                this.scene.start('Game', { level: level.level - 1 });
+                this.scene.start('Game', { levelId: level.level - 1 });
             });
 
             levelObjects.push(levelObject);
