@@ -8,6 +8,12 @@ class LoadingScene extends Scene {
     preload() {
         this.load.image('logo', './assets/menu/logo.png');
         this.load.image('playButton', './assets/menu/play.png');
+        this.load.image('soonButton', './assets/menu/soon.png');
+        this.load.image('border', './assets/menu/border.png');
+        this.load.image('leaderboard', './assets/menu/leaderboard.png');
+        this.load.image('musicOn', './assets/menu/music-on.png');
+        this.load.image('soundOn', './assets/menu/sound-on.png');
+        this.load.image('soundOff', './assets/menu/sound-off.png');
 
         this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
             frameWidth: 140,
