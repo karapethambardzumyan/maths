@@ -15,6 +15,15 @@ class LoadingScene extends Scene {
         this.load.image('soundOn', './assets/menu/sound-on.png');
         this.load.image('soundOff', './assets/menu/sound-off.png');
 
+        this.load.image('borderLevels', './assets/levels/border.png');
+        this.load.image('closeLevels', './assets/levels/close.png');
+        this.load.image('level1', './assets/levels/level-1.png');
+        this.load.image('level2', './assets/levels/level-2.png');
+        this.load.image('level3', './assets/levels/level-3.png');
+        this.load.image('level4', './assets/levels/level-4.png');
+        this.load.image('level5', './assets/levels/level-5.png');
+        this.load.image('level6', './assets/levels/level-6.png');
+
         this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
             frameWidth: 140,
             frameHeight: 140,

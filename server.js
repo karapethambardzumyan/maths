@@ -10,4 +10,4 @@ app.get('*', (req, res) => {
   return res.sendFile(path.resolve(__dirname, 'public/index.html'));
 });
 
-app.listen(8000, () => console.log('Server has started on port 8000!'));
+app.listen(3000, () => console.log('Server has started on port 3000!'));

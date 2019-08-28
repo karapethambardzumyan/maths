@@ -1,5 +1,4 @@
 import { Scene } from 'phaser';
-import LEVELS from '../constants/levels';
 
 class MenuScene extends Scene {
     constructor() {
@@ -18,9 +17,6 @@ class MenuScene extends Scene {
 
         this.menu = this.add.container(0, 0, [this.logo, this.border, this.leadernoard, this.playButton, this.soonMode, this.soonChallenges]);
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
-
-
-        this.levelObjects = this.addLevels();
     }
 
     addLogo() {
@@ -63,11 +59,8 @@ class MenuScene extends Scene {
         playButton.setInteractive();
 
         playButton.on('pointerdown', () => {
-            this.menu.visible = false;
-
-            for (const level of this.levelObjects) {
-                level.visible = true;
-            }
+            this.scene.stop('Menu');
+            this.scene.start('Levels');
         });
 
         return playButton;
@@ -91,29 +84,6 @@ class MenuScene extends Scene {
         soonButton.y = this.soonMode.y + this.soonMode.displayHeight + ((1090 * this.border.displayHeight / this.border.height) - (soonButton.displayHeight * 3)) / 4;
 
         return soonButton;
-    }
-
-    addLevels() {
-        const levelObjects = [];
-
-        for (let i = 0; i < LEVELS.length; i++) {
-            const level = LEVELS[i];
-
-            const levelObject = this.add.text(0, 0, `Level ${ level.level }`, { fontSize: 32 });
-            levelObject.x = (this.game.config.width - levelObject.displayWidth) / 2;
-            levelObject.y = (this.logo.y + this.logo.displayHeight + 10) + (levelObject.height * i);
-            levelObject.visible = false;
-
-            levelObject.setInteractive();
-
-            levelObject.on('pointerdown', () => {
-                this.scene.start('Game', { levelId: level.level - 1 });
-            });
-
-            levelObjects.push(levelObject);
-        }
-
-        return levelObjects;
     }
 }
 
