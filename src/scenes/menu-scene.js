@@ -8,8 +8,6 @@ class MenuScene extends Scene {
     create() {
         this.ratio = this.game.config.width / 414;
 
-        this.cameras.main.setBackgroundColor('#000000');
-
         this.background = this.addBackground();
         this.logo = this.addLogo();
         this.border = this.addBorder();

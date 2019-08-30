@@ -7,31 +7,45 @@ class LevelsScene extends Scene {
     }
 
     create() {
-        this.cameras.main.setBackgroundColor('#3b5d73');
+        this.ratio = this.game.config.width / 414;
 
+        this.background = this.addBackground();
         this.border = this.addBorder();
         this.closeButton = this.addCloseButton();
-        this.levelObjects = this.addLevels();
+        this.levels = this.addLevels();
 
-        this.menu = this.add.container(0, 0, [this.border, this.closeButton, ...this.levelObjects]);
+        this.menu = this.add.container(0, 0, [
+            this.border,
+            this.closeButton,
+            ...this.levels
+        ]);
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+    }
+
+    addBackground() {
+        const background = this.add.image(0, 0, 'background');
+        background.setScale(this.game.config.width / background.width, this.game.config.height / background.height);
+        background.setOrigin(0, 0);
+
+        return background;
     }
 
     addBorder() {
         const border = this.add.image(0, 0, 'borderLevels');
-        border.setScale(this.game.config.height / 1920);
+        border.setScale(this.ratio);
         border.setOrigin(0, 0);
         border.x = (this.game.config.width - border.displayWidth) / 2;
+        border.y = this.ratio * 36;
 
         return border;
     }
 
     addCloseButton() {
         const closeButton = this.add.image(0, 0, 'closeLevels');
-        closeButton.setScale(this.game.config.height / 1920);
+        closeButton.setScale(this.ratio);
         closeButton.setOrigin(0, 0);
-        closeButton.x = ((this.game.config.width - this.border.displayWidth) / 2) - (55 * this.game.config.width / 949);
-        closeButton.y = -(55 * this.game.config.height / 1571);
+        closeButton.x = this.border.x - (this.ratio * 20);
+        closeButton.y = this.border.y - (this.ratio * 20);
 
         closeButton.setInteractive();
 
@@ -44,16 +58,17 @@ class LevelsScene extends Scene {
     }
 
     addLevels() {
-        const levelObjects = [];
+        const levels = [];
 
         for (let i = 0; i < LEVELS.length; i++) {
             const level = LEVELS[i];
-
             const levelObject = this.add.image(0, 0, `level${ i + 1 }`);
             levelObject.setOrigin(0, 0);
             levelObject.setScale(this.game.config.width / 1080);
             levelObject.x = (this.game.config.width - levelObject.displayWidth ) / 2;
-            levelObject.y = (60 * (this.game.config.height / 1566)) * (i + 1) + (levelObject.displayHeight * i);
+            levelObject.y = i === 0 ?
+                this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) :
+                this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) + (this.ratio * 30) * i;
 
             levelObject.setInteractive();
 
@@ -61,10 +76,10 @@ class LevelsScene extends Scene {
                 this.scene.start('Game', { levelId: level.level - 1 });
             });
 
-            levelObjects.push(levelObject);
+            levels.push(levelObject);
         }
 
-        return levelObjects;
+        return levels;
     }
 }
 
