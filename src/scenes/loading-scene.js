@@ -6,14 +6,17 @@ class LoadingScene extends Scene {
     }
 
     preload() {
+        this.load.image('background', './assets/menu/background.png');
         this.load.image('logo', './assets/menu/logo.png');
+        this.load.image('borderMenu', './assets/menu/border.png');
+        this.load.image('topbar', './assets/menu/topbar.png');
+        this.load.image('leaderboardButton', './assets/menu/leaderboard.png');
+        this.load.image('noAdsButton', './assets/menu/no-ads.png');
+        this.load.image('soundOnButton', './assets/menu/sound-on.png');
+        this.load.image('soundOffButton', './assets/menu/sound-off.png');
+        this.load.image('musicOnButton', './assets/menu/music-on.png');
         this.load.image('playButton', './assets/menu/play.png');
         this.load.image('soonButton', './assets/menu/soon.png');
-        this.load.image('border', './assets/menu/border.png');
-        this.load.image('leaderboard', './assets/menu/leaderboard.png');
-        this.load.image('musicOn', './assets/menu/music-on.png');
-        this.load.image('soundOn', './assets/menu/sound-on.png');
-        this.load.image('soundOff', './assets/menu/sound-off.png');
 
         this.load.image('borderLevels', './assets/levels/border.png');
         this.load.image('closeLevels', './assets/levels/close.png');

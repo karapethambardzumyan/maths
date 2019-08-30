@@ -6,55 +6,115 @@ class MenuScene extends Scene {
     }
 
     create() {
-        this.cameras.main.setBackgroundColor('#3b5d73');
+        this.ratio = this.game.config.width / 414;
 
+        this.cameras.main.setBackgroundColor('#000000');
+
+        this.background = this.addBackground();
         this.logo = this.addLogo();
         this.border = this.addBorder();
-        this.leadernoard = this.addLeaderboard();
+        this.topbar = this.addTopbar();
+        this.leaderboardButton = this.addLeaderboardButton();
+        this.noAdsButton = this.addNoAdsButton();
+        this.soundOnButton = this.addSoundOnButton();
         this.playButton = this.addPlayButton();
         this.soonMode = this.addSoonMode();
         this.soonChallenges = this.addSoonChallenges();
 
-        this.menu = this.add.container(0, 0, [this.logo, this.border, this.leadernoard, this.playButton, this.soonMode, this.soonChallenges]);
+        this.menu = this.add.container(0, 0, [
+            this.logo,
+            this.border,
+            this.topbar,
+            this.leaderboardButton,
+            this.noAdsButton,
+            this.soundOnButton,
+            this.playButton,
+            this.soonMode,
+            this.soonChallenges
+        ]);
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+    }
+
+    addBackground() {
+        const background = this.add.image(0, 0, 'background');
+        background.setScale(this.game.config.width / background.width, this.game.config.height / background.height);
+        background.setOrigin(0, 0);
+
+        return background;
     }
 
     addLogo() {
         const logo = this.add.image(0, 0, 'logo');
-        logo.setScale(this.game.config.width / logo.width * 0.8);
+        logo.setScale(this.ratio);
         logo.setOrigin(0, 0);
         logo.x = (this.game.config.width - logo.displayWidth) / 2;
-        logo.y = 0;
+        logo.y = this.ratio * 40;
 
         return logo;
     }
 
     addBorder() {
-        const border = this.add.image(0, 0, 'border');
-        border.setScale(this.game.config.width / border.width * 0.8);
+        const border = this.add.image(0, 0, 'borderMenu');
+        border.setScale(this.ratio);
         border.setOrigin(0, 0);
         border.x = (this.game.config.width - border.displayWidth) / 2;
-        border.y = this.logo.y + this.logo.displayHeight + 10;
+        border.y = this.logo.y + this.logo.displayHeight + (this.ratio * 14);
 
         return border;
     }
 
-    addLeaderboard() {
-        const leaderboard = this.add.image(0, 0, 'leaderboard');
-        leaderboard.setScale(this.game.config.width / leaderboard.width * 0.15);
-        leaderboard.setOrigin(0, 0);
-        leaderboard.x = this.border.x + 15;
-        leaderboard.y = this.border.y + 10;
+    addTopbar() {
+        const topbar = this.add.image(0, 0, 'topbar');
+        topbar.setScale(this.ratio);
+        topbar.setOrigin(0, 0);
+        topbar.x = this.border.x + (this.ratio * 10);
+        topbar.y = this.border.y + (this.ratio * 12);
 
-        return leaderboard;
+        return topbar;
+    }
+
+    addLeaderboardButton() {
+        const leaderboardButton = this.add.image(0, 0, 'leaderboardButton');
+        leaderboardButton.setScale(this.ratio);
+        leaderboardButton.setOrigin(0, 0);
+        leaderboardButton.x = this.topbar.x + (this.ratio * 8);
+        leaderboardButton.y = this.topbar.y + (this.ratio * 11);
+
+        leaderboardButton.setInteractive();
+
+        return leaderboardButton;
+    }
+
+    addNoAdsButton() {
+        const noAdsButton = this.add.image(0, 0, 'noAdsButton');
+        noAdsButton.setScale(this.ratio);
+        noAdsButton.setOrigin(0, 0);
+        noAdsButton.x = this.topbar.x + (this.ratio * 89);
+        noAdsButton.y = this.topbar.y + (this.ratio * 4);
+
+        noAdsButton.setInteractive();
+
+        return noAdsButton;
+    }
+
+    addSoundOnButton() {
+        const soundButton = this.add.image(0, 0, 'soundOnButton');
+        soundButton.setScale(this.ratio);
+        soundButton.setOrigin(0, 0);
+        soundButton.x = this.topbar.x + (this.ratio * 169);
+        soundButton.y = this.topbar.y + (this.ratio * 2);
+
+        soundButton.setInteractive();
+
+        return soundButton;
     }
 
     addPlayButton() {
         const playButton = this.add.image(0, 0, 'playButton');
-        playButton.setScale(this.game.config.width / playButton.width * 0.6);
+        playButton.setScale(this.ratio);
         playButton.setOrigin(0, 0);
         playButton.x = (this.game.config.width - playButton.displayWidth) / 2;
-        playButton.y = this.border.y + (220 * this.border.displayHeight / this.border.height) + ((1090 * this.border.displayHeight / this.border.height) - (playButton.displayHeight * 3)) / 4;
+        playButton.y = this.border.y + (this.ratio * 114);
 
         playButton.setInteractive();
 
@@ -68,20 +128,20 @@ class MenuScene extends Scene {
 
     addSoonMode() {
         const soonButton = this.add.image(0, 0, 'soonButton');
-        soonButton.setScale(this.game.config.width / soonButton.width * 0.6);
+        soonButton.setScale(this.ratio);
         soonButton.setOrigin(0, 0);
         soonButton.x = (this.game.config.width - soonButton.displayWidth) / 2;
-        soonButton.y = this.playButton.y + this.playButton.displayHeight + ((1090 * this.border.displayHeight / this.border.height) - (soonButton.displayHeight * 3)) / 4;
+        soonButton.y = this.border.y + (this.ratio * 250);
 
         return soonButton;
     }
 
     addSoonChallenges() {
         const soonButton = this.add.image(0, 0, 'soonButton');
-        soonButton.setScale(this.game.config.width / soonButton.width * 0.6);
+        soonButton.setScale(this.ratio);
         soonButton.setOrigin(0, 0);
         soonButton.x = (this.game.config.width - soonButton.displayWidth) / 2;
-        soonButton.y = this.soonMode.y + this.soonMode.displayHeight + ((1090 * this.border.displayHeight / this.border.height) - (soonButton.displayHeight * 3)) / 4;
+        soonButton.y = this.border.y + (this.ratio * 380);
 
         return soonButton;
     }
