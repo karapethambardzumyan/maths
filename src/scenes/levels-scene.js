@@ -7,7 +7,7 @@ class LevelsScene extends Scene {
     }
 
     create() {
-        this.ratio = this.game.config.width / 414;
+        this.ratio = this.game.config.height / 736;
 
         this.background = this.addBackground();
         this.border = this.addBorder();

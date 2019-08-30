@@ -53,8 +53,7 @@ class LoadingScene extends Scene {
         });
 
         this.load.on('complete', () => {
-            // this.scene.start('Menu');
-            this.scene.start('Levels');
+            this.scene.start('Menu');
         });
     }
 }
