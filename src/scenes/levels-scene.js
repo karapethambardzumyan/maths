@@ -64,7 +64,7 @@ class LevelsScene extends Scene {
             const level = LEVELS[i];
             const levelObject = this.add.image(0, 0, `level${ i + 1 }`);
             levelObject.setOrigin(0, 0);
-            levelObject.setScale(this.game.config.width / 1080);
+            levelObject.setScale(this.ratio);
             levelObject.x = (this.game.config.width - levelObject.displayWidth ) / 2;
             levelObject.y = i === 0 ?
                 this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) :
@@ -78,6 +78,14 @@ class LevelsScene extends Scene {
 
             levels.push(levelObject);
         }
+
+        const levelInfinity = this.add.image(0, 0, 'levelInfinity');
+        levelInfinity.setOrigin(0, 0);
+        levelInfinity.setScale(this.ratio);
+        levelInfinity.x = (this.game.config.width - levelInfinity.displayWidth ) / 2;
+        levelInfinity.y = this.border.y + (this.ratio * 620);
+
+        levels.push(levelInfinity);
 
         return levels;
     }
