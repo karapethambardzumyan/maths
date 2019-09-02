@@ -26,7 +26,7 @@ class MenuScene extends Scene {
             this.leaderboardButton,
             this.noAdsButton,
             this.soundOnButton,
-            this.playButton,
+            ...this.playButton,
             this.soonMode,
             this.soonChallenges
         ]);
@@ -113,15 +113,32 @@ class MenuScene extends Scene {
         playButton.setOrigin(0, 0);
         playButton.x = (this.game.config.width - playButton.displayWidth) / 2;
         playButton.y = this.border.y + (this.ratio * 114);
+        playButton.visible = true;
+
+        const playButtonTap = this.add.image(0, 0, 'playButtonTap');
+        playButtonTap.setScale(this.ratio);
+        playButtonTap.setOrigin(0, 0);
+        playButtonTap.x = (this.game.config.width - playButtonTap.displayWidth) / 2;
+        playButtonTap.y = this.border.y + (this.ratio * 114);
+        playButtonTap.visible = false;
 
         playButton.setInteractive();
+        playButtonTap.setInteractive();
 
         playButton.on('pointerdown', () => {
+            playButton.visible = false;
+            playButtonTap.visible = true;
+        });
+
+        playButtonTap.on('pointerup', () => {
+            playButton.visible = true;
+            playButtonTap.visible = false;
+
             this.scene.stop('Menu');
             this.scene.start('Levels');
         });
 
-        return playButton;
+        return [playButton, playButtonTap];
     }
 
     addSoonMode() {
