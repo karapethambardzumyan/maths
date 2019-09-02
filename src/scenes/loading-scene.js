@@ -11,6 +11,7 @@ class LoadingScene extends Scene {
         this.load.image('borderMenu', './assets/menu/border.png');
         this.load.image('topbar', './assets/menu/topbar.png');
         this.load.image('leaderboardButton', './assets/menu/leaderboard.png');
+        this.load.image('leaderboardButtonTap', './assets/menu/leaderboard-tap.png');
         this.load.image('noAdsButton', './assets/menu/no-ads.png');
         this.load.image('soundOnButton', './assets/menu/sound-on.png');
         this.load.image('soundOffButton', './assets/menu/sound-off.png');
