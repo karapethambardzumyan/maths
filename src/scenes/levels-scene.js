@@ -86,7 +86,7 @@ class LevelsScene extends Scene {
             } else {
                 levelObject.setInteractive();
 
-                levelObject.on('pointerdown', () => {
+                levelObject.on('pointerup', () => {
                     this.scene.start('Game', { levelId: level.level - 1 });
                 });
             }
