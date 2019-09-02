@@ -72,7 +72,7 @@ class MenuScene extends Scene {
     }
 
     addLeaderboardButton() {
-        const leaderboardButton = this.add.image(0, 0, 'leaderboardButton');
+        const leaderboardButton = this.add.image(0, 0, 'leaderboardButtonSprite');
         leaderboardButton.setScale(this.ratio);
         leaderboardButton.setOrigin(0, 0);
         leaderboardButton.x = this.topbar.x + (this.ratio * 8);
@@ -81,7 +81,11 @@ class MenuScene extends Scene {
         leaderboardButton.setInteractive();
 
         leaderboardButton.on('pointerdown', () => {
-            console.log('pointerdown');
+            leaderboardButton.setFrame(1);
+        });
+
+        leaderboardButton.on('pointerout', () => {
+            leaderboardButton.setFrame(0);
         });
 
         return leaderboardButton;
