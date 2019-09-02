@@ -10,14 +10,15 @@ class LoadingScene extends Scene {
         this.load.image('logo', './assets/menu/logo.png');
         this.load.image('borderMenu', './assets/menu/border.png');
         this.load.image('topbar', './assets/menu/topbar.png');
-        this.load.image('leaderboardButton', './assets/menu/leaderboard.png');
-        this.load.image('leaderboardButtonTap', './assets/menu/leaderboard-tap.png');
-        this.load.spritesheet('leaderboardButtonSprite', './assets/menu/leaderboard-sprite.png', {
-            frameWidth: 38,
+        this.load.spritesheet('leaderboardButton', './assets/menu/leaderboard.png', {
+            frameWidth: 39,
             frameHeight: 34
         });
         this.load.image('noAdsButton', './assets/menu/no-ads.png');
-        this.load.image('soundOnButton', './assets/menu/sound-on.png');
+        this.load.spritesheet('soundsButton', './assets/menu/sounds.png', {
+            frameWidth: 49,
+            frameHeight: 50
+        });
         this.load.image('soundOffButton', './assets/menu/sound-off.png');
         this.load.image('musicOnButton', './assets/menu/music-on.png');
         this.load.spritesheet('playButton', './assets/menu/play.png', {

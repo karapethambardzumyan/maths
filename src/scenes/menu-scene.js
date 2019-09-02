@@ -14,7 +14,7 @@ class MenuScene extends Scene {
         this.topbar = this.addTopbar();
         this.leaderboardButton = this.addLeaderboardButton();
         this.noAdsButton = this.addNoAdsButton();
-        this.soundOnButton = this.addSoundOnButton();
+        this.soundOnButton = this.addSoundsButton();
         this.playButton = this.addPlayButton();
         this.soonMode = this.addSoonMode();
         this.soonChallenges = this.addSoonChallenges();
@@ -72,7 +72,7 @@ class MenuScene extends Scene {
     }
 
     addLeaderboardButton() {
-        const leaderboardButton = this.add.image(0, 0, 'leaderboardButtonSprite');
+        const leaderboardButton = this.add.image(0, 0, 'leaderboardButton');
         leaderboardButton.setScale(this.ratio);
         leaderboardButton.setOrigin(0, 0);
         leaderboardButton.x = this.topbar.x + (this.ratio * 8);
@@ -80,8 +80,14 @@ class MenuScene extends Scene {
 
         leaderboardButton.setInteractive();
 
+        leaderboardButton.setInteractive();
+
         leaderboardButton.on('pointerdown', () => {
             leaderboardButton.setFrame(1);
+        });
+
+        leaderboardButton.on('pointerup', () => {
+            leaderboardButton.setFrame(0);
         });
 
         leaderboardButton.on('pointerout', () => {
@@ -107,20 +113,34 @@ class MenuScene extends Scene {
         return noAdsButton;
     }
 
-    addSoundOnButton() {
-        const soundButton = this.add.image(0, 0, 'soundOnButton');
-        soundButton.setScale(this.ratio);
-        soundButton.setOrigin(0, 0);
-        soundButton.x = this.topbar.x + (this.ratio * 169);
-        soundButton.y = this.topbar.y + (this.ratio * 2);
+    addSoundsButton() {
+        let soundState = 0;
+        const soundsButton = this.add.image(0, 0, 'soundsButton');
+        soundsButton.setScale(this.ratio);
+        soundsButton.setOrigin(0, 0);
+        soundsButton.x = this.topbar.x + (this.ratio * 169);
+        soundsButton.y = this.topbar.y + (this.ratio * 2);
 
-        soundButton.setInteractive();
+        soundsButton.setInteractive();
+        soundsButton.setFrame(soundState);
 
-        soundButton.on('pointerdown', () => {
-            console.log('pointerdown');
+        soundsButton.on('pointerup', () => {
+            switch (soundState) {
+                case 0:
+                    soundState = 1;
+                    break;
+                case 1:
+                    soundState = 2;
+                    break;
+                case 2:
+                    soundState = 0;
+                    break;
+            }
+
+            soundsButton.setFrame(soundState);
         });
 
-        return soundButton;
+        return soundsButton;
     }
 
     addPlayButton() {
