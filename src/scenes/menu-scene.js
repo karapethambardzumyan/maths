@@ -133,9 +133,18 @@ class MenuScene extends Scene {
         playButton.setInteractive();
 
         playButton.on('pointerdown', () => {
-            console.log('pointerdown');
+            playButton.setFrame(1);
+        });
+
+        playButton.on('pointerup', () => {
+            playButton.setFrame(0);
+
             this.scene.stop('Menu');
             this.scene.start('Levels');
+        });
+
+        playButton.on('pointerout', () => {
+            playButton.setFrame(0);
         });
 
         return playButton;

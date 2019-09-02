@@ -20,8 +20,10 @@ class LoadingScene extends Scene {
         this.load.image('soundOnButton', './assets/menu/sound-on.png');
         this.load.image('soundOffButton', './assets/menu/sound-off.png');
         this.load.image('musicOnButton', './assets/menu/music-on.png');
-        this.load.image('playButton', './assets/menu/play.png');
-        this.load.image('playButtonTap', './assets/menu/play-tap.png');
+        this.load.spritesheet('playButton', './assets/menu/play.png', {
+            frameWidth: 260,
+            frameHeight: 85
+        });
         this.load.image('soonButton', './assets/menu/soon.png');
 
         this.load.image('borderLevels', './assets/levels/border.png');
