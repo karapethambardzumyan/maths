@@ -6,6 +6,10 @@ class LevelsScene extends Scene {
         super('Levels');
     }
 
+    init(data) {
+        this.levelId = data.levelId;
+    }
+
     create() {
         this.ratio = this.game.config.height / 736;
 
@@ -70,11 +74,22 @@ class LevelsScene extends Scene {
                 this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) :
                 this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) + (this.ratio * 30) * i;
 
-            levelObject.setInteractive();
+            if (!(this.levelId >= i)) {
+                const levelLocked = this.add.image(0, 0, 'levelLocked');
+                levelLocked.setOrigin(0, 0);
+                levelLocked.setScale(this.ratio);
+                levelLocked.x = levelObject.x + levelObject.displayWidth - levelLocked.displayWidth - (this.ratio * 10);
+                levelLocked.y = i === 0 ?
+                    this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) + (levelObject.displayHeight - levelLocked.displayHeight) / 2 :
+                    this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) + (this.ratio * 30) * i + (levelObject.displayHeight - levelLocked.displayHeight) / 2;
+                levelLocked.setDepth(1);
+            } else {
+                levelObject.setInteractive();
 
-            levelObject.on('pointerdown', () => {
-                this.scene.start('Game', { levelId: level.level - 1 });
-            });
+                levelObject.on('pointerdown', () => {
+                    this.scene.start('Game', { levelId: level.level - 1 });
+                });
+            }
 
             levels.push(levelObject);
         }

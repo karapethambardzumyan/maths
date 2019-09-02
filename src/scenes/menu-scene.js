@@ -160,7 +160,7 @@ class MenuScene extends Scene {
             playButton.setFrame(0);
 
             this.scene.stop('Menu');
-            this.scene.start('Levels');
+            this.scene.start('Levels', { levelId: 0 });
         });
 
         playButton.on('pointerout', () => {
