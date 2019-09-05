@@ -11,7 +11,7 @@ class LevelsScene extends Scene {
     }
 
     create() {
-        this.ratio = this.game.config.height / 736;
+        this.ratio = this.game.config.width / 414;
 
         this.background = this.addBackground();
         this.border = this.addBorder();
@@ -74,15 +74,16 @@ class LevelsScene extends Scene {
                 this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) :
                 this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) + (this.ratio * 30) * i;
 
+            levels.push(levelObject);
+
             if (!(this.levelId >= i)) {
                 const levelLocked = this.add.image(0, 0, 'levelLocked');
                 levelLocked.setOrigin(0, 0);
                 levelLocked.setScale(this.ratio);
                 levelLocked.x = levelObject.x + levelObject.displayWidth - levelLocked.displayWidth - (this.ratio * 10);
-                levelLocked.y = i === 0 ?
-                    this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) + (levelObject.displayHeight - levelLocked.displayHeight) / 2 :
-                    this.border.y + (levelObject.displayHeight * i) + (this.ratio * 25) + (this.ratio * 30) * i + (levelObject.displayHeight - levelLocked.displayHeight) / 2;
-                levelLocked.setDepth(1);
+                levelLocked.y = levelObject.y + (levelObject.displayHeight - levelLocked.displayHeight) / 2;
+
+                levels.push(levelLocked);
             } else {
                 levelObject.setInteractive();
 
@@ -90,8 +91,6 @@ class LevelsScene extends Scene {
                     this.scene.start('Game', { levelId: level.level - 1 });
                 });
             }
-
-            levels.push(levelObject);
         }
 
         const levelInfinity = this.add.image(0, 0, 'levelInfinity');

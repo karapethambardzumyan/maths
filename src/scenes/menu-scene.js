@@ -6,7 +6,7 @@ class MenuScene extends Scene {
     }
 
     create() {
-        this.ratio = this.game.config.height / 736;
+        this.ratio = this.game.config.width / 414;
 
         this.background = this.addBackground();
         this.logo = this.addLogo();

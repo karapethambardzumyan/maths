@@ -27,6 +27,11 @@ class LoadingScene extends Scene {
         });
         this.load.image('soonButton', './assets/menu/soon.png');
 
+        this.load.image('borderGameOver', './assets/game-over/border.png');
+        this.load.image('gameOver', './assets/game-over/game-over.png');
+        this.load.image('bestScore', './assets/game-over/best-score.png');
+        this.load.image('bestScoreBoard', './assets/game-over/best-score-board.png');
+
         this.load.image('borderLevels', './assets/levels/border.png');
         this.load.image('closeLevels', './assets/levels/close.png');
         this.load.image('level1', './assets/levels/level-1.png');
@@ -63,7 +68,8 @@ class LoadingScene extends Scene {
         });
 
         this.load.on('complete', () => {
-            this.scene.start('Menu');
+            // this.scene.start('Menu');
+            this.scene.start('GameOver', { levelId: 0 });
         });
     }
 }

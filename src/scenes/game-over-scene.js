@@ -12,32 +12,70 @@ class GameOverScene extends Scene {
     }
 
     create() {
-        this.gameOver = this.addGameOver();
-        this.addTryAgainButton();
+        this.ratio = this.game.config.width / 414;
 
-        this.cameras.main.setBackgroundColor(this.level.colors.background[0]);
+        this.background = this.addBackground();
+        this.border = this.addBorder();
+        this.gameOver = this.addGameOver();
+        this.bestScore = this.addBestScore();
+        this.bestScoreBoard = this.addBestScoreBoard();
+
+        this.menu = this.add.container(0, 0, [
+            this.border,
+            this.gameOver,
+            this.bestScore,
+            // this.bestScoreBoard
+        ]);
+        // this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+        this.menu.y = 0;
+    }
+
+    addBackground() {
+        const background = this.add.image(0, 0, 'background');
+        background.setScale(this.game.config.width / background.width, this.game.config.height / background.height);
+        background.setOrigin(0, 0);
+
+        return background;
+    }
+
+    addBorder() {
+        const border = this.add.image(0, 0, 'borderGameOver');
+        border.setScale(this.game.config.width / border.width, this.game.config.height / border.height);
+        border.setOrigin(0, 0);
+        border.x = (this.game.config.width - border.displayWidth) / 2;
+        border.y = 0;
+
+        return border;
     }
 
     addGameOver() {
-        const gameOver = this.add.text(0, 0, 'Game Over', { fontSize: 40 });
-        gameOver.x = (this.game.config.width - gameOver.width) / 2;
-        gameOver.y = 30;
+        const gameOver = this.add.image(0, 0, 'gameOver');
+        gameOver.setScale(this.ratio);
+        gameOver.setOrigin(0, 0);
+        gameOver.x = (this.game.config.width - gameOver.displayWidth) / 2;
+        gameOver.y = this.ratio * 90;
 
         return gameOver;
     }
 
-    addTryAgainButton() {
-        const tryAgainButton = this.add.text(0, 0, 'Try Again', { fontSize: 60 });
-        tryAgainButton.x = (this.game.config.width - tryAgainButton.displayWidth) / 2;
-        tryAgainButton.y = this.gameOver.y + this.gameOver.height + 100;
+    addBestScore() {
+        const bestScore = this.add.image(0, 0, 'bestScore');
+        bestScore.setScale(this.ratio);
+        bestScore.setOrigin(0, 0);
+        bestScore.x = this.ratio * 20;
+        bestScore.y = this.gameOver.y + this.gameOver.displayHeight + (this.ratio * 55);
 
-        tryAgainButton.setInteractive();
+        return bestScore;
+    }
 
-        tryAgainButton.on('pointerdown', () => {
-            this.scene.start('Game', { levelId: this.levelId });
-        });
+    addBestScoreBoard() {
+        const bestScoreBoard = this.add.image(0, 0, 'bestScoreBoard');
+        bestScoreBoard.setScale(this.ratio);
+        bestScoreBoard.setOrigin(0, 0);
+        bestScoreBoard.x = this.game.config.width - (this.bestScore.x + this.bestScore.displayWidth) - (this.ratio * 3);
+        bestScoreBoard.y = this.gameOver.y + this.gameOver.displayHeight + (this.ratio * 55);
 
-        return tryAgainButton;
+        return bestScoreBoard;
     }
 }
 
