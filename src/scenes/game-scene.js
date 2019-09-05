@@ -134,7 +134,7 @@ class GameScene extends Scene {
         this.player.add(playerLost);
 
         this.scene.stop('Game');
-        this.scene.start('GameOver', { levelId: this.levelId });
+        this.scene.start('GameOver', { levelId: this.levelId, score: this.operationOptions.answerNumber });
 
         this.operationOptions.answerNumber = 0;
     }

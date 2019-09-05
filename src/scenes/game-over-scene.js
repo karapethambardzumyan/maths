@@ -8,6 +8,7 @@ class GameOverScene extends Scene {
 
     init(data) {
         this.levelId = data.levelId;
+        this.score = data.score;
         this.level = LEVELS[this.levelId];
     }
 
@@ -19,15 +20,17 @@ class GameOverScene extends Scene {
         this.gameOver = this.addGameOver();
         this.bestScore = this.addBestScore();
         this.bestScoreBoard = this.addBestScoreBoard();
+        this.shareButton = this.addShareButton();
+        this.tryAgainButton = this.addTryAgainButton();
 
         this.menu = this.add.container(0, 0, [
-            this.border,
             this.gameOver,
             this.bestScore,
-            // this.bestScoreBoard
+            this.bestScoreBoard,
+            this.shareButton,
+            this.tryAgainButton
         ]);
-        // this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
-        this.menu.y = 0;
+        this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
     }
 
     addBackground() {
@@ -53,7 +56,7 @@ class GameOverScene extends Scene {
         gameOver.setScale(this.ratio);
         gameOver.setOrigin(0, 0);
         gameOver.x = (this.game.config.width - gameOver.displayWidth) / 2;
-        gameOver.y = this.ratio * 90;
+        gameOver.y = 0;
 
         return gameOver;
     }
@@ -76,6 +79,38 @@ class GameOverScene extends Scene {
         bestScoreBoard.y = this.gameOver.y + this.gameOver.displayHeight + (this.ratio * 55);
 
         return bestScoreBoard;
+    }
+
+    addShareButton() {
+        const shareButton = this.add.image(0, 0, 'shareButton');
+        shareButton.setScale(this.ratio);
+        shareButton.setOrigin(0, 0);
+        shareButton.x = (this.game.config.width - shareButton.displayWidth) / 2;
+        shareButton.y = this.bestScore.y + this.bestScore.displayHeight + (this.ratio * 65);
+
+        shareButton.setInteractive();
+
+        shareButton.on('pointerup', () => {
+            console.log('pointerup');
+        });
+
+        return shareButton;
+    }
+
+    addTryAgainButton() {
+        const tryAgainButton = this.add.image(0, 0, 'tryAgainButton');
+        tryAgainButton.setScale(this.ratio);
+        tryAgainButton.setOrigin(0, 0);
+        tryAgainButton.x = (this.game.config.width - tryAgainButton.displayWidth) / 2;
+        tryAgainButton.y = this.shareButton.y + this.shareButton.displayHeight + (this.ratio * 65);
+
+        tryAgainButton.setInteractive();
+
+        tryAgainButton.on('pointerup', () => {
+            this.scene.start('Game', { levelId: this.levelId });
+        });
+
+        return tryAgainButton;
     }
 }
 

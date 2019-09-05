@@ -31,6 +31,8 @@ class LoadingScene extends Scene {
         this.load.image('gameOver', './assets/game-over/game-over.png');
         this.load.image('bestScore', './assets/game-over/best-score.png');
         this.load.image('bestScoreBoard', './assets/game-over/best-score-board.png');
+        this.load.image('shareButton', './assets/game-over/share.png');
+        this.load.image('tryAgainButton', './assets/game-over/try-again.png');
 
         this.load.image('borderLevels', './assets/levels/border.png');
         this.load.image('closeLevels', './assets/levels/close.png');
@@ -68,8 +70,7 @@ class LoadingScene extends Scene {
         });
 
         this.load.on('complete', () => {
-            // this.scene.start('Menu');
-            this.scene.start('GameOver', { levelId: 0 });
+            this.scene.start('Menu');
         });
     }
 }
