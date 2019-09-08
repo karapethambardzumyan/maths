@@ -25,5 +25,7 @@ class Game extends Phaser.Game {
 }
 
 window.onload = () => {
-    window.game = new Game();
+    FBInstant.initializeAsync().then(function() {
+        window.game = new Game();
+    });
 };

@@ -6,6 +6,14 @@ class MenuScene extends Scene {
     }
 
     create() {
+        this.facebook.on('savestats', function (data) {
+            console.log('savestats:', data);
+        });
+
+        this.facebook.on('getstats', function (data) {
+            console.log('getstats:', data);
+        });
+
         this.ratio = this.game.config.width / 414;
 
         this.background = this.addBackground();
@@ -158,6 +166,8 @@ class MenuScene extends Scene {
 
         playButton.on('pointerup', () => {
             playButton.setFrame(0);
+
+            this.facebook.getStats([ 'level' ]);
 
             this.scene.stop('Menu');
             this.scene.start('Levels', { levelId: 0 });

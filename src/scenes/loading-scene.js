@@ -6,6 +6,9 @@ class LoadingScene extends Scene {
     }
 
     preload() {
+        this.facebook.once('startgame', () => this.scene.start('Menu'), this);
+        this.facebook.showLoadProgress(this);
+
         this.load.image('background', './assets/menu/background.png');
         this.load.image('logo', './assets/menu/logo.png');
         this.load.image('borderMenu', './assets/menu/border.png');
@@ -60,18 +63,6 @@ class LoadingScene extends Scene {
 
         this.load.audio('lowTimeAudio', ['./assets/audio/low-time.wav']);
         this.load.audio('winAudio', ['./assets/audio/win.wav']);
-
-        this.load.on('fileprogress', file => {
-            this.loading && this.loading.destroy();
-
-            this.loading = this.add.text(0, 0, file.src, { fontSize: 16 });
-            this.loading.x = (this.game.config.width - this.loading.width) / 2;
-            this.loading.y = (this.game.config.height - this.loading.height) / 2;
-        });
-
-        this.load.on('complete', () => {
-            this.scene.start('Menu');
-        });
     }
 }
 
