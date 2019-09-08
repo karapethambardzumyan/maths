@@ -70,7 +70,10 @@ class GameScene extends Scene {
         );
         squareObject.setOrigin(0, 0);
 
-        const numberObject = this.add.text(0, 0, '2', { fontSize: 30 });
+        const numberObject = this.add.text(0, 0, '2', {
+            fontSize: 30,
+            fontFamily: 'VT323-Regular'
+        });
         numberObject.x = (playerSize - numberObject.width) / 2;
         numberObject.y = (playerSize - numberObject.height) / 2;
 
@@ -161,7 +164,10 @@ class GameScene extends Scene {
 
             const number = getRandomInt(rightAnswer - 10, rightAnswer + 10, generatedNumbers);
             generatedNumbers.push(number);
-            const numberObject = this.add.text(0, 0, number, { fontSize: 30 });
+            const numberObject = this.add.text(0, 0, number, {
+                fontSize: 30,
+                fontFamily: 'VT323-Regular'
+            });
             numberObject.x = (enemySize - numberObject.width) / 2;
             numberObject.y = (enemySize - numberObject.height) / 2;
 
@@ -228,7 +234,11 @@ class GameScene extends Scene {
 
         const gameWidth = this.game.config.width;
         const gameHeight = this.game.config.height;
-        const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, { fontSize: 200, fill: '#ffffff' });
+        const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, {
+            fontSize: 200,
+            fill: '#ffffff',
+            fontFamily: 'VT323-Regular'
+        });
         operation.x = (gameWidth - operation.width) / 2;
         operation.y = (gameHeight - operation.height) / 2;
         operation.setDepth(-1);
