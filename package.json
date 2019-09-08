@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"npm run serve\" \"webpack --env.NODE_ENV=development --mode=development --watch=true\"",
-    "serve": "node server.js",
+    "serve": "http-server --ssl -c-1 -p 8080 -a 127.0.0.1",
     "build": "webpack --env.NODE_ENV=production --mode=production"
   },
   "devDependencies": {
@@ -25,7 +25,6 @@
   },
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
     "phaser": "^3.18.1"
   }
 }
