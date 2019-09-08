@@ -9,6 +9,8 @@ class LoadingScene extends Scene {
         this.facebook.once('startgame', () => this.scene.start('Menu'), this);
         this.facebook.showLoadProgress(this);
 
+        this.load.bitmapFont('atari', './assets/fonts/atari/index.png', './assets/fonts/atari/index.xml');
+
         this.load.image('background', './assets/menu/background.png');
         this.load.image('logo', './assets/menu/logo.png');
         this.load.image('borderMenu', './assets/menu/border.png');
