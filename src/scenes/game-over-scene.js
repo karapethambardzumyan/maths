@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import LEVELS from '../constants/levels';
+import { MAX_WIDTH } from '../constants';
 
 class GameOverScene extends Scene {
     constructor() {
@@ -13,7 +14,7 @@ class GameOverScene extends Scene {
     }
 
     create() {
-        this.ratio = this.game.config.width / 414;
+        this.ratio = this.game.config.width / MAX_WIDTH;
 
         this.background = this.addBackground();
         this.border = this.addBorder();

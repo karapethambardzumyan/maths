@@ -9,6 +9,14 @@ class LevelUpScene extends Scene {
     init(data) {
         this.levelId = data.levelId + 1;
         this.level = LEVELS[this.levelId - 1];
+
+        this.facebook.on('savedata', data => {
+            console.log('aaaaaaaaaaaa:', data);
+
+            this.facebook.getData(['levelId']);
+        });
+
+        this.facebook.saveData({ levelId: this.levelId });
     }
 
     create() {

@@ -1,20 +1,40 @@
 import { Scene } from 'phaser';
+import { MAX_WIDTH } from '../constants';
+
 
 class MenuScene extends Scene {
     constructor() {
         super('Menu');
+
+        this.data = null;
     }
 
     create() {
-        this.facebook.on('savestats', function (data) {
-            console.log('savestats:', data);
+        this.facebook.on('savedata', data => {
+            console.log('savedata:', data);
+
+            this.facebook.getData(['levelId']);
         });
 
-        this.facebook.on('getstats', function (data) {
-            console.log('getstats:', data);
+        this.facebook.on('getdata', data => {
+            console.log('getdata:', data);
+
+            if ('levelId' in data) {
+                this.data = data;
+            } else {
+                this.facebook.saveData({ levelId: 0 });
+            }
         });
 
-        this.ratio = this.game.config.width / 414;
+        this.facebook.on('flushdata', data => {
+            console.log('flushdata:', data);
+
+            this.data =  null;
+        });
+
+        this.facebook.getData(['levelId']);
+
+        this.ratio = this.game.config.width / MAX_WIDTH;
 
         this.background = this.addBackground();
         this.logo = this.addLogo();
@@ -167,10 +187,8 @@ class MenuScene extends Scene {
         playButton.on('pointerup', () => {
             playButton.setFrame(0);
 
-            this.facebook.getStats([ 'level' ]);
-
             this.scene.stop('Menu');
-            this.scene.start('Levels', { levelId: 0 });
+            this.scene.start('Levels', this.data);
         });
 
         playButton.on('pointerout', () => {
