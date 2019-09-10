@@ -54,7 +54,7 @@ class GameOverScene extends Scene {
 
     addGameOver() {
         const gameOver = this.add.image(0, 0, 'gameOver');
-        gameOver.setScale(this.ratio);
+        gameOver.setScale(this.game.config.width / gameOver.width);
         gameOver.setOrigin(0, 0);
         gameOver.x = (this.game.config.width - gameOver.displayWidth) / 2;
         gameOver.y = 0;

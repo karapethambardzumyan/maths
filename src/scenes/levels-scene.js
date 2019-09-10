@@ -101,6 +101,13 @@ class LevelsScene extends Scene {
         levelInfinity.setScale(this.ratio);
         levelInfinity.x = (this.game.config.width - levelInfinity.displayWidth ) / 2;
         levelInfinity.y = this.border.y + (this.ratio * 620);
+        levelInfinity.setVisible(this.levelId + 1 === LEVELS.length);
+
+        levelInfinity.setInteractive();
+
+        levelInfinity.on('pointerup', () => {
+            this.scene.start('Game', { levelId: 6 });
+        });
 
         levels.push(levelInfinity);
 

@@ -23,6 +23,10 @@ class GameScene extends Scene {
     }
 
     create() {
+        if (this.levelId === LEVELS.length) {
+            console.log('infinity level');
+        }
+
         console.log('create');
         this.player = this.addPlayer();
         this.operation = this.addOperation();
