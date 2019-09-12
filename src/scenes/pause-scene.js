@@ -12,6 +12,7 @@ class PauseScene extends Scene {
         this.background = this.addBackground();
         this.border = this.addBorder();
         this.pause = this.addPause();
+        this.pauseButton = this.addPauseButton();
 
         this.menu = this.add.container(0, 0, [
             this.border,
@@ -40,12 +41,39 @@ class PauseScene extends Scene {
 
     addPause() {
         const pause = this.add.image(0, 0, 'pause');
-        pause.setScale(this.ration);
+        pause.setScale(this.ratio);
         pause.setOrigin(0, 0);
         pause.x = (this.game.config.width - pause.displayWidth) / 2;
         pause.y = 0;
 
         return pause;
+    }
+
+    addPauseButton() {
+        const pauseButton = this.add.image(0, 0, 'pauseButton');
+        pauseButton.setScale(this.ratio);
+        pauseButton.setOrigin(0, 0);
+        pauseButton.x = this.ratio * 12;
+        pauseButton.y = this.ratio * 12;
+
+        pauseButton.setInteractive();
+
+        pauseButton.on('pointerdown', () => {
+            pauseButton.setFrame(1);
+        });
+
+        pauseButton.on('pointerup', () => {
+            pauseButton.setFrame(0);
+
+            this.scene.stop('Pause');
+            this.scene.resume('Game');
+        });
+
+        pauseButton.on('pointerout', () => {
+            pauseButton.setFrame(0);
+        });
+
+        return pauseButton;
     }
 }
 

@@ -6,8 +6,7 @@ class LoadingScene extends Scene {
     }
 
     preload() {
-        // this.facebook.once('startgame', () => this.scene.start('Menu'), this);
-        this.facebook.once('startgame', () => this.scene.start('Pause'), this);
+        this.facebook.once('startgame', () => this.scene.start('Menu'), this);
         this.facebook.showLoadProgress(this);
 
         this.load.bitmapFont('atari', './assets/fonts/atari/index.png', './assets/fonts/atari/index.xml');
@@ -53,6 +52,10 @@ class LoadingScene extends Scene {
 
         this.load.image('borderPause', './assets/pause/border.png');
         this.load.image('pause', './assets/pause/pause.png');
+        this.load.spritesheet('pauseButton', './assets/pause/pause-button.png', {
+            frameWidth: 24,
+            frameHeight: 28
+        });
 
         this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
             frameWidth: 140,

@@ -33,7 +33,8 @@ class GameScene extends Scene {
         this.player = this.addPlayer();
         this.operation = this.addOperation();
         this.enemies = this.addEnemies();
-        this.lifes = this.addLifes();
+        this.lives = this.addLives();
+        this.pauseButton = this.addPauseButton();
 
         this.addCollision();
     }
@@ -63,8 +64,35 @@ class GameScene extends Scene {
         }
     }
 
-    addLifes() {
-        const lifes = [];
+    addPauseButton() {
+        const pauseButton = this.add.image(0, 0, 'pauseButton');
+        pauseButton.setScale(this.ratio);
+        pauseButton.setOrigin(0, 0);
+        pauseButton.x = this.ratio * 12;
+        pauseButton.y = this.ratio * 12;
+
+        pauseButton.setInteractive();
+
+        pauseButton.on('pointerdown', () => {
+            pauseButton.setFrame(1);
+        });
+
+        pauseButton.on('pointerup', () => {
+            pauseButton.setFrame(0);
+
+            this.scene.pause('Game');
+            this.scene.run('Pause');
+        });
+
+        pauseButton.on('pointerout', () => {
+            pauseButton.setFrame(0);
+        });
+
+        return pauseButton;
+    }
+
+    addLives() {
+        const lives = [];
 
         const life1 = this.add.image(0, 0, 'life1');
         life1.setScale(this.ratio);
@@ -87,11 +115,11 @@ class GameScene extends Scene {
         life3.y = this.ratio * 10;
         life3.setVisible(true);
 
-        lifes.push(life1);
-        lifes.push(life2);
-        lifes.push(life3);
+        lives.push(life1);
+        lives.push(life2);
+        lives.push(life3);
 
-        return lifes;
+        return lives;
     }
 
     addPlayer(number) {
@@ -156,8 +184,8 @@ class GameScene extends Scene {
         this.life -= 1;
 
         if (this.life) {
-            this.lifes[this.life].setVisible(false);
-            this.lifes[this.life - 1].setVisible(true);
+            this.lives[this.life].setVisible(false);
+            this.lives[this.life - 1].setVisible(true);
 
             this.destroyEnemies();
             this.operation = this.addOperation(true);
