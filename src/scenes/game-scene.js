@@ -6,7 +6,14 @@ import { getRandomInt } from '../helpers/numbers';
 class GameScene extends Scene {
     constructor() {
         super('Game');
+    }
 
+    init(data) {
+        this.levelId = data.levelId;
+        this.level = LEVELS[this.levelId];
+    }
+
+    create() {
         this.operationOptions = {
             symbol: null,
             number: null,
@@ -16,14 +23,7 @@ class GameScene extends Scene {
         this.lowTimeAudio = null;
 
         this.life = 3;
-    }
 
-    init(data) {
-        this.levelId = data.levelId;
-        this.level = LEVELS[this.levelId];
-    }
-
-    create() {
         this.ratio = this.game.config.width / MAX_WIDTH;
 
         if (this.levelId === LEVELS.length) {
@@ -163,7 +163,6 @@ class GameScene extends Scene {
             this.operation = this.addOperation(true);
 
             const gameWidth = this.game.config.width;
-            const gameHeight = this.game.config.height;
             const playerSize = gameWidth / 6;
             const playerLost = this.add.sprite((-((112 * playerSize / 80) - this.player.body.width) / 2) * 2, -15,'playerLost');
             playerLost.setOrigin(0, 0);
