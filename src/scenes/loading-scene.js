@@ -62,6 +62,9 @@ class LoadingScene extends Scene {
             startFrame: 0,
             endFrame: 9
         });
+        this.load.image('life1', './assets/game/life-1.png');
+        this.load.image('life2', './assets/game/life-2.png');
+        this.load.image('life3', './assets/game/life-3.png');
 
         this.load.audio('lowTimeAudio', ['./assets/audio/low-time.wav']);
         this.load.audio('winAudio', ['./assets/audio/win.wav']);

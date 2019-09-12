@@ -1,5 +1,5 @@
 import { Math, Scene } from 'phaser';
-import { SPEED_RATIO } from '../constants';
+import { MAX_WIDTH, SPEED_RATIO } from '../constants';
 import LEVELS from '../constants/levels';
 import { getRandomInt } from '../helpers/numbers';
 
@@ -24,6 +24,8 @@ class GameScene extends Scene {
     }
 
     create() {
+        this.ratio = this.game.config.width / MAX_WIDTH;
+
         if (this.levelId === LEVELS.length) {
             console.log('infinity level');
         }
@@ -31,6 +33,7 @@ class GameScene extends Scene {
         this.player = this.addPlayer();
         this.operation = this.addOperation();
         this.enemies = this.addEnemies();
+        this.lifes = this.addLifes();
 
         this.addCollision();
     }
@@ -58,6 +61,37 @@ class GameScene extends Scene {
                 this.lowTimeAudio.play();
             }
         }
+    }
+
+    addLifes() {
+        const lifes = [];
+
+        const life1 = this.add.image(0, 0, 'life1');
+        life1.setScale(this.ratio);
+        life1.setOrigin(0, 0);
+        life1.x = this.game.config.width - life1.displayWidth - (this.ratio * 15);
+        life1.y = this.ratio * 10;
+        life1.setVisible(false);
+
+        const life2 = this.add.image(0, 0, 'life2');
+        life2.setScale(this.ratio);
+        life2.setOrigin(0, 0);
+        life2.x = this.game.config.width - life2.displayWidth - (this.ratio * 15);
+        life2.y = this.ratio * 10;
+        life2.setVisible(false);
+
+        const life3 = this.add.image(0, 0, 'life3');
+        life3.setScale(this.ratio);
+        life3.setOrigin(0, 0);
+        life3.x = this.game.config.width - life3.displayWidth - (this.ratio * 15);
+        life3.y = this.ratio * 10;
+        life3.setVisible(true);
+
+        lifes.push(life1);
+        lifes.push(life2);
+        lifes.push(life3);
+
+        return lifes;
     }
 
     addPlayer(number) {
@@ -122,6 +156,9 @@ class GameScene extends Scene {
         this.life -= 1;
 
         if (this.life) {
+            this.lifes[this.life].setVisible(false);
+            this.lifes[this.life - 1].setVisible(true);
+
             this.destroyEnemies();
             this.operation = this.addOperation(true);
 
