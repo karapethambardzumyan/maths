@@ -11,8 +11,6 @@ class LevelUpScene extends Scene {
         this.level = LEVELS[this.levelId - 1];
 
         this.facebook.on('savedata', data => {
-            console.log('aaaaaaaaaaaa:', data);
-
             this.facebook.getData(['levelId']);
         });
 

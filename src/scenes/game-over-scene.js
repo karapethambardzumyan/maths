@@ -92,7 +92,7 @@ class GameOverScene extends Scene {
         shareButton.setInteractive();
 
         shareButton.on('pointerup', () => {
-            console.log('pointerup');
+
         });
 
         return shareButton;

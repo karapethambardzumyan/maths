@@ -8,8 +8,6 @@ class LevelsScene extends Scene {
     }
 
     init(data) {
-        console.log(data);
-
         this.levelId = data.levelId;
     }
 

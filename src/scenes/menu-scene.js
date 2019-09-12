@@ -11,14 +11,10 @@ class MenuScene extends Scene {
 
     create() {
         this.facebook.on('savedata', data => {
-            console.log('savedata:', data);
-
             this.facebook.getData(['levelId']);
         });
 
         this.facebook.on('getdata', data => {
-            console.log('getdata:', data);
-
             if ('levelId' in data) {
                 this.data = data;
             } else {
@@ -27,8 +23,6 @@ class MenuScene extends Scene {
         });
 
         this.facebook.on('flushdata', data => {
-            console.log('flushdata:', data);
-
             this.data =  null;
         });
 
@@ -135,7 +129,7 @@ class MenuScene extends Scene {
         noAdsButton.setInteractive();
 
         noAdsButton.on('pointerdown', () => {
-            console.log('pointerdown');
+
         });
 
         return noAdsButton;

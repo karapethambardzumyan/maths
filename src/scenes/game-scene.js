@@ -14,10 +14,11 @@ class GameScene extends Scene {
         };
 
         this.lowTimeAudio = null;
+
+        this.life = 3;
     }
 
     init(data) {
-        console.log('levelId:', data.levelId);
         this.levelId = data.levelId;
         this.level = LEVELS[this.levelId];
     }
@@ -27,7 +28,6 @@ class GameScene extends Scene {
             console.log('infinity level');
         }
 
-        console.log('create');
         this.player = this.addPlayer();
         this.operation = this.addOperation();
         this.enemies = this.addEnemies();
@@ -60,7 +60,7 @@ class GameScene extends Scene {
         }
     }
 
-    addPlayer() {
+    addPlayer(number) {
         const gameWidth = this.game.config.width;
         const gameHeight = this.game.config.height;
         const playerSize = gameWidth / 6;
@@ -82,7 +82,7 @@ class GameScene extends Scene {
         this.physics.world.enable(containerObject);
         containerObject.body.width = playerSize;
         containerObject.body.height = playerSize;
-        containerObject.number = 2;
+        containerObject.number = number || 2;
 
         return containerObject;
     }
@@ -119,28 +119,44 @@ class GameScene extends Scene {
     }
 
     playerLost() {
-        const gameWidth = this.game.config.width;
-        const playerSize = gameWidth / 6;
-        const playerLost = this.add.sprite((-((112 * playerSize / 80) - this.player.body.width) / 2) * 2, -15,'playerLost');
-        playerLost.setOrigin(0, 0);
-        playerLost.setScale(1.2, 1.2);
+        this.life -= 1;
 
-        this.player.list[0] && this.player.list[0].destroy();
-        this.player.list[1] && this.player.list[1].destroy();
+        if (this.life) {
+            this.destroyEnemies();
+            this.operation = this.addOperation(true);
 
-        this.anims.create({
-            key: 'playerLost',
-            frames: this.anims.generateFrameNumbers('playerLost', { start: 0, end: 9 }),
-            frameRate: 35,
-            repeat: 0
-        });
-        playerLost.anims.play('playerLost');
-        this.player.add(playerLost);
+            const gameWidth = this.game.config.width;
+            const gameHeight = this.game.config.height;
+            const playerSize = gameWidth / 6;
+            const playerLost = this.add.sprite((-((112 * playerSize / 80) - this.player.body.width) / 2) * 2, -15,'playerLost');
+            playerLost.setOrigin(0, 0);
+            playerLost.setScale(1.2, 1.2);
 
-        this.scene.stop('Game');
-        this.scene.start('GameOver', { levelId: this.levelId, score: this.operationOptions.answerNumber });
+            this.player.list[0] && this.player.list[0].destroy();
+            this.player.list[1] && this.player.list[1].destroy();
 
-        this.operationOptions.answerNumber = 0;
+            this.anims.create({
+                key: 'playerLost',
+                frames: this.anims.generateFrameNumbers('playerLost', { start: 0, end: 9 }),
+                frameRate: 35,
+                repeat: 0
+            });
+            playerLost.anims.play('playerLost');
+            this.player.add(playerLost);
+
+            const number = this.player.number;
+
+            playerLost.on('animationcomplete', () => {
+                this.player.destroy();
+                this.player = this.addPlayer(number);
+                this.enemies = this.addEnemies();
+                this.addCollision();
+            }, playerLost);
+        } else {
+            this.scene.stop('Game');
+            this.scene.start('GameOver', { levelId: this.levelId, score: this.operationOptions.answerNumber });
+            this.operationOptions.answerNumber = 0;
+        }
     }
 
     addEnemies() {
@@ -219,7 +235,7 @@ class GameScene extends Scene {
         return answer;
     }
 
-    addOperation() {
+    addOperation(isForLifeChecking) {
         this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
         this.operationOptions.number = getRandomInt(1, 9);
 
@@ -237,7 +253,7 @@ class GameScene extends Scene {
         operation.y = (gameHeight - operation.height) / 2;
         operation.setDepth(-1);
 
-        if (this.operationOptions.answerNumber >= this.level.answersCount) {
+        if (!isForLifeChecking && this.operationOptions.answerNumber >= this.level.answersCount) {
             this.operationOptions = {
                 symbol: null,
                 number: null,
