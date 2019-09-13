@@ -13,10 +13,12 @@ class PauseScene extends Scene {
         this.border = this.addBorder();
         this.pause = this.addPause();
         this.pauseButton = this.addPauseButton();
+        this.goGameButton = this.addGoGameButton();
 
         this.menu = this.add.container(0, 0, [
             this.border,
-            this.pause
+            this.pause,
+            this.goGameButton
         ]);
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
     }
@@ -74,6 +76,23 @@ class PauseScene extends Scene {
         });
 
         return pauseButton;
+    }
+
+    addGoGameButton() {
+        const goGameButton = this.add.image(0, 0, 'goGameButton');
+        goGameButton.setScale(this.ratio);
+        goGameButton.setOrigin(0, 0);
+        goGameButton.x = (this.game.config.width - goGameButton.displayWidth) / 2;
+        goGameButton.y = this.border.y + (this.ratio * 480);
+
+        goGameButton.setInteractive();
+
+        goGameButton.on('pointerup', () => {
+            this.scene.stop('Pause');
+            this.scene.resume('Game');
+        });
+
+        return goGameButton;
     }
 }
 

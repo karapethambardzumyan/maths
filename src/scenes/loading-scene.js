@@ -56,6 +56,12 @@ class LoadingScene extends Scene {
             frameWidth: 24,
             frameHeight: 28
         });
+        this.load.spritesheet('pauseSoundButton', './assets/pause/pause-sound-button.png', {
+            frameWidth: 24,
+            frameHeight: 28
+        });
+        this.load.image('goHomeButton', './assets/pause/go-home-button.png');
+        this.load.image('goGameButton', './assets/pause/go-game-button.png');
 
         this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
             frameWidth: 140,
