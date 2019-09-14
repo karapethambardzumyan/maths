@@ -14,11 +14,15 @@ class PauseScene extends Scene {
         this.pause = this.addPause();
         this.pauseButton = this.addPauseButton();
         this.goGameButton = this.addGoGameButton();
+        this.goMenuButton = this.addGoMenuButton();
+        this.soundsButton = this.addSoundsButton();
 
         this.menu = this.add.container(0, 0, [
             this.border,
             this.pause,
-            this.goGameButton
+            this.goGameButton,
+            this.goMenuButton,
+            this.soundsButton
         ]);
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
     }
@@ -93,6 +97,54 @@ class PauseScene extends Scene {
         });
 
         return goGameButton;
+    }
+
+    addGoMenuButton() {
+        const goMenuButton = this.add.image(0, 0, 'goMenuButton');
+        goMenuButton.setScale(this.ratio);
+        goMenuButton.setOrigin(0, 0);
+        goMenuButton.x = (this.border.x + this.border.displayWidth) - (goMenuButton.displayWidth + (this.ratio * 24));
+        goMenuButton.y = this.border.y + (this.ratio * 370);
+
+        goMenuButton.setInteractive();
+
+        goMenuButton.on('pointerup', () => {
+            this.scene.stop('Pause');
+            this.scene.stop('Game');
+            this.scene.start('Menu');
+        });
+
+        return goMenuButton;
+    }
+
+    addSoundsButton() {
+        let soundState = 0;
+        const soundsButton = this.add.image(0, 0, 'pauseSoundsButton');
+        soundsButton.setScale(this.ratio);
+        soundsButton.setOrigin(0, 0);
+        soundsButton.x = this.border.x + (this.ratio * 24);
+        soundsButton.y = this.border.y + (this.ratio * 370);
+
+        soundsButton.setInteractive();
+        soundsButton.setFrame(soundState);
+
+        soundsButton.on('pointerup', () => {
+            switch (soundState) {
+                case 0:
+                    soundState = 1;
+                    break;
+                case 1:
+                    soundState = 2;
+                    break;
+                case 2:
+                    soundState = 0;
+                    break;
+            }
+
+            soundsButton.setFrame(soundState);
+        });
+
+        return soundsButton;
     }
 }
 
