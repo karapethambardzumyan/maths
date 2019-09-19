@@ -325,8 +325,7 @@ class GameScene extends Scene {
             };
 
             this.lowTimeAudio = null;
-            this.scene.stop();
-            this.scene.start('LevelUp', { levelId: this.levelId });
+            console.log('new level');
         } else {
             this.operationOptions.answerNumber++;
         }

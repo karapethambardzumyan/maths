@@ -6,7 +6,6 @@ import LevelsScene from './scenes/levels-scene';
 import MenuScene from './scenes/menu-scene';
 import GameScene from './scenes/game-scene';
 import GameOverScene from './scenes/game-over-scene';
-import LevelUpScene from './scenes/level-up-scene';
 import PauseScene from './scenes/pause-scene';
 import LeaderboardScene from './scenes/leaderboard-scene';
 
@@ -19,7 +18,6 @@ class Game extends Phaser.Game {
         this.scene.add('Levels', LevelsScene);
         this.scene.add('Game', GameScene);
         this.scene.add('GameOver', GameOverScene);
-        this.scene.add('LevelUp', LevelUpScene);
         this.scene.add('Pause', PauseScene);
         this.scene.add('Leaderboard', LeaderboardScene);
 
