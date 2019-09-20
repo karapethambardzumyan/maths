@@ -395,7 +395,7 @@ class GameScene extends Scene {
     nextLevel() {
         this.newLevel = true;
 
-        this.newLevelObject = this.add.image(0, 0, 'winLevel2');
+        this.newLevelObject = this.add.image(0, 0, `winLevel${ this.levelId + 2 }`);
         this.newLevelObject.setScale(this.ratio);
         this.newLevelObject.setOrigin(0, 0);
         this.newLevelObject.x = (this.game.config.width - this.newLevelObject.displayWidth) / 2;
