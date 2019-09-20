@@ -68,6 +68,11 @@ class GameScene extends Scene {
         if (this.newLevelObject && this.newLevelObject.y > this.game.config.height) {
             this.newLevelObject.destroy();
             this.newLevelObject = null;
+            this.newLevel = false;
+
+            this.player.destroy();
+
+            this.scene.start('Game', { levelId: this.levelId + 1 });
         }
     }
 
@@ -395,6 +400,8 @@ class GameScene extends Scene {
         this.newLevelObject.setOrigin(0, 0);
         this.newLevelObject.x = (this.game.config.width - this.newLevelObject.displayWidth) / 2;
         this.newLevelObject.y = this.ratio * 40;
+
+        this.facebook.saveData({ levelId: this.levelId + 1 });
     }
 }
 
