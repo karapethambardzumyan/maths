@@ -6,7 +6,6 @@ class LoadingScene extends Scene {
     }
 
     preload() {
-        console.log(31);
         this.facebook.once('startgame', () => this.scene.start('Menu'), this);
         this.facebook.showLoadProgress(this);
 

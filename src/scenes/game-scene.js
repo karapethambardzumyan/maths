@@ -19,11 +19,9 @@ class GameScene extends Scene {
             number: null,
             answerNumber: 0
         };
-
         this.lowTimeAudio = null;
-
         this.life = 3;
-
+        this.newLevel = false;
         this.ratio = this.game.config.width / MAX_WIDTH;
 
         if (this.levelId === LEVELS.length) {
@@ -46,7 +44,7 @@ class GameScene extends Scene {
 
         this.addControl();
 
-        if (window.Math.max(...this.enemies.map(enemy => enemy.y)) - enemySize > gameHeight) {
+        if (window.Math.max(...this.enemies.map(enemy => enemy.y)) - enemySize > gameHeight && !this.newLevel) {
             this.destroyEnemies();
             this.enemies = this.addEnemies();
             this.addCollision();
@@ -61,6 +59,15 @@ class GameScene extends Scene {
                 this.lowTimeAudio = this.sound.add('lowTimeAudio', { loop: false });
                 this.lowTimeAudio.play();
             }
+        }
+
+        if (this.newLevelObject) {
+            this.newLevelObject.y += 4;
+        }
+
+        if (this.newLevelObject && this.newLevelObject.y > this.game.config.height) {
+            this.newLevelObject.destroy();
+            this.newLevelObject = null;
         }
     }
 
@@ -300,37 +307,37 @@ class GameScene extends Scene {
     }
 
     addOperation(isForLifeChecking) {
-        this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
-        this.operationOptions.number = getRandomInt(1, 9);
-
-        this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
-        this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
-
         if (this.operation) {
             this.operation.destroy();
         }
 
-        const gameWidth = this.game.config.width;
-        const gameHeight = this.game.config.height;
-        const operation = this.add.bitmapText(0, 0, 'atari', `${ this.operationOptions.symbol }${ this.operationOptions.number }`, 200);
-        operation.x = (gameWidth - operation.width) / 2;
-        operation.y = (gameHeight - operation.height) / 2;
-        operation.setDepth(-1);
-
-        if (!isForLifeChecking && this.operationOptions.answerNumber >= this.level.answersCount) {
+        if (!isForLifeChecking && this.operationOptions.answerNumber >= this.level.answersCount && !this.newLevel) {
             this.operationOptions = {
                 symbol: null,
                 number: null,
                 answerNumber: 0
             };
-
             this.lowTimeAudio = null;
-            console.log('new level');
-        } else {
-            this.operationOptions.answerNumber++;
-        }
 
-        return operation;
+            this.nextLevel();
+        } else {
+            this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
+            this.operationOptions.number = getRandomInt(1, 9);
+
+            this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
+            this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
+
+            const gameWidth = this.game.config.width;
+            const gameHeight = this.game.config.height;
+            const operation = this.add.bitmapText(0, 0, 'atari', `${ this.operationOptions.symbol }${ this.operationOptions.number }`, 200);
+            operation.x = (gameWidth - operation.width) / 2;
+            operation.y = (gameHeight - operation.height) / 2;
+            operation.setDepth(-1);
+
+            this.operationOptions.answerNumber++;
+
+            return operation;
+        }
     }
 
     addCollision() {
@@ -378,6 +385,16 @@ class GameScene extends Scene {
         if (pointer.isDown) {
             this.player.x = Math.Clamp(pointer.x - playerSize / 2, 0, gameWidth - playerSize);
         }
+    }
+
+    nextLevel() {
+        this.newLevel = true;
+
+        this.newLevelObject = this.add.image(0, 0, 'winLevel2');
+        this.newLevelObject.setScale(this.ratio);
+        this.newLevelObject.setOrigin(0, 0);
+        this.newLevelObject.x = (this.game.config.width - this.newLevelObject.displayWidth) / 2;
+        this.newLevelObject.y = this.ratio * 40;
     }
 }
 

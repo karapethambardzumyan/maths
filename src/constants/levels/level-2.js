@@ -1,13 +1,13 @@
-const LEVEL_1 = {
+const LEVEL_2 = {
     level: 2,
     colors: {
-        background: ['#943737', '#88371b'],
+        background: ['#943737'],
         foreground: '#6f5c5c'
     },
     operations: ['+', '-'],
     limit: 150,
     speed: 1
 };
-LEVEL_1.answersCount = LEVEL_1.colors.background.length - 1;
+LEVEL_2.answersCount = LEVEL_2.colors.background.length;
 
-export default LEVEL_1;
+export default LEVEL_2;
