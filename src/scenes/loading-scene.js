@@ -65,6 +65,7 @@ class LoadingScene extends Scene {
 
         this.load.image('borderLeaderboard', './assets/leaderboard/border.png');
         this.load.image('logoLeaderboard', './assets/leaderboard/logo.png');
+        this.load.image('titleLeaderboard', './assets/leaderboard/title.png');
 
         this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
             frameWidth: 140,

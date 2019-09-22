@@ -35,6 +35,11 @@ class GameScene extends Scene {
         this.pauseButton = this.addPauseButton();
 
         this.addCollision();
+
+        this.facebook.getLeaderboard('test-board');
+        this.facebook.on('getleaderboard', leaderboard => {
+            this.leaderboard = leaderboard;
+        }, this);
     }
 
     update() {
@@ -317,14 +322,14 @@ class GameScene extends Scene {
         }
 
         if (!isForLifeChecking && this.operationOptions.answerNumber >= this.level.answersCount && !this.newLevel) {
+            this.nextLevel();
+
             this.operationOptions = {
                 symbol: null,
                 number: null,
                 answerNumber: 0
             };
             this.lowTimeAudio = null;
-
-            this.nextLevel();
         } else {
             this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
             this.operationOptions.number = getRandomInt(1, 9);
@@ -402,6 +407,8 @@ class GameScene extends Scene {
         this.newLevelObject.y = this.ratio * 40;
 
         this.facebook.saveData({ levelId: this.levelId + 1 });
+
+        this.leaderboard.setScore(this.operationOptions.answerNumber);
     }
 }
 

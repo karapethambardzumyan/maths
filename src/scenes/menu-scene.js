@@ -114,6 +114,9 @@ class MenuScene extends Scene {
 
         leaderboardButton.on('pointerout', () => {
             leaderboardButton.setFrame(0);
+
+            this.scene.stop('Menu');
+            this.scene.start('Leaderboard');
         });
 
         return leaderboardButton;
