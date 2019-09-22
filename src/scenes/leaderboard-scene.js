@@ -1,10 +1,13 @@
 import { Scene } from 'phaser';
 import { MAX_WIDTH } from '../constants';
-import {getRandomInt} from '../helpers/numbers';
 
 class LeaderboardScene extends Scene {
     constructor() {
         super('Leaderboard');
+    }
+
+    init(data) {
+        this.leaderboard = data.leaderboard;
     }
 
     create() {
@@ -14,15 +17,18 @@ class LeaderboardScene extends Scene {
         this.border = this.addBorder();
         this.logo = this.addLogo();
         this.title = this.addTitle();
-        this.players = this.addPlayers();
+        this.goMenuButton = this.addGoMenuButton();
+        this.addPlayers(players => {
+            this.menu = this.add.container(0, 0, [
+                this.border,
+                this.logo,
+                this.title,
+                players,
+                this.goMenuButton
+            ]);
 
-        this.menu = this.add.container(0, 0, [
-            this.border,
-            this.logo,
-            this.title,
-            this.players
-        ]);
-        this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+            this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+        });
     }
 
     addBackground() {
@@ -63,40 +69,75 @@ class LeaderboardScene extends Scene {
         return logo;
     }
 
-    addPlayers() {
-        const players = [];
-        const playersList = [1, 2, 3];
+    addGoMenuButton() {
+        const goMenuButton = this.add.image(0, 0, 'goMenuLeaderboardButton');
+        goMenuButton.setScale(this.ratio);
+        goMenuButton.setOrigin(0, 0);
+        goMenuButton.x = (this.game.config.width - goMenuButton.displayWidth) / 2;
+        goMenuButton.y = (this.game.config.height - goMenuButton.displayHeight) - this.ratio * 12;
 
-        this.facebook.on('getleaderboard', leaderboard => {
-            this.leaderboard = leaderboard;
+        goMenuButton.setInteractive();
 
-            this.leaderboard.on('getscores', scores =>{
-                console.log(scores);
+        goMenuButton.on('pointerup', () => {
+            this.leaderboard.off('getscores');
+            this.leaderboard.off('filecomplete');
+            this.scene.start('Menu');
+        });
+
+        return goMenuButton;
+    }
+
+    addPlayers(callback) {
+        this.leaderboard.getScores();
+
+        this.leaderboard.on('getscores', scores => {
+            const players = [];
+            const playersList = scores;
+
+            let i;
+            for (i = 0; i < playersList.length; i++) {
+                if (!this.textures.exists(`player${ i + 1 }`)) {
+                    this.load.image(`player${ i + 1 }`, playersList[i].playerPhotoURL);
+                    this.load.start()
+                } else {
+
+                }
+            }
+
+            this.load.on('filecomplete', key => {
+                const numberObject = this.add.bitmapText(0, 0, 'atari', players.length + 1, 30);
+                numberObject.x = 0;
+                numberObject.y = 0;
+
+                const pictureObject = this.add.image(0, 0, key);
+                pictureObject.setScale(100 / pictureObject.width);
+                pictureObject.setOrigin(0, 0);
+                pictureObject.x = numberObject.width;
+                pictureObject.y = 0;
+
+                const scoreObject = this.add.bitmapText(0, 0, 'atari', playersList[players.length].score, 30);
+                scoreObject.x = pictureObject.x + pictureObject.displayWidth;
+                scoreObject.y = 0;
+
+                const nameObject = this.add.bitmapText(0, 0, 'atari', playersList[players.length].playerName, 30);
+                nameObject.x = pictureObject.x + pictureObject.displayWidth;
+                nameObject.y = scoreObject.y + scoreObject.height;
+
+                const containerObject = this.add.container(0, players.length * pictureObject.displayHeight, [numberObject, pictureObject, scoreObject, nameObject]);
+                this.physics.world.enable(containerObject);
+
+                players.push(containerObject);
+
+                if (i === playersList.length) {
+                    const containerObject = this.add.container(0, 0, [...players]);
+                    this.physics.world.enable(containerObject);
+                    containerObject.x = (this.game.config.width - (containerObject.list[0].list[0].width + containerObject.list[0].list[1].displayWidth + containerObject.list[0].list[2].width + containerObject.list[0].list[0].width)) / 2;
+                    containerObject.y = (this.title.y + this.title.displayHeight) + this.ratio * 10;
+
+                    return callback(containerObject);
+                }
             }, this);
-
-            this.leaderboard.getScores();
         }, this);
-
-        this.facebook.getLeaderboard('test-board');
-
-
-        for (let i = 0; i < playersList.length; i++) {
-            const numberObject = this.add.bitmapText(0, 0, 'atari', i + 1, 30);
-            numberObject.x = 0;
-            numberObject.y = 0;
-
-            const containerObject = this.add.container(0, i * numberObject.height, [numberObject]);
-            this.physics.world.enable(containerObject);
-
-            players.push(containerObject);
-        }
-
-        const containerObject = this.add.container(0, 0, [...players]);
-        this.physics.world.enable(containerObject);
-        containerObject.x = (this.game.config.width - containerObject.list[0].list[0].width) / 2;
-        containerObject.y = (this.title.y + this.title.displayHeight) + this.ratio * 10;
-
-        return containerObject;
     }
 
 }

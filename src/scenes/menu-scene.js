@@ -9,6 +9,10 @@ class MenuScene extends Scene {
         this.data = null;
     }
 
+    init(data) {
+        this.leaderboard = data.leaderboard;
+    }
+
     create() {
         this.facebook.on('savedata', data => {
             this.facebook.getData(['levelId']);
@@ -110,13 +114,13 @@ class MenuScene extends Scene {
 
         leaderboardButton.on('pointerup', () => {
             leaderboardButton.setFrame(0);
+
+            this.scene.stop('Menu');
+            this.scene.start('Leaderboard', { leaderboard: this.leaderboard });
         });
 
         leaderboardButton.on('pointerout', () => {
             leaderboardButton.setFrame(0);
-
-            this.scene.stop('Menu');
-            this.scene.start('Leaderboard');
         });
 
         return leaderboardButton;

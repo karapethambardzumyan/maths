@@ -6,7 +6,13 @@ class LoadingScene extends Scene {
     }
 
     preload() {
-        this.facebook.once('startgame', () => this.scene.start('Menu'), this);
+        this.facebook.once('startgame', () => {
+            this.facebook.getLeaderboard('test-board');
+
+            this.facebook.on('getleaderboard', leaderboard => {
+                this.scene.start('Menu', { leaderboard });
+            }, this);
+        }, this);
         this.facebook.showLoadProgress(this);
 
         this.load.bitmapFont('atari', './assets/fonts/atari/index.png', './assets/fonts/atari/index.xml');
@@ -66,6 +72,7 @@ class LoadingScene extends Scene {
         this.load.image('borderLeaderboard', './assets/leaderboard/border.png');
         this.load.image('logoLeaderboard', './assets/leaderboard/logo.png');
         this.load.image('titleLeaderboard', './assets/leaderboard/title.png');
+        this.load.image('goMenuLeaderboardButton', './assets/leaderboard/go-menu.png');
 
         this.load.spritesheet('playerWin', './assets/sprites/player-win.png', {
             frameWidth: 140,
