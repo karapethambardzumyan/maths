@@ -100,7 +100,37 @@ class LeaderboardScene extends Scene {
                     this.load.image(`player${ i + 1 }`, playersList[i].playerPhotoURL);
                     this.load.start()
                 } else {
+                    const numberObject = this.add.bitmapText(0, 0, 'atari', players.length + 1, 30);
+                    numberObject.x = 0;
+                    numberObject.y = 0;
 
+                    const pictureObject = this.add.image(0, 0, `player${ i + 1 }`);
+                    pictureObject.setScale(100 / pictureObject.width);
+                    pictureObject.setOrigin(0, 0);
+                    pictureObject.x = numberObject.width;
+                    pictureObject.y = 0;
+
+                    const scoreObject = this.add.bitmapText(0, 0, 'atari', playersList[players.length].score, 30);
+                    scoreObject.x = pictureObject.x + pictureObject.displayWidth;
+                    scoreObject.y = 0;
+
+                    const nameObject = this.add.bitmapText(0, 0, 'atari', playersList[players.length].playerName, 30);
+                    nameObject.x = pictureObject.x + pictureObject.displayWidth;
+                    nameObject.y = scoreObject.y + scoreObject.height;
+
+                    const containerObject = this.add.container(0, players.length * pictureObject.displayHeight, [numberObject, pictureObject, scoreObject, nameObject]);
+                    this.physics.world.enable(containerObject);
+
+                    players.push(containerObject);
+
+                    if (i + 1 === playersList.length) {
+                        const containerObject = this.add.container(0, 0, [...players]);
+                        this.physics.world.enable(containerObject);
+                        containerObject.x = (this.game.config.width - (containerObject.list[0].list[0].width + containerObject.list[0].list[1].displayWidth + containerObject.list[0].list[2].width + containerObject.list[0].list[0].width)) / 2;
+                        containerObject.y = (this.title.y + this.title.displayHeight) + this.ratio * 10;
+
+                        return callback(containerObject);
+                    }
                 }
             }
 
