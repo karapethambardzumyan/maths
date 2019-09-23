@@ -26,7 +26,7 @@ class MenuScene extends Scene {
             }
         });
 
-        this.facebook.on('flushdata', data => {
+        this.facebook.on('flushdata', () => {
             this.data =  null;
         });
 

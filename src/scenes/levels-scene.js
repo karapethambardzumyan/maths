@@ -54,7 +54,7 @@ class LevelsScene extends Scene {
 
         closeButton.setInteractive();
 
-        closeButton.on('pointerdown', () => {
+        closeButton.on('pointerup', () => {
             this.scene.stop('Levels');
             this.scene.start('Menu');
         });

@@ -15,7 +15,7 @@
 const LEVEL_1 = {
     level: 1,
     colors: {
-        background: ['#15242f'],
+        background: ['#15242f', '#15242f'],
         foreground: '#004a6a'
     },
     operations: ['+'],

@@ -1,7 +1,7 @@
 const LEVEL_3 = {
     level: 3,
     colors: {
-        background: ['#69d282'],
+        background: ['#69d282', '#69d282'],
         foreground: '#47694f'
     },
     operations: ['+', '-', '*'],

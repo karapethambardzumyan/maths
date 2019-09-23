@@ -11,6 +11,7 @@ class GameScene extends Scene {
     init(data) {
         this.levelId = data.levelId;
         this.level = LEVELS[this.levelId];
+        this.playerNumber = data.playerNumber;
     }
 
     create() {
@@ -28,7 +29,7 @@ class GameScene extends Scene {
             console.log('infinity level');
         }
 
-        this.player = this.addPlayer();
+        this.player = this.addPlayer(this.playerNumber);
         this.operation = this.addOperation();
         this.enemies = this.addEnemies();
         this.lives = this.addLives();
@@ -75,9 +76,13 @@ class GameScene extends Scene {
             this.newLevelObject = null;
             this.newLevel = false;
 
+            const playerNumber = this.player.number;
             this.player.destroy();
 
-            this.scene.start('Game', { levelId: this.levelId + 1 });
+            this.scene.start('Game', {
+                playerNumber,
+                levelId: this.levelId + 1
+            });
         }
     }
 
@@ -153,7 +158,7 @@ class GameScene extends Scene {
         );
         squareObject.setOrigin(0, 0);
 
-        const numberObject = this.add.bitmapText(0, 0, 'atari', 2, 30);
+        const numberObject = this.add.bitmapText(0, 0, 'atari', number || 2, 30);
         numberObject.x = (playerSize - numberObject.width) / 2;
         numberObject.y = (playerSize - numberObject.height) / 2;
 
@@ -194,7 +199,7 @@ class GameScene extends Scene {
         this.player.list[1].x = (playerSize - this.player.list[1].width) / 2;
         this.player.list[1].y = (playerSize - this.player.list[1].height) / 2;
 
-        this.operation = this.addOperation();
+        this.operation = this.addOperation(true);
     }
 
     playerLost() {
@@ -205,7 +210,7 @@ class GameScene extends Scene {
             this.lives[this.life - 1].setVisible(true);
 
             this.destroyEnemies();
-            this.operation = this.addOperation(true);
+            this.operation = this.addOperation(false);
 
             const gameWidth = this.game.config.width;
             const playerSize = gameWidth / 6;
@@ -225,9 +230,8 @@ class GameScene extends Scene {
             playerLost.anims.play('playerLost');
             this.player.add(playerLost);
 
-            const number = this.player.number;
-
             playerLost.on('animationcomplete', () => {
+                const number = this.player.number;
                 this.player.destroy();
                 this.player = this.addPlayer(number);
                 this.enemies = this.addEnemies();
@@ -316,21 +320,14 @@ class GameScene extends Scene {
         return answer;
     }
 
-    addOperation(isForLifeChecking) {
+    addOperation(isWon) {
         if (this.operation) {
             this.operation.destroy();
         }
 
-        if (!isForLifeChecking && this.operationOptions.answerNumber >= this.level.answersCount && !this.newLevel) {
-            this.nextLevel();
+        this.operationOptions.answerNumber += 1;
 
-            this.operationOptions = {
-                symbol: null,
-                number: null,
-                answerNumber: 0
-            };
-            this.lowTimeAudio = null;
-        } else {
+        if (isWon === true && this.operationOptions.answerNumber < this.level.answersCount) {
             this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
             this.operationOptions.number = getRandomInt(1, 9);
 
@@ -344,7 +341,59 @@ class GameScene extends Scene {
             operation.y = (gameHeight - operation.height) / 2;
             operation.setDepth(-1);
 
-            this.operationOptions.answerNumber++;
+            console.log('win', this.operationOptions.answerNumber, this.level.answersCount);
+
+            return operation;
+        }
+        if (isWon === true && this.operationOptions.answerNumber === this.level.answersCount) {
+            this.nextLevel();
+
+            this.operationOptions = {
+                symbol: null,
+                number: null,
+                answerNumber: 0
+            };
+            this.lowTimeAudio = null;
+
+            console.log('win level', this.operationOptions.answerNumber, this.level.answersCount);
+        }
+        if (isWon === false && this.life) {
+            this.operationOptions.answerNumber -= 1;
+
+            this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
+            this.operationOptions.number = getRandomInt(1, 9);
+
+            this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
+            this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
+
+            const gameWidth = this.game.config.width;
+            const gameHeight = this.game.config.height;
+            const operation = this.add.bitmapText(0, 0, 'atari', `${ this.operationOptions.symbol }${ this.operationOptions.number }`, 200);
+            operation.x = (gameWidth - operation.width) / 2;
+            operation.y = (gameHeight - operation.height) / 2;
+            operation.setDepth(-1);
+
+            console.log('lose one life', this.operationOptions.answerNumber, this.level.answersCount);
+
+            return operation;
+        }
+        if (isWon === undefined) {
+            this.operationOptions.answerNumber -= 1;
+
+            this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
+            this.operationOptions.number = getRandomInt(1, 9);
+
+            this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
+            this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
+
+            const gameWidth = this.game.config.width;
+            const gameHeight = this.game.config.height;
+            const operation = this.add.bitmapText(0, 0, 'atari', `${ this.operationOptions.symbol }${ this.operationOptions.number }`, 200);
+            operation.x = (gameWidth - operation.width) / 2;
+            operation.y = (gameHeight - operation.height) / 2;
+            operation.setDepth(-1);
+
+            console.log('first time', this.operationOptions.answerNumber, this.level.answersCount);
 
             return operation;
         }
