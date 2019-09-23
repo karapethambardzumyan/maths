@@ -68,7 +68,7 @@ class GameScene extends Scene {
         }
 
         if (this.newLevelObject) {
-            this.newLevelObject.y += 4;
+            this.newLevelObject.y += 3;
         }
 
         if (this.newLevelObject && this.newLevelObject.y > this.game.config.height) {
