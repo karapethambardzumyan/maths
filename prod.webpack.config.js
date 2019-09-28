@@ -1,11 +1,7 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  optimization: {
-    minimizer: [new UglifyJsPlugin()],
-  },
   plugins: [
     new webpack.DefinePlugin({
       WEBGL_RENDERER: true,

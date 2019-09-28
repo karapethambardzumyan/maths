@@ -1,4 +1,4 @@
-import RoundRectanglePlugin from 'phaser3-rex-notes-master/plugins/roundrectangle-plugin';
+import RoundRectanglePlugin from '../node_modules/phaser3-rex-notes-master/plugins/roundrectangle-plugin';
 import { MAX_WIDTH, MAX_HEIGHT } from './constants';
 
 const width = window.innerWidth > MAX_WIDTH ? MAX_WIDTH : window.innerWidth;
