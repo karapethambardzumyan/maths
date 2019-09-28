@@ -149,11 +149,13 @@ class GameScene extends Scene {
         const gameHeight = this.game.config.height;
         const playerSize = gameWidth / 6;
 
-        const squareObject = this.physics.scene.add.rectangle(
+
+        const squareObject = this.add.rexRoundRectangle(
             0,
             0,
             playerSize,
             playerSize,
+            8,
             Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color
         );
         squareObject.setOrigin(0, 0);
@@ -255,11 +257,12 @@ class GameScene extends Scene {
         this.lowTimeAudio = null;
 
         for (let i = 0; i < 5; i++) {
-            const squareObject = this.physics.scene.add.rectangle(
+            const squareObject = this.add.rexRoundRectangle(
                 0,
                 0,
                 enemySize,
                 enemySize,
+                8,
                 Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color
             );
             squareObject.setOrigin(0, 0);

@@ -1,3 +1,4 @@
+import RoundRectanglePlugin from 'phaser/plugins/roundrectangle-plugin';
 import { MAX_WIDTH, MAX_HEIGHT } from './constants';
 
 const width = window.innerWidth > MAX_WIDTH ? MAX_WIDTH : window.innerWidth;
@@ -13,5 +14,14 @@ export default {
         arcade: {
             debug: false
         }
+    },
+    plugins: {
+        global: [
+            {
+                key: 'rexRoundRectanglePlugin',
+                plugin: RoundRectanglePlugin,
+                start: true
+            }
+        ]
     }
 };
