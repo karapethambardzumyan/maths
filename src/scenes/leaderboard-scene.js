@@ -100,7 +100,7 @@ class LeaderboardScene extends Scene {
                     this.load.image(`player${ i + 1 }`, playersList[i].playerPhotoURL);
                     this.load.start()
                 } else {
-                    const numberObject = this.add.bitmapText(0, 0, 'atari', players.length + 1, 30);
+                    const numberObject = this.add.text(0, 0, players.length + 1, { fontFamily: 'Orbitron', fontSize: '40px' });
                     numberObject.x = 0;
                     numberObject.y = 0;
 
@@ -110,11 +110,11 @@ class LeaderboardScene extends Scene {
                     pictureObject.x = numberObject.width;
                     pictureObject.y = 0;
 
-                    const scoreObject = this.add.bitmapText(0, 0, 'atari', playersList[players.length].score, 30);
+                    const scoreObject = this.add.text(0, 0, playersList[players.length].score, { fontFamily: 'Orbitron', fontSize: '40px' });
                     scoreObject.x = pictureObject.x + pictureObject.displayWidth;
                     scoreObject.y = 0;
 
-                    const nameObject = this.add.bitmapText(0, 0, 'atari', playersList[players.length].playerName, 30);
+                    const nameObject = this.add.text(0, 0, playersList[players.length].playerName, { fontFamily: 'Orbitron', fontSize: '40px' });
                     nameObject.x = pictureObject.x + pictureObject.displayWidth;
                     nameObject.y = scoreObject.y + scoreObject.height;
 
@@ -135,7 +135,7 @@ class LeaderboardScene extends Scene {
             }
 
             this.load.on('filecomplete', key => {
-                const numberObject = this.add.bitmapText(0, 0, 'atari', players.length + 1, 30);
+                const numberObject = this.add.text(0, 0, players.length + 1, { fontFamily: 'Orbitron', fontSize: '40px' });
                 numberObject.x = 0;
                 numberObject.y = 0;
 
@@ -145,11 +145,11 @@ class LeaderboardScene extends Scene {
                 pictureObject.x = numberObject.width;
                 pictureObject.y = 0;
 
-                const scoreObject = this.add.bitmapText(0, 0, 'atari', playersList[players.length].score, 30);
+                const scoreObject = this.add.text(0, 0, playersList[players.length].score, { fontFamily: 'Orbitron', fontSize: '40px' });
                 scoreObject.x = pictureObject.x + pictureObject.displayWidth;
                 scoreObject.y = 0;
 
-                const nameObject = this.add.bitmapText(0, 0, 'atari', playersList[players.length].playerName, 30);
+                const nameObject = this.add.text(0, 0, playersList[players.length].playerName, { fontFamily: 'Orbitron', fontSize: '40px' });
                 nameObject.x = pictureObject.x + pictureObject.displayWidth;
                 nameObject.y = scoreObject.y + scoreObject.height;
 
