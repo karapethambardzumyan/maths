@@ -149,7 +149,6 @@ class GameScene extends Scene {
         const gameHeight = this.game.config.height;
         const playerSize = gameWidth / 6;
 
-
         const squareObject = this.add.rexRoundRectangle(
             0,
             0,
@@ -160,7 +159,10 @@ class GameScene extends Scene {
         );
         squareObject.setOrigin(0, 0);
 
-        const numberObject = this.add.text(0, 0, number || 2, { fontFamily: 'Orbitron', fontSize: '40px' });
+        const numberObject = this.add.text(0, 0, number || 2, {
+            fontFamily: 'Orbitron',
+            fontSize: this.fitNumberSize(number || 2)
+        });
         numberObject.x = (playerSize - numberObject.width) / 2;
         numberObject.y = (playerSize - numberObject.height) / 2;
 
@@ -269,7 +271,10 @@ class GameScene extends Scene {
 
             const number = getRandomInt(rightAnswer - 10, rightAnswer + 10, generatedNumbers);
             generatedNumbers.push(number);
-            const numberObject = this.add.text(0, 0, number, { fontFamily: 'Orbitron', fontSize: '40px' });
+            const numberObject = this.add.text(0, 0, number, {
+                fontFamily: 'Orbitron',
+                fontSize: this.fitNumberSize(number)
+            });
             numberObject.x = (enemySize - numberObject.width) / 2;
             numberObject.y = (enemySize - numberObject.height) / 2;
 
@@ -339,7 +344,10 @@ class GameScene extends Scene {
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
-            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`,{ fontFamily: 'Orbitron', fontSize: '180px' });
+            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`,{
+                fontFamily: 'Orbitron',
+                fontSize: `${ 180 * this.ratio }px`
+            });
             operation.x = (gameWidth - operation.width) / 2;
             operation.y = (gameHeight - operation.height) / 2;
             operation.setDepth(-1);
@@ -371,7 +379,10 @@ class GameScene extends Scene {
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
-            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, { fontFamily: 'Orbitron', fontSize: '180px' });
+            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, {
+                fontFamily: 'Orbitron',
+                fontSize: `${ 180 * this.ratio }px`
+            });
             operation.x = (gameWidth - operation.width) / 2;
             operation.y = (gameHeight - operation.height) / 2;
             operation.setDepth(-1);
@@ -391,7 +402,10 @@ class GameScene extends Scene {
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
-            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, { fontFamily: 'Orbitron', fontSize: '180px' });
+            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, {
+                fontFamily: 'Orbitron',
+                fontSize: `${ 180 * this.ratio }px`
+            });
             operation.x = (gameWidth - operation.width) / 2;
             operation.y = (gameHeight - operation.height) / 2;
             operation.setDepth(-1);
@@ -461,6 +475,23 @@ class GameScene extends Scene {
         this.facebook.saveData({ levelId: this.levelId + 1 });
 
         this.leaderboard.setScore(this.operationOptions.answerNumber);
+    }
+
+    fitNumberSize(number) {
+        const length = number.toString().length;
+
+        switch (length) {
+            case 1:
+                return `${ 40 * this.ratio }px`;
+            case 2:
+                return `${ 35 * this.ratio }px`;
+            case 3:
+                return `${ 30 * this.ratio }px`;
+            case 4:
+                return `${ 25 * this.ratio }px`;
+            case 5:
+                return `${ 20 * this.ratio }px`;
+        }
     }
 }
 
