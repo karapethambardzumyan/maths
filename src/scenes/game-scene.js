@@ -160,7 +160,7 @@ class GameScene extends Scene {
         );
         squareObject.setOrigin(0, 0);
 
-        const numberObject = this.add.bitmapText(0, 0, 'atari', number || 2, 30);
+        const numberObject = this.add.text(0, 0, number || 2, { fontFamily: 'Orbitron', fontSize: '40px' });
         numberObject.x = (playerSize - numberObject.width) / 2;
         numberObject.y = (playerSize - numberObject.height) / 2;
 
@@ -269,7 +269,7 @@ class GameScene extends Scene {
 
             const number = getRandomInt(rightAnswer - 10, rightAnswer + 10, generatedNumbers);
             generatedNumbers.push(number);
-            const numberObject = this.add.bitmapText(0, 0, 'atari', number, 30);
+            const numberObject = this.add.text(0, 0, number, { fontFamily: 'Orbitron', fontSize: '40px' });
             numberObject.x = (enemySize - numberObject.width) / 2;
             numberObject.y = (enemySize - numberObject.height) / 2;
 
@@ -339,7 +339,7 @@ class GameScene extends Scene {
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
-            const operation = this.add.bitmapText(0, 0, 'atari', `${ this.operationOptions.symbol }${ this.operationOptions.number }`, 200);
+            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`,{ fontFamily: 'Orbitron', fontSize: '180px' });
             operation.x = (gameWidth - operation.width) / 2;
             operation.y = (gameHeight - operation.height) / 2;
             operation.setDepth(-1);
@@ -371,7 +371,7 @@ class GameScene extends Scene {
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
-            const operation = this.add.bitmapText(0, 0, 'atari', `${ this.operationOptions.symbol }${ this.operationOptions.number }`, 200);
+            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, { fontFamily: 'Orbitron', fontSize: '180px' });
             operation.x = (gameWidth - operation.width) / 2;
             operation.y = (gameHeight - operation.height) / 2;
             operation.setDepth(-1);
@@ -391,7 +391,7 @@ class GameScene extends Scene {
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
-            const operation = this.add.bitmapText(0, 0, 'atari', `${ this.operationOptions.symbol }${ this.operationOptions.number }`, 200);
+            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`, { fontFamily: 'Orbitron', fontSize: '180px' });
             operation.x = (gameWidth - operation.width) / 2;
             operation.y = (gameHeight - operation.height) / 2;
             operation.setDepth(-1);

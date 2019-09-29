@@ -15,7 +15,12 @@ class LoadingScene extends Scene {
         }, this);
         this.facebook.showLoadProgress(this);
 
-        this.load.bitmapFont('atari', './assets/fonts/atari/index.png', './assets/fonts/atari/index.xml');
+        this.load.rexWebFont({
+            custom: {
+                families: ['Orbitron'],
+                urls: ['./assets/fonts/index.css']
+            }
+        });
 
         this.load.image('background', './assets/menu/background.png');
         this.load.image('logo', './assets/menu/logo.png');
