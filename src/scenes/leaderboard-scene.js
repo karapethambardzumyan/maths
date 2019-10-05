@@ -169,7 +169,6 @@ class LeaderboardScene extends Scene {
             }, this);
         }, this);
     }
-
 }
 
 export default LeaderboardScene;
