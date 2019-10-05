@@ -1,6 +1,5 @@
 import RoundRectanglePlugin from '../node_modules/phaser3-rex-notes-master/plugins/roundrectangle-plugin';
 import WebFontLoaderPlugin from '../node_modules/phaser3-rex-notes-master/plugins/webfontloader-plugin';
-import ScrollerPlugin from '../node_modules/phaser3-rex-notes-master/plugins/scroller.js';
 import { MAX_WIDTH, MAX_HEIGHT } from './constants';
 
 const width = window.innerWidth > MAX_WIDTH ? MAX_WIDTH : window.innerWidth;
@@ -27,11 +26,6 @@ export default {
             {
                 key: 'WebFontLoader',
                 plugin: WebFontLoaderPlugin,
-                start: true
-            },
-            {
-                key: 'rexScroller',
-                plugin: ScrollerPlugin,
                 start: true
             }
         ]
