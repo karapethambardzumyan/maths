@@ -11,6 +11,91 @@ class LeaderboardScene extends Scene {
     }
 
     create() {
+        const players = [
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' },
+            { name: 'D' },
+            { name: 'E' },
+            { name: 'F' },
+            { name: 'J' },
+            { name: 'I' },
+            { name: 'L' },
+            { name: 'M' }
+        ];
+
         this.ratio = this.game.config.width / MAX_WIDTH;
 
         this.background = this.addBackground();
@@ -18,17 +103,17 @@ class LeaderboardScene extends Scene {
         this.logo = this.addLogo();
         this.title = this.addTitle();
         this.goMenuButton = this.addGoMenuButton();
-        this.addPlayers(players => {
-            this.menu = this.add.container(0, 0, [
-                this.border,
-                this.logo,
-                this.title,
-                players,
-                this.goMenuButton
-            ]);
+        this.playersList = this.addPlayers(players);
 
-            this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
-        });
+        this.menu = this.add.container(0, 0, [
+            this.border,
+            this.logo,
+            this.title,
+            this.goMenuButton,
+            this.playersList
+        ]);
+
+        this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
     }
 
     addBackground() {
@@ -87,87 +172,64 @@ class LeaderboardScene extends Scene {
         return goMenuButton;
     }
 
-    addPlayers(callback) {
-        this.leaderboard.getScores();
+    addPlayers(players) {
+        const createPanel = (scene, data) => {
+            return scene.rexUI.add.sizer({ orientation: 'y' }).add(createList(scene, data), 0, 'top', null, true);
+        };
 
-        this.leaderboard.on('getscores', scores => {
-            const players = [];
-            const playersList = scores;
+        const createList = (scene, items) => {
+            const column = 1;
+            const row = Math.ceil(items.length / column);
+            const table = scene.rexUI.add.gridSizer({ column, row });
 
-            let i;
-            for (i = 0; i < playersList.length; i++) {
-                if (!this.textures.exists(`player${ i + 1 }`)) {
-                    this.load.image(`player${ i + 1 }`, playersList[i].playerPhotoURL);
-                    this.load.start()
-                } else {
-                    const numberObject = this.add.text(0, 0, players.length + 1, { fontFamily: 'Orbitron', fontSize: '40px' });
-                    numberObject.x = 0;
-                    numberObject.y = 0;
+            let item, r, c;
+            for (let i = 0, cnt = items.length; i < cnt; i++) {
+                item = items[i];
+                r = i % row;
+                c = (i - r) / row;
 
-                    const pictureObject = this.add.image(0, 0, `player${ i + 1 }`);
-                    pictureObject.setScale(100 / pictureObject.width);
-                    pictureObject.setOrigin(0, 0);
-                    pictureObject.x = numberObject.width;
-                    pictureObject.y = 0;
-
-                    const scoreObject = this.add.text(0, 0, playersList[players.length].score, { fontFamily: 'Orbitron', fontSize: '40px' });
-                    scoreObject.x = pictureObject.x + pictureObject.displayWidth;
-                    scoreObject.y = 0;
-
-                    const nameObject = this.add.text(0, 0, playersList[players.length].playerName, { fontFamily: 'Orbitron', fontSize: '40px' });
-                    nameObject.x = pictureObject.x + pictureObject.displayWidth;
-                    nameObject.y = scoreObject.y + scoreObject.height;
-
-                    const containerObject = this.add.container(0, players.length * pictureObject.displayHeight, [numberObject, pictureObject, scoreObject, nameObject]);
-                    this.physics.world.enable(containerObject);
-
-                    players.push(containerObject);
-
-                    if (i + 1 === playersList.length) {
-                        const containerObject = this.add.container(0, 0, [...players]);
-                        this.physics.world.enable(containerObject);
-                        containerObject.x = (this.game.config.width - (containerObject.list[0].list[0].width + containerObject.list[0].list[1].displayWidth + containerObject.list[0].list[2].width + containerObject.list[0].list[0].width)) / 2;
-                        containerObject.y = (this.title.y + this.title.displayHeight) + this.ratio * 10;
-
-                        return callback(containerObject);
-                    }
-                }
+                table.add(
+                    createItem(item),
+                    c,
+                    r,
+                    'top',
+                    0,
+                    true
+                );
             }
 
-            this.load.on('filecomplete', key => {
-                const numberObject = this.add.text(0, 0, players.length + 1, { fontFamily: 'Orbitron', fontSize: '40px' });
-                numberObject.x = 0;
-                numberObject.y = 0;
+            return scene.rexUI.add.sizer({ orientation: 'y' }).add(table, 0, 'center', 0, true);
+        };
 
-                const pictureObject = this.add.image(0, 0, key);
-                pictureObject.setScale(100 / pictureObject.width);
-                pictureObject.setOrigin(0, 0);
-                pictureObject.x = numberObject.width;
-                pictureObject.y = 0;
+        const createItem = player => {
+            console.log(player);
+            return this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, Phaser.Display.Color.HexStringToColor('#000000').color);
+        };
 
-                const scoreObject = this.add.text(0, 0, playersList[players.length].score, { fontFamily: 'Orbitron', fontSize: '40px' });
-                scoreObject.x = pictureObject.x + pictureObject.displayWidth;
-                scoreObject.y = 0;
+        const playersObject = this.rexUI.add.scrollablePanel({
+            x: 12 * this.ratio,
+            y: this.title.y + this.title.displayHeight + (14 * this.ratio),
+            width: this.game.config.width - (12 * 2 * this.ratio),
+            height: this.game.config.height - (this.title.y + this.title.displayHeight) - (27 * this.ratio),
+            scrollMode: 0,
+            panel: {
+                child: createPanel(this, players),
+                mask: true,
+            },
+            slider: {
+                track: this.rexUI.add.roundRectangle(0, 0, 20, 0, 1, Phaser.Display.Color.HexStringToColor('#6a8492').color),
+                thumb: this.rexUI.add.roundRectangle(0, 0, 12, 140, 1, Phaser.Display.Color.HexStringToColor('#f8f8f9').color)
+            },
+            space: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                panel: 0
+            }
+        }).setOrigin(0, 0).layout();
 
-                const nameObject = this.add.text(0, 0, playersList[players.length].playerName, { fontFamily: 'Orbitron', fontSize: '40px' });
-                nameObject.x = pictureObject.x + pictureObject.displayWidth;
-                nameObject.y = scoreObject.y + scoreObject.height;
-
-                const containerObject = this.add.container(0, players.length * pictureObject.displayHeight, [numberObject, pictureObject, scoreObject, nameObject]);
-                this.physics.world.enable(containerObject);
-
-                players.push(containerObject);
-
-                if (i === playersList.length) {
-                    const containerObject = this.add.container(0, 0, [...players]);
-                    this.physics.world.enable(containerObject);
-                    containerObject.x = (this.game.config.width - (containerObject.list[0].list[0].width + containerObject.list[0].list[1].displayWidth + containerObject.list[0].list[2].width + containerObject.list[0].list[0].width)) / 2;
-                    containerObject.y = (this.title.y + this.title.displayHeight) + this.ratio * 10;
-
-                    return callback(containerObject);
-                }
-            }, this);
-        }, this);
+        return playersObject;
     }
 }
 
