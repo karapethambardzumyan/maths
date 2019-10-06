@@ -109,8 +109,7 @@ class LeaderboardScene extends Scene {
             this.border,
             this.logo,
             this.title,
-            this.goMenuButton,
-            this.playersList
+            this.goMenuButton
         ]);
 
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
@@ -227,7 +226,9 @@ class LeaderboardScene extends Scene {
                 bottom: 0,
                 panel: 0
             }
-        }).setOrigin(0, 0).layout();
+        });
+
+        playersObject.setOrigin(0, 0).layout();
 
         return playersObject;
     }
