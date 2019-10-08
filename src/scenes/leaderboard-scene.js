@@ -11,91 +11,6 @@ class LeaderboardScene extends Scene {
     }
 
     create() {
-        const players = [
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'A' },
-            { name: 'B' },
-            { name: 'C' },
-            { name: 'D' },
-            { name: 'E' },
-            { name: 'F' },
-            { name: 'J' },
-            { name: 'I' },
-            { name: 'L' },
-            { name: 'M' }
-        ];
-
         this.ratio = this.game.config.width / MAX_WIDTH;
 
         this.background = this.addBackground();
@@ -103,16 +18,16 @@ class LeaderboardScene extends Scene {
         this.logo = this.addLogo();
         this.title = this.addTitle();
         this.goMenuButton = this.addGoMenuButton();
-        this.playersList = this.addPlayers(players);
+        this.addPlayers(() => {
+            this.menu = this.add.container(0, 0, [
+                this.border,
+                this.logo,
+                this.title,
+                this.goMenuButton
+            ]);
 
-        this.menu = this.add.container(0, 0, [
-            this.border,
-            this.logo,
-            this.title,
-            this.goMenuButton
-        ]);
-
-        this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+            this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+        });
     }
 
     addBackground() {
@@ -171,66 +86,100 @@ class LeaderboardScene extends Scene {
         return goMenuButton;
     }
 
-    addPlayers(players) {
-        const createPanel = (scene, data) => {
-            return scene.rexUI.add.sizer({ orientation: 'y' }).add(createList(scene, data), 0, 'top', null, true);
-        };
+    addPlayers(callback) {
+        this.leaderboard.getScores();
 
-        const createList = (scene, items) => {
-            const column = 1;
-            const row = Math.ceil(items.length / column);
-            const table = scene.rexUI.add.gridSizer({ column, row });
+        this.leaderboard.on('getscores', players => {
+            const playersPictures = {};
 
-            let item, r, c;
-            for (let i = 0, cnt = items.length; i < cnt; i++) {
-                item = items[i];
-                r = i % row;
-                c = (i - r) / row;
-
-                table.add(
-                    createItem(item),
-                    c,
-                    r,
-                    'top',
-                    0,
-                    true
-                );
+            for (const player of players) {
+                this.load.image(player.playerID, player.playerPhotoURL);
+                this.load.start();
             }
 
-            return scene.rexUI.add.sizer({ orientation: 'y' }).add(table, 0, 'center', 0, true);
-        };
+            this.load.on('filecomplete', key => {
+                playersPictures[key] = key;
 
-        const createItem = player => {
-            console.log(player);
-            return this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, Phaser.Display.Color.HexStringToColor('#000000').color);
-        };
+                if (players.length === Object.values(playersPictures).length) {
+                    const createPanel = (scene, data) => {
+                        return scene.rexUI.add.sizer({ orientation: 'y' }).add(createList(scene, data), 0, 'top', null, true);
+                    };
 
-        const playersObject = this.rexUI.add.scrollablePanel({
-            x: 12 * this.ratio,
-            y: this.title.y + this.title.displayHeight + (14 * this.ratio),
-            width: this.game.config.width - (12 * 2 * this.ratio),
-            height: this.game.config.height - (this.title.y + this.title.displayHeight) - (27 * this.ratio),
-            scrollMode: 0,
-            panel: {
-                child: createPanel(this, players),
-                mask: true,
-            },
-            slider: {
-                track: this.rexUI.add.roundRectangle(0, 0, 20, 0, 1, Phaser.Display.Color.HexStringToColor('#6a8492').color),
-                thumb: this.rexUI.add.roundRectangle(0, 0, 12, 140, 1, Phaser.Display.Color.HexStringToColor('#f8f8f9').color)
-            },
-            space: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                panel: 0
-            }
+                    const createList = (scene, items) => {
+                        const column = 1;
+                        const row = Math.ceil(items.length / column);
+                        const table = scene.rexUI.add.gridSizer({ column, row });
+
+                        let item, r, c;
+                        for (let i = 0, cnt = items.length; i < cnt; i++) {
+                            item = items[i];
+                            r = i % row;
+                            c = (i - r) / row;
+
+                            table.add(
+                                createItem(item),
+                                c,
+                                r,
+                                'top',
+                                0,
+                                true
+                            );
+                        }
+
+                        return scene.rexUI.add.sizer({ orientation: 'y' }).add(table, 0, 'center', 0, true);
+                    };
+
+                    const createItem = player => {
+                        const pictureKey = playersPictures[player.playerID];
+                        const pictureObject = this.add.image(0, 0, pictureKey);
+                        pictureObject.setScale(100 / pictureObject.width);
+                        pictureObject.setOrigin(0, 0);
+
+                        const nameObject = this.add.text(0, 0, player.playerName, { fontFamily: 'Orbitron', fontSize: '40px' });
+                        nameObject.x = pictureObject.x + pictureObject.displayWidth;
+
+                        const containerObject = this.add.container(10, 10, [
+                            pictureObject,
+                            nameObject
+                        ]);
+                        this.physics.world.enable(containerObject);
+                        containerObject.originX = 0;
+                        containerObject.body.height = 80;
+                        containerObject.body.height = 80;
+
+                        console.log(containerObject);
+
+                        return containerObject;
+                    };
+
+                    const playersObject = this.rexUI.add.scrollablePanel({
+                        x: 12 * this.ratio,
+                        y: this.title.y + this.title.displayHeight + (14 * this.ratio),
+                        width: this.game.config.width - (12 * 2 * this.ratio),
+                        height: this.game.config.height - (this.title.y + this.title.displayHeight) - (27 * this.ratio),
+                        scrollMode: 0,
+                        panel: {
+                            child: createPanel(this, players),
+                            mask: true,
+                        },
+                        slider: {
+                            track: this.rexUI.add.roundRectangle(0, 0, 20, 0, 1, Phaser.Display.Color.HexStringToColor('#6a8492').color),
+                            thumb: this.rexUI.add.roundRectangle(0, 0, 12, 140, 1, Phaser.Display.Color.HexStringToColor('#f8f8f9').color)
+                        },
+                        space: {
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            panel: 0
+                        }
+                    });
+                    playersObject.setOrigin(0, 0).layout();
+
+                    return callback();
+                }
+            });
         });
-
-        playersObject.setOrigin(0, 0).layout();
-
-        return playersObject;
     }
 }
 
