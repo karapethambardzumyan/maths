@@ -129,25 +129,37 @@ class LeaderboardScene extends Scene {
                         return scene.rexUI.add.sizer({ orientation: 'y' }).add(table, 0, 'center', 0, true);
                     };
 
+                    let playerNumber = 1;
                     const createItem = player => {
+                        const containerObject = this.physics.scene.add.container(0, 0);
+                        this.physics.world.enable(containerObject);
+                        containerObject.setSize((this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20), 80 * this.ratio);
+                        containerObject.body.width = (this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20);
+                        containerObject.body.height = 80 * this.ratio;
+
+                        const numberObject = this.add.text(0, 0, playerNumber, { fontFamily: 'Orbitron', fontSize: '30px' });
+                        numberObject.setOrigin(0, 0);
+                        numberObject.x = -containerObject.displayOriginX;
+                        numberObject.y = -containerObject.displayOriginY;
+
                         const pictureKey = playersPictures[player.playerID];
                         const pictureObject = this.add.image(0, 0, pictureKey);
-                        pictureObject.setScale(100 / pictureObject.width);
+                        pictureObject.setScale(80 / pictureObject.width);
                         pictureObject.setOrigin(0, 0);
+                        pictureObject.x = -containerObject.displayOriginX + (this.ratio * 40);
+                        pictureObject.y = -containerObject.displayOriginY;
 
                         const nameObject = this.add.text(0, 0, player.playerName, { fontFamily: 'Orbitron', fontSize: '40px' });
-                        nameObject.x = pictureObject.x + pictureObject.displayWidth;
+                        nameObject.setOrigin(0, 0);
+                        nameObject.x = -containerObject.displayOriginX + (this.ratio * 40) + numberObject.displayWidth + pictureObject.displayWidth;
+                        nameObject.y = -containerObject.displayOriginY;
 
-                        const containerObject = this.add.container(10, 10, [
-                            pictureObject,
-                            nameObject
-                        ]);
-                        this.physics.world.enable(containerObject);
-                        containerObject.originX = 0;
-                        containerObject.body.height = 80;
-                        containerObject.body.height = 80;
+                        containerObject
+                            .add(numberObject)
+                            .add(pictureObject)
+                            .add(nameObject);
 
-                        console.log(containerObject);
+                        playerNumber++;
 
                         return containerObject;
                     };
