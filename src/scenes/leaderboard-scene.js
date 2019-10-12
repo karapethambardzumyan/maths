@@ -93,112 +93,120 @@ class LeaderboardScene extends Scene {
             const playersPictures = {};
 
             for (const player of players) {
-                this.load.image(player.playerID, player.playerPhotoURL);
-                this.load.start();
+                if (!this.textures.exists(player.playerID)) {
+                    this.load.image(player.playerID, player.playerPhotoURL);
+                    this.load.start();
+                } else {
+                    run(players, playersPictures, player.playerID);
+                }
             }
 
             this.load.on('filecomplete', key => {
-                playersPictures[key] = key;
-
-                if (players.length === Object.values(playersPictures).length) {
-                    const createPanel = (scene, data) => {
-                        return scene.rexUI.add.sizer({ orientation: 'y' }).add(createList(scene, data), 0, 'top', null, true);
-                    };
-
-                    const createList = (scene, items) => {
-                        const column = 1;
-                        const row = Math.ceil(items.length / column);
-                        const table = scene.rexUI.add.gridSizer({ column, row });
-
-                        let item, r, c;
-                        for (let i = 0, cnt = items.length; i < cnt; i++) {
-                            item = items[i];
-                            r = i % row;
-                            c = (i - r) / row;
-
-                            table.add(
-                                createItem(item),
-                                c,
-                                r,
-                                'top',
-                                0,
-                                true
-                            );
-                        }
-
-                        return scene.rexUI.add.sizer({ orientation: 'y' }).add(table, 0, 'center', 0, true);
-                    };
-
-                    let playerNumber = 1;
-                    const createItem = player => {
-                        const containerObject = this.physics.scene.add.container(0, 0);
-                        this.physics.world.enable(containerObject);
-                        containerObject.setSize((this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20), 80 * this.ratio);
-                        containerObject.body.width = (this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20);
-                        // containerObject.body.height = this.ratio * 120;
-
-                        const pictureKey = playersPictures[player.playerID];
-                        const pictureObject = this.add.rexCircleMaskImage(0, 0, pictureKey);
-                        pictureObject.setScale(80 * this.ratio / pictureObject.width);
-                        pictureObject.setOrigin(0, 0);
-                        pictureObject.x = -containerObject.displayOriginX + (this.ratio * 60);
-                        pictureObject.y = -containerObject.displayOriginY + (playerNumber * (this.ratio * 25));
-
-                        const circleObject = this.add.circle(0, 0, 43, Phaser.Display.Color.HexStringToColor('#ffffff').color);
-                        circleObject.setScale(86 * this.ratio / circleObject.displayWidth);
-                        circleObject.x = pictureObject.x + circleObject.displayWidth / 2 - this.ratio * 3;
-                        circleObject.y = pictureObject.y + circleObject.displayHeight / 2 - this.ratio * 3;
-
-                        const numberObject = this.add.text(0, 0, playerNumber, { fontFamily: 'Orbitron', fontSize: '30px' });
-                        numberObject.setOrigin(0, 0);
-                        numberObject.x = -containerObject.displayOriginX + ((this.ratio * 40) - numberObject.displayWidth) / 2;
-                        numberObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 23) + (pictureObject.displayHeight - numberObject.displayHeight) / 2;
-
-                        const borderBottom = this.add.image(0, 0, 'borderBottomLeaderboard');
-                        borderBottom.setScale(320 / pictureObject.width);
-                        borderBottom.setOrigin(0, 0);
-                        borderBottom.x = -containerObject.displayOriginX;
-                        borderBottom.y = pictureObject.y + this.ratio * 10 + pictureObject.displayHeight - 1;
-
-                        containerObject
-                            .add(numberObject)
-                            .add(circleObject)
-                            .add(pictureObject)
-                            .add(borderBottom);
-
-                        playerNumber++;
-
-                        return containerObject;
-                    };
-
-                    const playersObject = this.rexUI.add.scrollablePanel({
-                        x: 12 * this.ratio,
-                        y: this.title.y + this.title.displayHeight + (14 * this.ratio),
-                        width: this.game.config.width - (12 * 2 * this.ratio),
-                        height: this.game.config.height - (this.title.y + this.title.displayHeight) - (27 * this.ratio),
-                        scrollMode: 0,
-                        panel: {
-                            child: createPanel(this, players),
-                            mask: true,
-                        },
-                        slider: {
-                            track: this.rexUI.add.roundRectangle(0, 0, 20, 0, 1, Phaser.Display.Color.HexStringToColor('#6a8492').color),
-                            thumb: this.rexUI.add.roundRectangle(0, 0, 12, 140, 1, Phaser.Display.Color.HexStringToColor('#f8f8f9').color)
-                        },
-                        space: {
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0,
-                            panel: 0
-                        }
-                    });
-                    playersObject.setOrigin(0, 0).layout();
-
-                    return callback();
-                }
+                run(players, playersPictures, key);
             });
         });
+
+        const run = (players, playersPictures, key) => {
+            playersPictures[key] = key;
+
+            if (players.length === Object.values(playersPictures).length) {
+                const createPanel = (scene, data) => {
+                    return scene.rexUI.add.sizer({ orientation: 'y' }).add(createList(scene, data), 0, 'top', null, true);
+                };
+
+                const createList = (scene, items) => {
+                    const column = 1;
+                    const row = Math.ceil(items.length / column);
+                    const table = scene.rexUI.add.gridSizer({ column, row });
+
+                    let item, r, c;
+                    for (let i = 0, cnt = items.length; i < cnt; i++) {
+                        item = items[i];
+                        r = i % row;
+                        c = (i - r) / row;
+
+                        table.add(
+                            createItem(item),
+                            c,
+                            r,
+                            'top',
+                            0,
+                            true
+                        );
+                    }
+
+                    return scene.rexUI.add.sizer({ orientation: 'y' }).add(table, 0, 'center', 0, true);
+                };
+
+                let playerNumber = 1;
+                const createItem = player => {
+                    const containerObject = this.physics.scene.add.container(0, 0);
+                    this.physics.world.enable(containerObject);
+                    containerObject.setSize((this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20), 80 * this.ratio);
+                    containerObject.body.width = (this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20);
+                    // containerObject.body.height = this.ratio * 120;
+
+                    const pictureKey = playersPictures[player.playerID];
+                    const pictureObject = this.add.rexCircleMaskImage(0, 0, pictureKey);
+                    pictureObject.setScale(80 * this.ratio / pictureObject.width);
+                    pictureObject.setOrigin(0, 0);
+                    pictureObject.x = -containerObject.displayOriginX + (this.ratio * 60);
+                    pictureObject.y = -containerObject.displayOriginY + (playerNumber * (this.ratio * 25));
+
+                    const circleObject = this.add.circle(0, 0, 43, Phaser.Display.Color.HexStringToColor('#ffffff').color);
+                    circleObject.setScale(86 * this.ratio / circleObject.displayWidth);
+                    circleObject.x = pictureObject.x + circleObject.displayWidth / 2 - this.ratio * 3;
+                    circleObject.y = pictureObject.y + circleObject.displayHeight / 2 - this.ratio * 3;
+
+                    const numberObject = this.add.text(0, 0, playerNumber, { fontFamily: 'Orbitron', fontSize: '30px' });
+                    numberObject.setOrigin(0, 0);
+                    numberObject.x = -containerObject.displayOriginX + ((this.ratio * 40) - numberObject.displayWidth) / 2;
+                    numberObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 23) + (pictureObject.displayHeight - numberObject.displayHeight) / 2;
+
+                    const borderBottom = this.add.image(0, 0, 'borderBottomLeaderboard');
+                    borderBottom.setScale(320 / pictureObject.width);
+                    borderBottom.setOrigin(0, 0);
+                    borderBottom.x = -containerObject.displayOriginX;
+                    borderBottom.y = pictureObject.y + this.ratio * 10 + pictureObject.displayHeight - 1;
+
+                    containerObject
+                        .add(numberObject)
+                        .add(circleObject)
+                        .add(pictureObject)
+                        .add(borderBottom);
+
+                    playerNumber++;
+
+                    return containerObject;
+                };
+
+                const playersObject = this.rexUI.add.scrollablePanel({
+                    x: 12 * this.ratio,
+                    y: this.title.y + this.title.displayHeight + (14 * this.ratio),
+                    width: this.game.config.width - (12 * 2 * this.ratio),
+                    height: this.game.config.height - (this.title.y + this.title.displayHeight) - (27 * this.ratio),
+                    scrollMode: 0,
+                    panel: {
+                        child: createPanel(this, players),
+                        mask: true,
+                    },
+                    slider: {
+                        track: this.rexUI.add.roundRectangle(0, 0, 20, 0, 1, Phaser.Display.Color.HexStringToColor('#6a8492').color),
+                        thumb: this.rexUI.add.roundRectangle(0, 0, 12, 140, 1, Phaser.Display.Color.HexStringToColor('#f8f8f9').color)
+                    },
+                    space: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        panel: 0
+                    }
+                });
+                playersObject.setOrigin(0, 0).layout();
+
+                return callback();
+            }
+        };
     }
 }
 
