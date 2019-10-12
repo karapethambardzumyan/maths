@@ -141,7 +141,7 @@ class LeaderboardScene extends Scene {
                         const pictureObject = this.add.rexCircleMaskImage(0, 0, pictureKey);
                         pictureObject.setScale(80 * this.ratio / pictureObject.width);
                         pictureObject.setOrigin(0, 0);
-                        pictureObject.x = -containerObject.displayOriginX + (this.ratio * 40);
+                        pictureObject.x = -containerObject.displayOriginX + (this.ratio * 60);
                         pictureObject.y = -containerObject.displayOriginY + (playerNumber * (this.ratio * 25));
 
                         const circleObject = this.add.circle(0, 0, 43, Phaser.Display.Color.HexStringToColor('#ffffff').color);
