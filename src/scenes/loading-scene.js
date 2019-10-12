@@ -10,8 +10,8 @@ class LoadingScene extends Scene {
             this.facebook.getLeaderboard('test-board');
 
             this.facebook.on('getleaderboard', leaderboard => {
-                this.scene.start('Menu', { leaderboard });
-                // this.scene.start('Leaderboard', { leaderboard });
+                // this.scene.start('Menu', { leaderboard });
+                this.scene.start('Leaderboard', { leaderboard });
             }, this);
         }, this);
         this.facebook.showLoadProgress(this);
@@ -27,10 +27,6 @@ class LoadingScene extends Scene {
         this.load.image('logo', './assets/menu/logo.png');
         this.load.image('borderMenu', './assets/menu/border.png');
         this.load.image('topbar', './assets/menu/topbar.png');
-        this.load.spritesheet('leaderboardButton', './assets/menu/leaderboard.png', {
-            frameWidth: 39,
-            frameHeight: 34
-        });
         this.load.image('noAdsButton', './assets/menu/no-ads.png');
         this.load.spritesheet('soundsButton', './assets/menu/sounds.png', {
             frameWidth: 49,
@@ -75,7 +71,12 @@ class LoadingScene extends Scene {
         this.load.image('goMenuButton', './assets/pause/go-menu-button.png');
         this.load.image('goGameButton', './assets/pause/go-game-button.png');
 
+        this.load.spritesheet('leaderboardButton', './assets/menu/leaderboard.png', {
+            frameWidth: 39,
+            frameHeight: 34
+        });
         this.load.image('borderLeaderboard', './assets/leaderboard/border.png');
+        this.load.image('borderBottomLeaderboard', './assets/leaderboard/border-bottom.png');
         this.load.image('logoLeaderboard', './assets/leaderboard/logo.png');
         this.load.image('titleLeaderboard', './assets/leaderboard/title.png');
         this.load.image('goMenuLeaderboardButton', './assets/leaderboard/go-menu.png');

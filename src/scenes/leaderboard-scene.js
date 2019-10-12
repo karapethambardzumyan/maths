@@ -135,29 +135,30 @@ class LeaderboardScene extends Scene {
                         this.physics.world.enable(containerObject);
                         containerObject.setSize((this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20), 80 * this.ratio);
                         containerObject.body.width = (this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20);
-                        containerObject.body.height = 80 * this.ratio;
-
-                        const numberObject = this.add.text(0, 0, playerNumber, { fontFamily: 'Orbitron', fontSize: '30px' });
-                        numberObject.setOrigin(0, 0);
-                        numberObject.x = -containerObject.displayOriginX;
-                        numberObject.y = -containerObject.displayOriginY;
+                        containerObject.body.height = 80 * this.ratio + 40;
 
                         const pictureKey = playersPictures[player.playerID];
                         const pictureObject = this.add.image(0, 0, pictureKey);
                         pictureObject.setScale(80 / pictureObject.width);
                         pictureObject.setOrigin(0, 0);
                         pictureObject.x = -containerObject.displayOriginX + (this.ratio * 40);
-                        pictureObject.y = -containerObject.displayOriginY;
+                        pictureObject.y = -containerObject.displayOriginY + (playerNumber * (this.ratio * 25));
 
-                        const nameObject = this.add.text(0, 0, player.playerName, { fontFamily: 'Orbitron', fontSize: '40px' });
-                        nameObject.setOrigin(0, 0);
-                        nameObject.x = -containerObject.displayOriginX + (this.ratio * 40) + numberObject.displayWidth + pictureObject.displayWidth;
-                        nameObject.y = -containerObject.displayOriginY;
+                        const numberObject = this.add.text(0, 0, playerNumber, { fontFamily: 'Orbitron', fontSize: '30px' });
+                        numberObject.setOrigin(0, 0);
+                        numberObject.x = -containerObject.displayOriginX + ((this.ratio * 40) - numberObject.displayWidth) / 2;
+                        numberObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 22) + (pictureObject.displayHeight - numberObject.displayHeight) / 2;
+
+                        const borderBottom = this.add.image(0, 0, 'borderBottomLeaderboard');
+                        borderBottom.setScale(320 / pictureObject.width);
+                        borderBottom.setOrigin(0, 0);
+                        borderBottom.x = -containerObject.displayOriginX;
+                        borderBottom.y = pictureObject.y + 10 + pictureObject.displayHeight - 1;
 
                         containerObject
                             .add(numberObject)
                             .add(pictureObject)
-                            .add(nameObject);
+                            .add(borderBottom);
 
                         playerNumber++;
 
