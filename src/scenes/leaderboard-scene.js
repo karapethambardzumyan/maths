@@ -135,18 +135,19 @@ class LeaderboardScene extends Scene {
                         this.physics.world.enable(containerObject);
                         containerObject.setSize((this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20), 80 * this.ratio);
                         containerObject.body.width = (this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20);
-                        containerObject.body.height = 80 * this.ratio + 40;
+                        // containerObject.body.height = this.ratio * 120;
 
                         const pictureKey = playersPictures[player.playerID];
                         const pictureObject = this.add.rexCircleMaskImage(0, 0, pictureKey);
-                        pictureObject.setScale(80 / pictureObject.width);
+                        pictureObject.setScale(80 * this.ratio / pictureObject.width);
                         pictureObject.setOrigin(0, 0);
                         pictureObject.x = -containerObject.displayOriginX + (this.ratio * 40);
                         pictureObject.y = -containerObject.displayOriginY + (playerNumber * (this.ratio * 25));
 
                         const circleObject = this.add.circle(0, 0, 43, Phaser.Display.Color.HexStringToColor('#ffffff').color);
-                        circleObject.x = pictureObject.x + circleObject.displayWidth / 2 - 3;
-                        circleObject.y = pictureObject.y + circleObject.displayHeight / 2 - 3;
+                        circleObject.setScale(86 * this.ratio / circleObject.displayWidth);
+                        circleObject.x = pictureObject.x + circleObject.displayWidth / 2 - this.ratio * 3;
+                        circleObject.y = pictureObject.y + circleObject.displayHeight / 2 - this.ratio * 3;
 
                         const numberObject = this.add.text(0, 0, playerNumber, { fontFamily: 'Orbitron', fontSize: '30px' });
                         numberObject.setOrigin(0, 0);
@@ -157,7 +158,7 @@ class LeaderboardScene extends Scene {
                         borderBottom.setScale(320 / pictureObject.width);
                         borderBottom.setOrigin(0, 0);
                         borderBottom.x = -containerObject.displayOriginX;
-                        borderBottom.y = pictureObject.y + 10 + pictureObject.displayHeight - 1;
+                        borderBottom.y = pictureObject.y + this.ratio * 10 + pictureObject.displayHeight - 1;
 
                         containerObject
                             .add(numberObject)
