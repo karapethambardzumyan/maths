@@ -138,16 +138,20 @@ class LeaderboardScene extends Scene {
                         containerObject.body.height = 80 * this.ratio + 40;
 
                         const pictureKey = playersPictures[player.playerID];
-                        const pictureObject = this.add.image(0, 0, pictureKey);
+                        const pictureObject = this.add.rexCircleMaskImage(0, 0, pictureKey);
                         pictureObject.setScale(80 / pictureObject.width);
                         pictureObject.setOrigin(0, 0);
                         pictureObject.x = -containerObject.displayOriginX + (this.ratio * 40);
                         pictureObject.y = -containerObject.displayOriginY + (playerNumber * (this.ratio * 25));
 
+                        const circleObject = this.add.circle(0, 0, 43, Phaser.Display.Color.HexStringToColor('#ffffff').color);
+                        circleObject.x = pictureObject.x + circleObject.displayWidth / 2 - 3;
+                        circleObject.y = pictureObject.y + circleObject.displayHeight / 2 - 3;
+
                         const numberObject = this.add.text(0, 0, playerNumber, { fontFamily: 'Orbitron', fontSize: '30px' });
                         numberObject.setOrigin(0, 0);
                         numberObject.x = -containerObject.displayOriginX + ((this.ratio * 40) - numberObject.displayWidth) / 2;
-                        numberObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 22) + (pictureObject.displayHeight - numberObject.displayHeight) / 2;
+                        numberObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 23) + (pictureObject.displayHeight - numberObject.displayHeight) / 2;
 
                         const borderBottom = this.add.image(0, 0, 'borderBottomLeaderboard');
                         borderBottom.setScale(320 / pictureObject.width);
@@ -157,6 +161,7 @@ class LeaderboardScene extends Scene {
 
                         containerObject
                             .add(numberObject)
+                            .add(circleObject)
                             .add(pictureObject)
                             .add(borderBottom);
 

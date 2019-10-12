@@ -1,5 +1,6 @@
 import RoundRectanglePlugin from '../node_modules/phaser3-rex-notes-master/plugins/roundrectangle-plugin';
 import WebFontLoaderPlugin from '../node_modules/phaser3-rex-notes-master/plugins/webfontloader-plugin';
+import CircleMaskImagePlugin from '../node_modules/phaser3-rex-notes-master/plugins/circlemaskimage-plugin';
 import UIPlugin from '../node_modules/phaser3-rex-notes-master/templates/ui/ui-plugin.js';
 import { MAX_WIDTH, MAX_HEIGHT } from './constants';
 
@@ -27,6 +28,11 @@ export default {
             {
                 key: 'WebFontLoader',
                 plugin: WebFontLoaderPlugin,
+                start: true
+            },
+            {
+                key: 'rexCircleMaskImagePlugin',
+                plugin: CircleMaskImagePlugin,
                 start: true
             }
         ],
