@@ -142,9 +142,9 @@ class LeaderboardScene extends Scene {
                 const createItem = player => {
                     const containerObject = this.physics.scene.add.container(0, 0);
                     this.physics.world.enable(containerObject);
-                    containerObject.setSize((this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20), 80 * this.ratio);
+                    containerObject.setSize((this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20), this.ratio * 80);
                     containerObject.body.width = (this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20);
-                    // containerObject.body.height = this.ratio * 120;
+                    containerObject.body.height = this.ratio * 80;
 
                     const pictureKey = playersPictures[player.playerID];
                     const pictureObject = this.add.rexCircleMaskImage(0, 0, pictureKey);
@@ -163,6 +163,11 @@ class LeaderboardScene extends Scene {
                     numberObject.x = -containerObject.displayOriginX + ((this.ratio * 40) - numberObject.displayWidth) / 2;
                     numberObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 23) + (pictureObject.displayHeight - numberObject.displayHeight) / 2;
 
+                    const scoreObject = this.add.text(0, 0, player.score, { fontFamily: 'Orbitron', fontSize: '30px' });
+                    scoreObject.setOrigin(0, 0);
+                    scoreObject.x = -containerObject.displayOriginX + (this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20) - scoreObject.displayWidth - (this.ratio * 20);
+                    scoreObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 23) + (pictureObject.displayHeight - scoreObject.displayHeight) / 2;
+
                     const borderBottom = this.add.image(0, 0, 'borderBottomLeaderboard');
                     borderBottom.setScale(320 / pictureObject.width);
                     borderBottom.setOrigin(0, 0);
@@ -173,6 +178,7 @@ class LeaderboardScene extends Scene {
                         .add(numberObject)
                         .add(circleObject)
                         .add(pictureObject)
+                        .add(scoreObject)
                         .add(borderBottom);
 
                     playerNumber++;
