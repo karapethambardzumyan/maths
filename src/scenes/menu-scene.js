@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { MAX_WIDTH } from '../constants';
+import {getAudioType, setAudioType} from '../helpers/audio-manager';
 
 
 class MenuScene extends Scene {
@@ -14,6 +15,8 @@ class MenuScene extends Scene {
     }
 
     create() {
+        setAudioType('on');
+
         this.facebook.on('savedata', data => {
             this.facebook.getData(['levelId']);
         });
@@ -167,7 +170,8 @@ class MenuScene extends Scene {
             }
 
             soundsButton.setFrame(soundState);
-        });
+            setAudioType(soundState);
+         });
 
         return soundsButton;
     }
