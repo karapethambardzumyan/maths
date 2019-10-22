@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import {addAudio, getAudioType, setAudioType} from '../helpers/audio-manager';
 
 class LoadingScene extends Scene {
     constructor() {
@@ -31,7 +32,6 @@ class LoadingScene extends Scene {
             frameWidth: 49,
             frameHeight: 50
         });
-        this.load.image('soundOffButton', './assets/menu/sound-off.png');
         this.load.image('musicOnButton', './assets/menu/music-on.png');
         this.load.spritesheet('playButton', './assets/menu/play.png', {
             frameWidth: 260,
@@ -102,8 +102,17 @@ class LoadingScene extends Scene {
         this.load.image('winLevel5', './assets/game/win-level-5.png');
         this.load.image('winLevel6', './assets/game/win-level-6.png');
 
+        this.load.audio('menuAudio', ['./assets/audio/menu.mp3']);
+        this.load.audio('clickAudio', ['./assets/audio/click.wav']);
         this.load.audio('lowTimeAudio', ['./assets/audio/low-time.wav']);
         this.load.audio('winAudio', ['./assets/audio/win.wav']);
+    }
+
+    create() {
+        addAudio('menuAudio', this, true);
+        addAudio('clickAudio', this, false);
+
+        setAudioType(2);
     }
 }
 

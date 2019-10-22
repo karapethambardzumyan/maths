@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { MAX_WIDTH } from '../constants';
+import { getAudioType, getAudio } from '../helpers/audio-manager';
 
 class LeaderboardScene extends Scene {
     constructor() {
@@ -78,6 +79,10 @@ class LeaderboardScene extends Scene {
         goMenuButton.setInteractive();
 
         goMenuButton.on('pointerup', () => {
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
             this.leaderboard.off('getscores');
             this.leaderboard.off('filecomplete');
             this.scene.start('Menu');

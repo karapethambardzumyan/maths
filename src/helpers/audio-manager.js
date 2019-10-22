@@ -9,16 +9,12 @@ export const getAudioType = () => {
     return audioType;
 };
 
-export const addAudio = (key, scene) => {
-    audios[key] = scene.sound.add(key, { loop: false });
+export const addAudio = (key, scene, loop) => {
+    audios[key] = scene.sound.add(key, { loop });
 };
 
-export const playAudio = key => {
-    audios[key].play();
-};
-
-export const stopAudio = key => {
-    audios[key].stop();
+export const getAudio = key => {
+    return audios[key];
 };
 
 export const stopAllAudios = () => {

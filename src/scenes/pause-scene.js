@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { MAX_WIDTH } from '../constants';
+import {getAudioType, getAudio, setAudioType} from '../helpers/audio-manager';
 
 class PauseScene extends Scene {
     constructor() {
@@ -69,6 +70,10 @@ class PauseScene extends Scene {
         });
 
         pauseButton.on('pointerup', () => {
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
             pauseButton.setFrame(0);
 
             this.scene.stop('Pause');
@@ -92,6 +97,10 @@ class PauseScene extends Scene {
         goGameButton.setInteractive();
 
         goGameButton.on('pointerup', () => {
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
             this.scene.stop('Pause');
             this.scene.resume('Game');
         });
@@ -109,6 +118,10 @@ class PauseScene extends Scene {
         goMenuButton.setInteractive();
 
         goMenuButton.on('pointerup', () => {
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
             this.scene.stop('Pause');
             this.scene.stop('Game');
             this.scene.start('Menu');
@@ -118,7 +131,6 @@ class PauseScene extends Scene {
     }
 
     addSoundsButton() {
-        let soundState = 0;
         const soundsButton = this.add.image(0, 0, 'pauseSoundsButton');
         soundsButton.setScale(this.ratio);
         soundsButton.setOrigin(0, 0);
@@ -126,22 +138,36 @@ class PauseScene extends Scene {
         soundsButton.y = this.border.y + (this.ratio * 370);
 
         soundsButton.setInteractive();
-        soundsButton.setFrame(soundState);
+
+        switch (getAudioType()) {
+            case 0:
+                soundsButton.setFrame(2);
+                break;
+            case 1:
+                soundsButton.setFrame(1);
+                break;
+            case 2:
+                soundsButton.setFrame(0);
+                break;
+        }
 
         soundsButton.on('pointerup', () => {
-            switch (soundState) {
+            switch (getAudioType()) {
                 case 0:
-                    soundState = 1;
+                    setAudioType(1);
+                    soundsButton.setFrame(1);
                     break;
                 case 1:
-                    soundState = 2;
+                    setAudioType(2);
+                    soundsButton.setFrame(0);
                     break;
                 case 2:
-                    soundState = 0;
+                    setAudioType(0);
+                    soundsButton.setFrame(2);
                     break;
             }
 
-            soundsButton.setFrame(soundState);
+            getAudio('clickAudio').play();
         });
 
         return soundsButton;

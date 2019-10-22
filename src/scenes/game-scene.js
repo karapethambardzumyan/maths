@@ -2,6 +2,7 @@ import { Math, Scene } from 'phaser';
 import { MAX_WIDTH, SPEED_RATIO } from '../constants';
 import LEVELS from '../constants/levels';
 import { getRandomInt } from '../helpers/numbers';
+import { getAudioType, getAudio } from '../helpers/audio-manager';
 
 class GameScene extends Scene {
     constructor() {
@@ -62,8 +63,8 @@ class GameScene extends Scene {
             }
 
             if (this.lowTimeAudio === null && this.enemies[0].y > gameHeight / 3) {
-                this.lowTimeAudio = this.sound.add('lowTimeAudio', { loop: false });
-                this.lowTimeAudio.play();
+                // this.lowTimeAudio = this.sound.add('lowTimeAudio', { loop: false });
+                // this.lowTimeAudio.play();
             }
         }
 
@@ -100,6 +101,10 @@ class GameScene extends Scene {
         });
 
         pauseButton.on('pointerup', () => {
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
             pauseButton.setFrame(0);
 
             this.scene.pause('Game');

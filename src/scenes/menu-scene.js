@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { MAX_WIDTH } from '../constants';
-import {getAudioType, setAudioType} from '../helpers/audio-manager';
+import { getAudio, getAudioType, setAudioType } from '../helpers/audio-manager';
 
 
 class MenuScene extends Scene {
@@ -15,8 +15,6 @@ class MenuScene extends Scene {
     }
 
     create() {
-        setAudioType('on');
-
         this.facebook.on('savedata', data => {
             this.facebook.getData(['levelId']);
         });
@@ -109,14 +107,16 @@ class MenuScene extends Scene {
 
         leaderboardButton.setInteractive();
 
-        leaderboardButton.setInteractive();
-
         leaderboardButton.on('pointerdown', () => {
             leaderboardButton.setFrame(1);
         });
 
         leaderboardButton.on('pointerup', () => {
             leaderboardButton.setFrame(0);
+
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
 
             this.scene.stop('Menu');
             this.scene.start('Leaderboard', { leaderboard: this.leaderboard });
@@ -146,7 +146,6 @@ class MenuScene extends Scene {
     }
 
     addSoundsButton() {
-        let soundState = 0;
         const soundsButton = this.add.image(0, 0, 'soundsButton');
         soundsButton.setScale(this.ratio);
         soundsButton.setOrigin(0, 0);
@@ -154,23 +153,23 @@ class MenuScene extends Scene {
         soundsButton.y = this.topbar.y + (this.ratio * 2);
 
         soundsButton.setInteractive();
-        soundsButton.setFrame(soundState);
+        soundsButton.setFrame(getAudioType());
 
         soundsButton.on('pointerup', () => {
-            switch (soundState) {
+            switch (getAudioType()) {
                 case 0:
-                    soundState = 1;
+                    setAudioType(1);
                     break;
                 case 1:
-                    soundState = 2;
+                    setAudioType(2);
                     break;
                 case 2:
-                    soundState = 0;
+                    setAudioType(0);
                     break;
             }
 
-            soundsButton.setFrame(soundState);
-            setAudioType(soundState);
+            getAudio('clickAudio').play();
+            soundsButton.setFrame(getAudioType());
          });
 
         return soundsButton;
@@ -190,6 +189,10 @@ class MenuScene extends Scene {
         });
 
         playButton.on('pointerup', () => {
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
             playButton.setFrame(0);
 
             this.scene.stop('Menu');

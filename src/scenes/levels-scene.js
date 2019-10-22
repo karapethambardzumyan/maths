@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import LEVELS from '../constants/levels';
 import { MAX_WIDTH } from '../constants';
+import { getAudioType, getAudio} from '../helpers/audio-manager';
 
 class LevelsScene extends Scene {
     constructor() {
@@ -55,6 +56,10 @@ class LevelsScene extends Scene {
         closeButton.setInteractive();
 
         closeButton.on('pointerup', () => {
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
             this.scene.stop('Levels');
             this.scene.start('Menu');
         });
@@ -89,6 +94,10 @@ class LevelsScene extends Scene {
                 levelObject.setInteractive();
 
                 levelObject.on('pointerup', () => {
+                    if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
                     this.scene.start('Game', { levelId: level.level - 1 });
                 });
             }
