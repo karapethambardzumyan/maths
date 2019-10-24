@@ -195,7 +195,7 @@ class GameScene extends Scene {
         });
         playerWin.anims.play('playerWin');
         this.player.add(playerWin);
-        this.lowTimeAudio.stop();
+        // this.lowTimeAudio.stop();
         const winAudio = this.sound.add('winAudio', { loop: false });
         winAudio.play();
 
