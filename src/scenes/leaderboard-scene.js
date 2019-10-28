@@ -41,7 +41,7 @@ class LeaderboardScene extends Scene {
 
     addBorder() {
         const border = this.add.image(0, 0, 'borderLeaderboard');
-        border.setScale(this.game.config.width / border.width, this.game.config.height / border.height);
+        border.setScale(this.ratio);
         border.setOrigin(0, 0);
         border.x = (this.game.config.width - border.displayWidth) / 2;
         border.y = 0;
@@ -54,7 +54,7 @@ class LeaderboardScene extends Scene {
         logo.setScale(this.ratio);
         logo.setOrigin(0, 0);
         logo.x = (this.game.config.width - logo.displayWidth) / 2;
-        logo.y = this.ratio * 22;
+        logo.y = this.ratio * 20;
 
         return logo;
     }
@@ -64,7 +64,7 @@ class LeaderboardScene extends Scene {
         logo.setScale(this.ratio);
         logo.setOrigin(0, 0);
         logo.x = (this.game.config.width - logo.displayWidth) / 2;
-        logo.y = (this.logo.y + this.logo.displayHeight) + this.ratio * 24;
+        logo.y = (this.logo.y + this.logo.displayHeight) + this.ratio * 9;
 
         return logo;
     }
