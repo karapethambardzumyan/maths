@@ -41,7 +41,7 @@ class LeaderboardScene extends Scene {
 
     addBorder() {
         const border = this.add.image(0, 0, 'borderLeaderboard');
-        border.setScale(this.ratio);
+        border.setScale(this.game.config.width / border.width, this.game.config.height / border.height);
         border.setOrigin(0, 0);
         border.x = (this.game.config.width - border.displayWidth) / 2;
         border.y = 0;
@@ -193,7 +193,7 @@ class LeaderboardScene extends Scene {
 
                 const playersObject = this.rexUI.add.scrollablePanel({
                     x: 12 * this.ratio,
-                    y: this.title.y + this.title.displayHeight + (14 * this.ratio),
+                    y: this.title.y + this.title.displayHeight + (10 * this.ratio),
                     width: this.game.config.width - (12 * 2 * this.ratio),
                     height: this.game.config.height - (this.title.y + this.title.displayHeight) - (27 * this.ratio),
                     scrollMode: 0,
