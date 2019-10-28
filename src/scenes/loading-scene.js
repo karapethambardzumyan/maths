@@ -32,7 +32,6 @@ class LoadingScene extends Scene {
             frameWidth: 49,
             frameHeight: 50
         });
-        this.load.image('musicOnButton', './assets/menu/music-on.png');
         this.load.spritesheet('playButton', './assets/menu/play.png', {
             frameWidth: 260,
             frameHeight: 85
@@ -74,8 +73,9 @@ class LoadingScene extends Scene {
             frameWidth: 39,
             frameHeight: 34
         });
-        this.load.image('borderLeaderboard', './assets/leaderboard/border.png');
+        this.load.image('borderTopLeaderboard', './assets/leaderboard/border-top.png');
         this.load.image('borderBottomLeaderboard', './assets/leaderboard/border-bottom.png');
+        this.load.image('borderBottomPlayerLeaderboard', './assets/leaderboard/border-bottom-player.png');
         this.load.image('logoLeaderboard', './assets/leaderboard/logo.png');
         this.load.image('titleLeaderboard', './assets/leaderboard/title.png');
         this.load.image('goMenuLeaderboardButton', './assets/leaderboard/go-menu.png');

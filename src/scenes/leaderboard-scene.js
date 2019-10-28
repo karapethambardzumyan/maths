@@ -15,20 +15,12 @@ class LeaderboardScene extends Scene {
         this.ratio = this.game.config.width / MAX_WIDTH;
 
         this.background = this.addBackground();
-        this.border = this.addBorder();
+        this.borderTop = this.addBorderTop();
         this.logo = this.addLogo();
         this.title = this.addTitle();
+        this.borderBottom = this.addBorderBottom();
         this.goMenuButton = this.addGoMenuButton();
-        this.addPlayers(() => {
-            this.menu = this.add.container(0, 0, [
-                this.border,
-                this.logo,
-                this.title,
-                this.goMenuButton
-            ]);
-
-            this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
-        });
+        this.addPlayers();
     }
 
     addBackground() {
@@ -39,14 +31,14 @@ class LeaderboardScene extends Scene {
         return background;
     }
 
-    addBorder() {
-        const border = this.add.image(0, 0, 'borderLeaderboard');
-        border.setScale(this.game.config.width / border.width, this.game.config.height / border.height);
-        border.setOrigin(0, 0);
-        border.x = (this.game.config.width - border.displayWidth) / 2;
-        border.y = 0;
+    addBorderTop() {
+        const borderTop = this.add.image(0, 0, 'borderTopLeaderboard');
+        borderTop.setScale(this.ratio);
+        borderTop.setOrigin(0, 0);
+        borderTop.x = (this.game.config.width - borderTop.displayWidth) / 2;
+        borderTop.y = 0;
 
-        return border;
+        return borderTop;
     }
 
     addLogo() {
@@ -64,9 +56,21 @@ class LeaderboardScene extends Scene {
         logo.setScale(this.ratio);
         logo.setOrigin(0, 0);
         logo.x = (this.game.config.width - logo.displayWidth) / 2;
-        logo.y = (this.logo.y + this.logo.displayHeight) + this.ratio * 9;
+        logo.y = (this.logo.y + this.logo.displayHeight) + (this.ratio * 11);
 
         return logo;
+    }
+
+    addBorderBottom() {
+        const borderBottom = this.add.image(0, 0, 'borderBottomLeaderboard');
+        borderBottom.setScale(this.ratio);
+        borderBottom.setOrigin(0, 0);
+        borderBottom.displayHeight = this.game.config.height - (this.title.y + this.title.displayHeight + (this.ratio * 11));
+        borderBottom.x = (this.game.config.width - borderBottom.displayWidth) / 2;
+        borderBottom.y = this.title.y + this.title.displayHeight + (this.ratio * 11);
+        borderBottom.setDepth(1);
+
+        return borderBottom;
     }
 
     addGoMenuButton() {
@@ -74,7 +78,8 @@ class LeaderboardScene extends Scene {
         goMenuButton.setScale(this.ratio);
         goMenuButton.setOrigin(0, 0);
         goMenuButton.x = (this.game.config.width - goMenuButton.displayWidth) / 2;
-        goMenuButton.y = (this.game.config.height - goMenuButton.displayHeight) - this.ratio * 12;
+        goMenuButton.y = (this.game.config.height - goMenuButton.displayHeight) - (this.ratio * 8);
+        goMenuButton.setDepth(2);
 
         goMenuButton.setInteractive();
 
@@ -91,7 +96,7 @@ class LeaderboardScene extends Scene {
         return goMenuButton;
     }
 
-    addPlayers(callback) {
+    addPlayers() {
         this.leaderboard.getScores();
 
         this.leaderboard.on('getscores', players => {
@@ -173,7 +178,7 @@ class LeaderboardScene extends Scene {
                     scoreObject.x = -containerObject.displayOriginX + (this.game.config.width - (12 * 2 * this.ratio)) - (this.ratio * 20) - scoreObject.displayWidth - (this.ratio * 20);
                     scoreObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 23) + (pictureObject.displayHeight - scoreObject.displayHeight) / 2;
 
-                    const borderBottom = this.add.image(0, 0, 'borderBottomLeaderboard');
+                    const borderBottom = this.add.image(0, 0, 'borderBottomPlayerLeaderboard');
                     borderBottom.setOrigin(0, 0);
                     borderBottom.displayWidth = this.game.config.width - (12 * 2 * this.ratio);
                     borderBottom.x = -containerObject.displayOriginX;
@@ -193,9 +198,9 @@ class LeaderboardScene extends Scene {
 
                 const playersObject = this.rexUI.add.scrollablePanel({
                     x: 12 * this.ratio,
-                    y: this.title.y + this.title.displayHeight + (10 * this.ratio),
+                    y: this.borderBottom.y,
                     width: this.game.config.width - (12 * 2 * this.ratio),
-                    height: this.game.config.height - (this.title.y + this.title.displayHeight) - (27 * this.ratio),
+                    height: this.game.config.height - (this.title.y + this.title.displayHeight),
                     scrollMode: 0,
                     panel: {
                         child: createPanel(this, players),
@@ -211,8 +216,6 @@ class LeaderboardScene extends Scene {
                     }
                 });
                 playersObject.setOrigin(0, 0).layout();
-
-                return callback();
             }
         };
     }
