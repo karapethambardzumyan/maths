@@ -174,8 +174,8 @@ class LeaderboardScene extends Scene {
                     scoreObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 23) + (pictureObject.displayHeight - scoreObject.displayHeight) / 2;
 
                     const borderBottom = this.add.image(0, 0, 'borderBottomLeaderboard');
-                    borderBottom.setScale(320 / pictureObject.width);
                     borderBottom.setOrigin(0, 0);
+                    borderBottom.displayWidth = this.game.config.width - (12 * 2 * this.ratio);
                     borderBottom.x = -containerObject.displayOriginX;
                     borderBottom.y = pictureObject.y + this.ratio * 10 + pictureObject.displayHeight - 1;
 
@@ -201,10 +201,7 @@ class LeaderboardScene extends Scene {
                         child: createPanel(this, players),
                         mask: true,
                     },
-                    slider: {
-                        track: this.rexUI.add.roundRectangle(0, 0, 20, 0, 1, Phaser.Display.Color.HexStringToColor('#6a8492').color),
-                        thumb: this.rexUI.add.roundRectangle(0, 0, 12, 140, 1, Phaser.Display.Color.HexStringToColor('#f8f8f9').color)
-                    },
+                    slider: false,
                     space: {
                         left: 0,
                         right: 0,
