@@ -11,8 +11,7 @@ class LoadingScene extends Scene {
             this.facebook.getLeaderboard('test-board');
 
             this.facebook.on('getleaderboard', leaderboard => {
-                // this.scene.start('Menu', { leaderboard });
-                this.scene.start('Leaderboard', { leaderboard });
+                this.scene.start('Menu', { leaderboard });
             }, this);
         }, this);
         this.facebook.showLoadProgress(this);
