@@ -168,6 +168,11 @@ class LeaderboardScene extends Scene {
                     circleObject.x = pictureObject.x + circleObject.displayWidth / 2 - this.ratio * 3;
                     circleObject.y = pictureObject.y + circleObject.displayHeight / 2 - this.ratio * 3;
 
+                    const nameObject = this.add.text(0, 0, player.playerName, { fontFamily: 'Orbitron', fontSize: '30px' });
+                    nameObject.setOrigin(0, 0);
+                    nameObject.x = (circleObject.x + circleObject.displayWidth) - (this.ratio * 30);
+                    nameObject.y = -containerObject.displayOriginY + playerNumber * (this.ratio * 23) + (pictureObject.displayHeight - nameObject.displayHeight) / 2;
+
                     const numberObject = this.add.text(0, 0, playerNumber, { fontFamily: 'Orbitron', fontSize: '30px' });
                     numberObject.setOrigin(0, 0);
                     numberObject.x = -containerObject.displayOriginX + ((this.ratio * 40) - numberObject.displayWidth) / 2;
@@ -188,6 +193,7 @@ class LeaderboardScene extends Scene {
                         .add(numberObject)
                         .add(circleObject)
                         .add(pictureObject)
+                        .add(nameObject)
                         .add(scoreObject)
                         .add(borderBottom);
 
