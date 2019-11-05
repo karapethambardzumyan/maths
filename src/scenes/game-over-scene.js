@@ -21,6 +21,7 @@ class GameOverScene extends Scene {
         this.gameOver = this.addGameOver();
         this.bestScore = this.addBestScore();
         this.bestScoreBoard = this.addBestScoreBoard();
+        this.bestScoreValue = this.addBestScoreValue();
         this.shareButton = this.addShareButton();
         this.tryAgainButton = this.addTryAgainButton();
 
@@ -28,6 +29,7 @@ class GameOverScene extends Scene {
             this.gameOver,
             this.bestScore,
             this.bestScoreBoard,
+            this.bestScoreValue,
             this.shareButton,
             this.tryAgainButton
         ]);
@@ -76,10 +78,19 @@ class GameOverScene extends Scene {
         const bestScoreBoard = this.add.image(0, 0, 'bestScoreBoard');
         bestScoreBoard.setScale(this.ratio);
         bestScoreBoard.setOrigin(0, 0);
-        bestScoreBoard.x = this.game.config.width - (this.bestScore.x + this.bestScore.displayWidth) - (this.ratio * 3);
+        bestScoreBoard.x = this.game.config.width - (this.bestScore.x + this.bestScore.displayWidth) - (this.ratio * 5);
         bestScoreBoard.y = this.gameOver.y + this.gameOver.displayHeight + (this.ratio * 55);
 
         return bestScoreBoard;
+    }
+
+    addBestScoreValue() {
+        const bestScoreValue = this.add.text(0, 0, this.score, { fontFamily: 'Orbitron', fontSize: '55px' });
+        bestScoreValue.setOrigin(0, 0);
+        bestScoreValue.x = this.bestScoreBoard.x + (this.bestScoreBoard.displayWidth - bestScoreValue.displayWidth) / 2;
+        bestScoreValue.y = this.bestScoreBoard.y + (this.bestScoreBoard.displayHeight - bestScoreValue.displayHeight) / 2;
+
+        return bestScoreValue;
     }
 
     addShareButton() {
@@ -92,7 +103,7 @@ class GameOverScene extends Scene {
         shareButton.setInteractive();
 
         shareButton.on('pointerup', () => {
-
+            console.log('share');
         });
 
         return shareButton;

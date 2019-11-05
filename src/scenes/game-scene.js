@@ -21,7 +21,6 @@ class GameScene extends Scene {
             number: null,
             answerNumber: 0
         };
-        this.lowTimeAudio = null;
         this.life = 3;
         this.newLevel = false;
         this.ratio = this.game.config.width / MAX_WIDTH;
@@ -60,11 +59,6 @@ class GameScene extends Scene {
         if (this.enemies.length !== 0) {
             for (const enemy of this.enemies) {
                 enemy.y += (gameHeight / SPEED_RATIO) * this.level.speed;
-            }
-
-            if (this.lowTimeAudio === null && this.enemies[0].y > gameHeight / 3) {
-                // this.lowTimeAudio = this.sound.add('lowTimeAudio', { loop: false });
-                // this.lowTimeAudio.play();
             }
         }
 
@@ -195,7 +189,6 @@ class GameScene extends Scene {
         });
         playerWin.anims.play('playerWin');
         this.player.add(playerWin);
-        // this.lowTimeAudio.stop();
         const winAudio = this.sound.add('winAudio', { loop: false });
         winAudio.play();
 
@@ -241,8 +234,11 @@ class GameScene extends Scene {
 
             playerLost.on('animationcomplete', () => {
                 const number = this.player.number;
+                const lastPlayerX = this.player.x;
+
                 this.player.destroy();
                 this.player = this.addPlayer(number);
+                this.player.x = lastPlayerX;
                 this.enemies = this.addEnemies();
                 this.addCollision();
             }, playerLost);
@@ -260,8 +256,6 @@ class GameScene extends Scene {
         const enemyObjects = [];
         const rightAnswer = this.calcAnswer();
         const generatedNumbers = [rightAnswer];
-
-        this.lowTimeAudio = null;
 
         for (let i = 0; i < 5; i++) {
             const squareObject = this.add.rexRoundRectangle(
@@ -369,7 +363,6 @@ class GameScene extends Scene {
                 number: null,
                 answerNumber: 0
             };
-            this.lowTimeAudio = null;
 
             console.log('win level', this.operationOptions.answerNumber, this.level.answersCount);
         }
