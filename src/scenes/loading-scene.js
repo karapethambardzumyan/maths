@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import {addAudio, getAudioType, setAudioType} from '../helpers/audio-manager';
+import { addAudio, setAudioType } from '../helpers/audio-manager';
 
 class LoadingScene extends Scene {
     constructor() {

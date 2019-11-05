@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import LEVELS from '../constants/levels';
 import { MAX_WIDTH } from '../constants';
+import { getAudio, getAudioType } from '../helpers/audio-manager';
 
 class GameOverScene extends Scene {
     constructor() {
@@ -103,7 +104,12 @@ class GameOverScene extends Scene {
         shareButton.setInteractive();
 
         shareButton.on('pointerup', () => {
-            console.log('share');
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
+            const share = this.facebook.openShare();
+            console.log(share);
         });
 
         return shareButton;
