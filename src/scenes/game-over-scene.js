@@ -108,8 +108,13 @@ class GameOverScene extends Scene {
                 getAudio('clickAudio').play();
             }
 
-            const share = this.facebook.openShare();
-            console.log(share);
+            this.game.renderer.snapshot(img => {
+                FBInstant.shareAsync({
+                    intent: 'SHARE',
+                    image: img.src,
+                    text: 'Game Over'
+                });
+            });
         });
 
         return shareButton;
