@@ -328,6 +328,44 @@ class GameScene extends Scene {
     }
 
     addOperation(isWon) {
+        const isPrime = n => {
+            if (n === 1) {
+                return false;
+            } else if ( n === 2) {
+                return true;
+            } else {
+                for (let x = 2; x < n; x++) {
+                    if (n % x === 0) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        };
+
+        const getDivisor = n => {
+            for (let i = 9; i > 1; i--) {
+                if (n % i === 0) {
+                    return i;
+                }
+            }
+
+            return 1;
+        };
+
+        const setOperationOptions = () => {
+            this.operationOptions.number = getRandomInt(1, 9);
+            this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
+
+            if (this.operationOptions.symbol === '/' && this.player.number < this.operationOptions.number || isPrime(this.player.number)) {
+                const symbols = this.level.operations.filter(symbol => symbol !== '/');
+                this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
+            } else if (this.operationOptions.symbol === '/' && this.player.number > this.operationOptions.number && this.player.number % this.operationOptions.number) {
+                this.operationOptions.number = getDivisor(this.player.number);
+            }
+        };
+
         if (this.operation) {
             this.operation.destroy();
         }
@@ -335,17 +373,16 @@ class GameScene extends Scene {
         this.operationOptions.answerNumber += 1;
 
         if (isWon === true && this.operationOptions.answerNumber < this.level.answersCount) {
-            this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
-            this.operationOptions.number = getRandomInt(1, 9);
+            setOperationOptions();
 
             this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
             this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
-            const operation = this.add.text(0, 0, `${ this.operationOptions.symbol }${ this.operationOptions.number }`,{
+            const operation = this.add.text(0, 0, `${this.operationOptions.symbol}${this.operationOptions.number}`, {
                 fontFamily: 'Orbitron',
-                fontSize: `${ 180 * this.ratio }px`
+                fontSize: `${180 * this.ratio}px`
             });
             operation.x = (gameWidth - operation.width) / 2;
             operation.y = (gameHeight - operation.height) / 2;
@@ -369,8 +406,7 @@ class GameScene extends Scene {
         if (isWon === false && this.life) {
             this.operationOptions.answerNumber -= 1;
 
-            this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
-            this.operationOptions.number = getRandomInt(1, 9);
+            setOperationOptions();
 
             this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
             this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
@@ -392,8 +428,7 @@ class GameScene extends Scene {
         if (isWon === undefined) {
             this.operationOptions.answerNumber -= 1;
 
-            this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
-            this.operationOptions.number = getRandomInt(1, 9);
+            setOperationOptions();
 
             this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
             this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
