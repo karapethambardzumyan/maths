@@ -1,12 +1,23 @@
 const LEVEL_6 = {
-    level: 5,
+    level: 6,
     colors: {
-        background: ['#d874e6'],
+        background: [
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6'
+        ],
         foreground: '#452f48'
     },
     operations: ['+', '-', '*', '/'],
-    limit: 150,
-    speed: 1
+    limit: 500,
+    speed: 1.5
 };
 LEVEL_6.answersCount = LEVEL_6.colors.background.length;
 
