@@ -268,7 +268,7 @@ class GameScene extends Scene {
             );
             squareObject.setOrigin(0, 0);
 
-            const number = getRandomInt(rightAnswer - 10, rightAnswer + 10, generatedNumbers);
+            const number = getRandomInt(rightAnswer - 10 <= 0 ? rightAnswer : rightAnswer - 10, rightAnswer + 10, generatedNumbers);
             generatedNumbers.push(number);
             const numberObject = this.add.text(0, 0, number, {
                 fontFamily: 'Orbitron',
@@ -355,14 +355,21 @@ class GameScene extends Scene {
         };
 
         const setOperationOptions = () => {
+            let symbols = this.level.operations;
+
             this.operationOptions.number = getRandomInt(1, 9);
-            this.operationOptions.symbol = this.level.operations[getRandomInt(0, this.level.operations.length - 1)];
+            this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
 
             if (this.operationOptions.symbol === '/' && this.player.number < this.operationOptions.number || isPrime(this.player.number)) {
-                const symbols = this.level.operations.filter(symbol => symbol !== '/');
+                symbols = this.level.operations.filter(symbol => symbol !== '/');
                 this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
             } else if (this.operationOptions.symbol === '/' && this.player.number > this.operationOptions.number && this.player.number % this.operationOptions.number) {
                 this.operationOptions.number = getDivisor(this.player.number);
+            }
+
+            if (this.operationOptions.symbol === '-' && this.player.number - this.operationOptions.number <= 0) {
+                symbols = symbols.filter(symbol => symbol !== '-');
+                this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
             }
         };
 
