@@ -12,6 +12,7 @@ class GameOverScene extends Scene {
         this.levelId = data.levelId;
         this.score = data.score;
         this.level = LEVELS[this.levelId];
+        this.leaderboard = data.leaderboard;
     }
 
     create() {
@@ -130,7 +131,11 @@ class GameOverScene extends Scene {
         tryAgainButton.setInteractive();
 
         tryAgainButton.on('pointerup', () => {
-            this.scene.start('Game', { levelId: this.levelId });
+            if (getAudioType() !== 0) {
+                getAudio('clickAudio').play();
+            }
+
+            this.scene.start('Game', { levelId: this.levelId, leaderboard: this.leaderboard });
         });
 
         return tryAgainButton;

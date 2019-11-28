@@ -6,33 +6,14 @@ import { getAudio, getAudioType, setAudioType } from '../helpers/audio-manager';
 class MenuScene extends Scene {
     constructor() {
         super('Menu');
-
-        this.data = null;
     }
 
     init(data) {
         this.leaderboard = data.leaderboard;
+        this.levelId = data.levelId;
     }
 
     create() {
-        this.facebook.on('savedata', data => {
-            this.facebook.getData(['levelId']);
-        });
-
-        this.facebook.on('getdata', data => {
-            if ('levelId' in data) {
-                this.data = data;
-            } else {
-                this.facebook.saveData({ levelId: 0 });
-            }
-        });
-
-        this.facebook.on('flushdata', () => {
-            this.data =  null;
-        });
-
-        this.facebook.getData(['levelId']);
-
         this.ratio = this.game.config.width / MAX_WIDTH;
 
         this.background = this.addBackground();
@@ -119,7 +100,7 @@ class MenuScene extends Scene {
             }
 
             this.scene.stop('Menu');
-            this.scene.start('Leaderboard', { leaderboard: this.leaderboard });
+            this.scene.start('Leaderboard', { levelId: this.levelId, leaderboard: this.leaderboard });
         });
 
         leaderboardButton.on('pointerout', () => {
@@ -196,7 +177,7 @@ class MenuScene extends Scene {
             playButton.setFrame(0);
 
             this.scene.stop('Menu');
-            this.scene.start('Levels', this.data);
+            this.scene.start('Levels', { levelId: this.levelId, leaderboard: this.leaderboard});
         });
 
         playButton.on('pointerout', () => {

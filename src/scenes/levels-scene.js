@@ -9,7 +9,9 @@ class LevelsScene extends Scene {
     }
 
     init(data) {
+        console.log(data);
         this.levelId = data.levelId;
+        this.leaderboard = data.leaderboard;
     }
 
     create() {
@@ -95,10 +97,11 @@ class LevelsScene extends Scene {
 
                 levelObject.on('pointerup', () => {
                     if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+                        getAudio('clickAudio').play();
+                    }
 
-                    this.scene.start('Game', { levelId: level.level - 1 });
+                    this.scene.stop('Levels');
+                    this.scene.start('Game', { levelId: level.level - 1, leaderboard: this.leaderboard });
                 });
             }
         }
@@ -113,7 +116,8 @@ class LevelsScene extends Scene {
         levelInfinity.setInteractive();
 
         levelInfinity.on('pointerup', () => {
-            this.scene.start('Game', { levelId: 6 });
+            this.scene.stop('Levels');
+            this.scene.start('Game', { levelId: 6, leaderboard: this.leaderboard });
         });
 
         levels.push(levelInfinity);

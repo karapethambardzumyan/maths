@@ -9,9 +9,25 @@ class LoadingScene extends Scene {
     preload() {
         this.facebook.once('startgame', () => {
             this.facebook.getLeaderboard('test-board');
-
             this.facebook.on('getleaderboard', leaderboard => {
-                this.scene.start('Menu', { leaderboard });
+                this.facebook.on('savedata', data => {
+                    this.facebook.getData(['levelId']);
+                });
+
+                this.facebook.on('getdata', data => {
+                    if ('levelId' in data) {
+                        this.levelId = data.levelId;
+                        this.scene.start('Menu', { levelId: this.levelId, leaderboard });
+                    } else {
+                        this.facebook.saveData({ levelId: 0 });
+                    }
+                });
+
+                this.facebook.on('flushdata', () => {
+                    this.data =  null;
+                });
+
+                this.facebook.getData(['levelId']);
             }, this);
         }, this);
         this.facebook.showLoadProgress(this);

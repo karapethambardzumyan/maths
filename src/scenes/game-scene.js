@@ -13,6 +13,7 @@ class GameScene extends Scene {
         this.levelId = data.levelId;
         this.level = LEVELS[this.levelId];
         this.playerNumber = data.playerNumber;
+        this.leaderboard = data.leaderboard;
     }
 
     create() {
@@ -36,11 +37,6 @@ class GameScene extends Scene {
         this.pauseButton = this.addPauseButton();
 
         this.addCollision();
-
-        this.facebook.getLeaderboard('test-board');
-        this.facebook.on('getleaderboard', leaderboard => {
-            this.leaderboard = leaderboard;
-        }, this);
     }
 
     update() {
@@ -76,7 +72,8 @@ class GameScene extends Scene {
 
             this.scene.start('Game', {
                 playerNumber,
-                levelId: this.levelId + 1
+                levelId: this.levelId + 1,
+                leaderboard: this.leaderboard
             });
         }
     }
@@ -244,7 +241,7 @@ class GameScene extends Scene {
             }, playerLost);
         } else {
             this.scene.stop('Game');
-            this.scene.start('GameOver', { levelId: this.levelId, score: this.operationOptions.answerNumber });
+            this.scene.start('GameOver', { levelId: this.levelId, score: this.operationOptions.answerNumber, leaderboard: this.leaderboard });
             this.operationOptions.answerNumber = 0;
         }
     }
@@ -345,30 +342,48 @@ class GameScene extends Scene {
         };
 
         const getDivisor = n => {
-            for (let i = 9; i > 1; i--) {
+            for (let i = n - 1; i > 1; i--) {
                 if (n % i === 0) {
                     return i;
                 }
             }
 
-            return 1;
+            return false;
         };
 
         const setOperationOptions = () => {
             let symbols = this.level.operations;
-
             this.operationOptions.number = getRandomInt(1, 9);
             this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
+            this.operationOptions.symbol = '/';
 
-            if (this.operationOptions.symbol === '/' && this.player.number < this.operationOptions.number || isPrime(this.player.number)) {
-                symbols = this.level.operations.filter(symbol => symbol !== '/');
+            if (this.operationOptions.symbol === '/' && (this.player.number < this.operationOptions.number || isPrime(this.player.number))) {
+                symbols = symbols.filter(symbol => symbol !== '/');
                 this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
-            } else if (this.operationOptions.symbol === '/' && this.player.number > this.operationOptions.number && this.player.number % this.operationOptions.number) {
-                this.operationOptions.number = getDivisor(this.player.number);
+            } else if (this.operationOptions.symbol === '/' && this.player.number > this.operationOptions.number && (this.player.number % this.operationOptions.number)) {
+                const divisor = getDivisor(this.player.number);
+
+                if (divisor) {
+                    this.operationOptions.number = divisor;
+                } else {
+                    symbols = symbols.filter(symbol => symbol !== '/');
+                    this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
+                }
             }
 
             if (this.operationOptions.symbol === '-' && this.player.number - this.operationOptions.number <= 0) {
                 symbols = symbols.filter(symbol => symbol !== '-');
+                this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
+            }
+
+            if (this.operationOptions.symbol === '*' && this.player.number * this.operationOptions.number > this.level.limit) {
+                symbols = symbols.filter(symbol => symbol !== '*');
+                this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
+            }
+
+            if (this.operationOptions.symbol === '+' && this.player.number + this.operationOptions.number > this.level.limit) {
+                symbols = symbols.filter(symbol => symbol !== '+');
+                symbols = symbols.length !== 0 ? symbols : ['-'];
                 this.operationOptions.symbol = symbols[getRandomInt(0, symbols.length - 1)];
             }
         };
