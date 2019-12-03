@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
 import { MAX_WIDTH } from '../constants';
-import { getAudio, getAudioType, setAudioType } from '../helpers/audio-manager';
+import { playAudio, getAudioType, setAudioType } from '../helpers/audio-manager';
 
 
 class MenuScene extends Scene {
@@ -39,6 +39,10 @@ class MenuScene extends Scene {
             this.soonChallenges
         ]);
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+
+        setAudioType(2, 'menuAudio');
+
+        playAudio('menuAudio');
     }
 
     addBackground() {
@@ -95,9 +99,7 @@ class MenuScene extends Scene {
         leaderboardButton.on('pointerup', () => {
             leaderboardButton.setFrame(0);
 
-            if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+            playAudio('clickAudio');
 
             this.scene.stop('Menu');
             this.scene.start('Leaderboard', { levelId: this.levelId, leaderboard: this.leaderboard });
@@ -139,17 +141,17 @@ class MenuScene extends Scene {
         soundsButton.on('pointerup', () => {
             switch (getAudioType()) {
                 case 0:
-                    setAudioType(1);
+                    setAudioType(1, 'menuAudio');
                     break;
                 case 1:
-                    setAudioType(2);
+                    setAudioType(2, 'menuAudio');
                     break;
                 case 2:
-                    setAudioType(0);
+                    setAudioType(0, 'menuAudio');
                     break;
             }
 
-            getAudio('clickAudio').play();
+            playAudio('clickAudio');
             soundsButton.setFrame(getAudioType());
          });
 
@@ -170,9 +172,7 @@ class MenuScene extends Scene {
         });
 
         playButton.on('pointerup', () => {
-            if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+            playAudio('clickAudio');
 
             playButton.setFrame(0);
 

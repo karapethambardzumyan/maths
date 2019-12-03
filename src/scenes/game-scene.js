@@ -2,7 +2,7 @@ import { Math, Scene } from 'phaser';
 import { MAX_WIDTH, SPEED_RATIO } from '../constants';
 import LEVELS from '../constants/levels';
 import { getRandomInt } from '../helpers/numbers';
-import { getAudioType, getAudio } from '../helpers/audio-manager';
+import { playAudio } from '../helpers/audio-manager';
 
 class GameScene extends Scene {
     constructor() {
@@ -17,6 +17,27 @@ class GameScene extends Scene {
     }
 
     create() {
+        switch (this.levelId) {
+            case 0:
+                playAudio('level12Audio');
+                break;
+            case 1:
+                playAudio('level12Audio');
+                break;
+            case 2:
+                playAudio('level34Audio');
+                break;
+            case 3:
+                playAudio('level34Audio');
+                break;
+            case 4:
+                playAudio('level5Audio');
+                break;
+            case 5:
+                playAudio('level6Audio');
+                break;
+        }
+
         this.operationOptions = {
             symbol: null,
             number: null,
@@ -92,14 +113,12 @@ class GameScene extends Scene {
         });
 
         pauseButton.on('pointerup', () => {
-            if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+            playAudio('clickAudio');
 
             pauseButton.setFrame(0);
 
             this.scene.pause('Game');
-            this.scene.run('Pause');
+            this.scene.run('Pause', { levelId: this.levelId });
         });
 
         pauseButton.on('pointerout', () => {
@@ -186,8 +205,8 @@ class GameScene extends Scene {
         });
         playerWin.anims.play('playerWin');
         this.player.add(playerWin);
-        const winAudio = this.sound.add('winAudio', { loop: false });
-        winAudio.play();
+
+        playAudio('rightAnswerAudio');
 
         for (let enemy of this.enemies) {
             enemy.alpha = 0.6;
@@ -229,6 +248,8 @@ class GameScene extends Scene {
             playerLost.anims.play('playerLost');
             this.player.add(playerLost);
 
+            playAudio('wrongAnswerAudio');
+
             playerLost.on('animationcomplete', () => {
                 const number = this.player.number;
                 const lastPlayerX = this.player.x;
@@ -240,6 +261,8 @@ class GameScene extends Scene {
                 this.addCollision();
             }, playerLost);
         } else {
+            playAudio('gameOverAudio');
+
             this.scene.stop('Game');
             this.scene.start('GameOver', { levelId: this.levelId, score: this.operationOptions.answerNumber, leaderboard: this.leaderboard });
             this.operationOptions.answerNumber = 0;

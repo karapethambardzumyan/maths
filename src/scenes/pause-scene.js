@@ -1,10 +1,14 @@
 import { Scene } from 'phaser';
 import { MAX_WIDTH } from '../constants';
-import {getAudioType, getAudio, setAudioType} from '../helpers/audio-manager';
+import { getAudioType, playAudio, setAudioType } from '../helpers/audio-manager';
 
 class PauseScene extends Scene {
     constructor() {
         super('Pause');
+    }
+
+    init(data) {
+        this.levelId = data.levelId;
     }
 
     create() {
@@ -70,9 +74,7 @@ class PauseScene extends Scene {
         });
 
         pauseButton.on('pointerup', () => {
-            if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+            playAudio('clickAudio');
 
             pauseButton.setFrame(0);
 
@@ -97,9 +99,7 @@ class PauseScene extends Scene {
         goGameButton.setInteractive();
 
         goGameButton.on('pointerup', () => {
-            if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+            playAudio('clickAudio');
 
             this.scene.stop('Pause');
             this.scene.resume('Game');
@@ -118,9 +118,7 @@ class PauseScene extends Scene {
         goMenuButton.setInteractive();
 
         goMenuButton.on('pointerup', () => {
-            if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+            playAudio('clickAudio');
 
             this.scene.stop('Pause');
             this.scene.stop('Game');
@@ -152,22 +150,34 @@ class PauseScene extends Scene {
         }
 
         soundsButton.on('pointerup', () => {
+            let levelAudioId = null;
+            if (this.levelId <= 1) {
+                levelAudioId = '12';
+            } else if (this.levelId <= 3) {
+                levelAudioId = '34';
+            } else if (this.levelId === 5) {
+                levelAudioId = '5';
+            } else if (this.levelId === 6) {
+                levelAudioId = '6';
+            }
+            const levelAudio = `level${ levelAudioId }Audio`;
+
             switch (getAudioType()) {
                 case 0:
-                    setAudioType(1);
+                    setAudioType(1, levelAudio);
                     soundsButton.setFrame(1);
                     break;
                 case 1:
-                    setAudioType(2);
+                    setAudioType(2, levelAudio);
                     soundsButton.setFrame(0);
                     break;
                 case 2:
-                    setAudioType(0);
+                    setAudioType(0, levelAudio);
                     soundsButton.setFrame(2);
                     break;
             }
 
-            getAudio('clickAudio').play();
+            playAudio('clickAudio');
         });
 
         return soundsButton;

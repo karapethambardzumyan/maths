@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { addAudio, setAudioType } from '../helpers/audio-manager';
+import { addAudio } from '../helpers/audio-manager';
 
 class LoadingScene extends Scene {
     constructor() {
@@ -21,10 +21,6 @@ class LoadingScene extends Scene {
                     } else {
                         this.facebook.saveData({ levelId: 0 });
                     }
-                });
-
-                this.facebook.on('flushdata', () => {
-                    this.data =  null;
                 });
 
                 this.facebook.getData(['levelId']);
@@ -118,17 +114,27 @@ class LoadingScene extends Scene {
         this.load.image('winLevel5', './assets/game/win-level-5.png');
         this.load.image('winLevel6', './assets/game/win-level-6.png');
 
-        this.load.audio('menuAudio', ['./assets/audio/menu.mp3']);
         this.load.audio('clickAudio', ['./assets/audio/click.wav']);
-        this.load.audio('lowTimeAudio', ['./assets/audio/low-time.wav']);
-        this.load.audio('winAudio', ['./assets/audio/win.wav']);
+        this.load.audio('rightAnswerAudio', ['./assets/audio/right-answer.wav']);
+        this.load.audio('wrongAnswerAudio', ['./assets/audio/wrong-answer.wav']);
+        this.load.audio('gameOverAudio', ['./assets/audio/game-over.wav']);
+        this.load.audio('menuAudio', ['./assets/audio/menu.mp3']);
+        this.load.audio('level12Audio', ['./assets/audio/level-1-2.mp3']);
+        this.load.audio('level34Audio', ['./assets/audio/level-3-4.mp3']);
+        this.load.audio('level5Audio', ['./assets/audio/level-5.mp3']);
+        this.load.audio('level6Audio', ['./assets/audio/level-6.mp3']);
     }
 
     create() {
-        addAudio('menuAudio', this, true);
         addAudio('clickAudio', this, false);
-
-        setAudioType(2);
+        addAudio('rightAnswerAudio', this, false);
+        addAudio('wrongAnswerAudio', this, false);
+        addAudio('gameOverAudio', this, false);
+        addAudio('menuAudio', this, true, 'music');
+        addAudio('level12Audio', this, true, 'music');
+        addAudio('level34Audio', this, true, 'music');
+        addAudio('level5Audio', this, true, 'music');
+        addAudio('level6Audio', this, true, 'music');
     }
 }
 

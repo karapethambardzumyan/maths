@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import LEVELS from '../constants/levels';
 import { MAX_WIDTH } from '../constants';
-import { getAudio, getAudioType } from '../helpers/audio-manager';
+import { playAudio } from '../helpers/audio-manager';
 
 class GameOverScene extends Scene {
     constructor() {
@@ -105,9 +105,7 @@ class GameOverScene extends Scene {
         shareButton.setInteractive();
 
         shareButton.on('pointerup', () => {
-            if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+            playAudio('clickAudio');
 
             this.game.renderer.snapshot(img => {
                 FBInstant.shareAsync({
@@ -131,9 +129,7 @@ class GameOverScene extends Scene {
         tryAgainButton.setInteractive();
 
         tryAgainButton.on('pointerup', () => {
-            if (getAudioType() !== 0) {
-                getAudio('clickAudio').play();
-            }
+            playAudio('clickAudio');
 
             this.scene.start('Game', { levelId: this.levelId, leaderboard: this.leaderboard });
         });
