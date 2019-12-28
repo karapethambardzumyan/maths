@@ -69,7 +69,7 @@ class LevelsScene extends Scene {
     addLevels() {
         const levels = [];
 
-        for (let i = 0; i < LEVELS.length; i++) {
+        for (let i = 0; i < LEVELS.length - 1; i++) {
             const level = LEVELS[i];
             const levelObject = this.add.image(0, 0, `level${ i + 1 }`);
             levelObject.setOrigin(0, 0);
@@ -106,7 +106,7 @@ class LevelsScene extends Scene {
         levelInfinity.setScale(this.ratio);
         levelInfinity.x = (this.game.config.width - levelInfinity.displayWidth ) / 2;
         levelInfinity.y = this.border.y + (this.ratio * 620);
-        levelInfinity.setVisible(this.levelId + 1 === LEVELS.length);
+        levelInfinity.setVisible(this.levelId + 1 === LEVELS.length - 1);
 
         levelInfinity.setInteractive();
 

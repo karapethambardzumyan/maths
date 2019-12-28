@@ -417,7 +417,7 @@ class GameScene extends Scene {
 
         this.operationOptions.answerNumber += 1;
 
-        if (isWon === true && this.operationOptions.answerNumber < this.level.answersCount) {
+        if (isWon === true && (this.operationOptions.answerNumber < this.level.answersCount || this.level.answersCount === Infinity)) {
             setOperationOptions();
 
             this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;

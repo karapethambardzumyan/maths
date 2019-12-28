@@ -22,7 +22,6 @@ class LoadingScene extends Scene {
                         this.facebook.saveData({ levelId: 0 });
                     }
                 });
-
                 this.facebook.getData(['levelId']);
             }, this);
         }, this);
@@ -136,7 +135,8 @@ class LoadingScene extends Scene {
         addAudio('level5Audio', this, true, 'music');
         addAudio('level6Audio', this, true, 'music');
 
-        setAudioType(2, 'menuAudio');
+        // setAudioType(2, 'menuAudio');
+        setAudioType(0, 'menuAudio');
     }
 }
 

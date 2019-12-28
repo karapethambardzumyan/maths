@@ -3,14 +3,6 @@ const LEVEL_4 = {
     colors: {
         background: [
             '#d874e6',
-            '#d874e6',
-            '#d874e6',
-            '#d874e6',
-            '#d874e6',
-            '#d874e6',
-            '#d874e6',
-            '#d874e6',
-            '#d874e6',
             '#d874e6'
         ],
         foreground: '#452f48'
