@@ -40,8 +40,6 @@ class MenuScene extends Scene {
         ]);
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
 
-        setAudioType(2, 'menuAudio');
-
         playAudio('menuAudio');
     }
 

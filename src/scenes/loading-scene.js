@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { addAudio } from '../helpers/audio-manager';
+import { addAudio, setAudioType } from '../helpers/audio-manager';
 
 class LoadingScene extends Scene {
     constructor() {
@@ -135,6 +135,8 @@ class LoadingScene extends Scene {
         addAudio('level34Audio', this, true, 'music');
         addAudio('level5Audio', this, true, 'music');
         addAudio('level6Audio', this, true, 'music');
+
+        setAudioType(2, 'menuAudio');
     }
 }
 
