@@ -83,7 +83,7 @@ class GameScene extends Scene {
             this.newLevelObject.y += 3;
         }
 
-        if (this.newLevelObject && this.newLevelObject.y > this.game.config.height) {
+        if (this.newLevel && this.newLevelObject && this.newLevelObject.y > this.game.config.height) {
             this.newLevelObject.destroy();
             this.newLevelObject = null;
             this.newLevel = false;
@@ -454,7 +454,7 @@ class GameScene extends Scene {
             setOperationOptions();
 
             this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
-            this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
+            this.cameras.main.setBackgroundColor(this.level.colors.background[this.level.answersCount !== Infinity ? this.operationOptions.answerNumber : 0]);
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
@@ -544,7 +544,14 @@ class GameScene extends Scene {
     nextLevel() {
         const answerNumber = this.operationOptions.answerNumber;
 
-        this.newLevelObject = this.add.image(0, 0, `winLevel${ this.levelId + 2 }`);
+        if (this.levelId + 1 < LEVELS.length - 1) {
+            this.newLevelObject = this.add.image(0, 0, `winLevel${ this.levelId + 2 }`);
+        } else {
+            this.newLevelObject = this.add.text(0, 0, 'Infinity Level', {
+                fontFamily: 'Orbitron',
+                fontSize: this.ratio * 50
+            });
+        }
         this.newLevelObject.setScale(this.ratio);
         this.newLevelObject.setOrigin(0, 0);
         this.newLevelObject.x = (this.game.config.width - this.newLevelObject.displayWidth) / 2;
