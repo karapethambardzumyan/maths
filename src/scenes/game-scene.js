@@ -421,7 +421,7 @@ class GameScene extends Scene {
             setOperationOptions();
 
             this.player.list[0].fillColor = Phaser.Display.Color.HexStringToColor(this.level.colors.foreground).color;
-            this.cameras.main.setBackgroundColor(this.level.colors.background[this.operationOptions.answerNumber]);
+            this.cameras.main.setBackgroundColor(this.level.colors.background[this.level.answersCount !== Infinity ? this.operationOptions.answerNumber : 0]);
 
             const gameWidth = this.game.config.width;
             const gameHeight = this.game.config.height;
@@ -542,17 +542,34 @@ class GameScene extends Scene {
     }
 
     nextLevel() {
-        this.newLevel = true;
+        const answerNumber = this.operationOptions.answerNumber;
 
         this.newLevelObject = this.add.image(0, 0, `winLevel${ this.levelId + 2 }`);
         this.newLevelObject.setScale(this.ratio);
         this.newLevelObject.setOrigin(0, 0);
         this.newLevelObject.x = (this.game.config.width - this.newLevelObject.displayWidth) / 2;
         this.newLevelObject.y = this.ratio * 40;
+        this.newLevel = true;
 
-        this.facebook.saveData({ levelId: this.levelId + 1 });
+        let isDataFetched = false;
+        this.facebook.getData(['levelId']);
+        this.leaderboard.getPlayerScore();
 
-        this.leaderboard.setScore(this.operationOptions.answerNumber);
+        this.facebook.on('getdata', data => {
+            this.leaderboard.on('getplayerscore', player => {
+                if (!isDataFetched && this.levelId === data.levelId) {
+                    isDataFetched = true;
+
+                    if (player === null) {
+                        this.leaderboard.setScore(answerNumber);
+                    } else if (player.score < data.levelId * LEVELS[0].answersCount + answerNumber) {
+                        this.leaderboard.setScore(data.levelId * LEVELS[0].answersCount + answerNumber);
+                    }
+
+                    this.facebook.saveData({ levelId: this.levelId + 1 });
+                }
+            });
+        });
     }
 
     fitNumberSize(number) {

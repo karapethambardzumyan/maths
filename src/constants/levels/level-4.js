@@ -9,7 +9,7 @@ const LEVEL_4 = {
     },
     operations: ['+', '-', '*'],
     limit: 400,
-    speed: 1.3
+    speed: 1.5
 };
 LEVEL_4.answersCount = LEVEL_4.colors.background.length;
 

@@ -8,12 +8,12 @@ class LoadingScene extends Scene {
 
     preload() {
         this.facebook.once('startgame', () => {
-            this.facebook.getLeaderboard('leader-board');
+            this.facebook.getLeaderboard('test5');
             this.facebook.on('getleaderboard', leaderboard => {
                 this.facebook.on('savedata', data => {
                     this.facebook.getData(['levelId']);
                 });
-
+                // this.facebook.saveData({ levelId: 0 });
                 this.facebook.on('getdata', data => {
                     if ('levelId' in data) {
                         this.levelId = data.levelId;

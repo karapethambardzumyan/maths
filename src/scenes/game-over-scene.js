@@ -36,6 +36,8 @@ class GameOverScene extends Scene {
             this.tryAgainButton
         ]);
         this.menu.y = (this.game.config.height - this.menu.getBounds().height) / 2;
+
+        this.leaderboard.setScore(this.levelId * LEVELS[0].answersCount + this.score);
     }
 
     addBackground() {
@@ -87,7 +89,7 @@ class GameOverScene extends Scene {
     }
 
     addBestScoreValue() {
-        const bestScoreValue = this.add.text(0, 0, this.score, { fontFamily: 'Orbitron', fontSize: '55px' });
+        const bestScoreValue = this.add.text(0, 0, this.levelId * LEVELS[0].answersCount + this.score, { fontFamily: 'Orbitron', fontSize: '55px' });
         bestScoreValue.setOrigin(0, 0);
         bestScoreValue.x = this.bestScoreBoard.x + (this.bestScoreBoard.displayWidth - bestScoreValue.displayWidth) / 2;
         bestScoreValue.y = this.bestScoreBoard.y + (this.bestScoreBoard.displayHeight - bestScoreValue.displayHeight) / 2;
