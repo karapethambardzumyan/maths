@@ -8,8 +8,8 @@ const LEVEL_7 = {
         foreground: '#452f48'
     },
     operations: ['+', '-', '*', '/'],
-    limit: 500,
-    speed: 1.5
+    limit: 950,
+    speed: 1.6
 };
 LEVEL_7.answersCount = Infinity;
 

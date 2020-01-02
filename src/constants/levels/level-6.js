@@ -3,13 +3,31 @@ const LEVEL_6 = {
     colors: {
         background: [
             '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
+            '#d874e6',
             '#d874e6'
         ],
         foreground: '#452f48'
     },
     operations: ['+', '-', '*', '/'],
-    limit: 500,
-    speed: 1.5
+    limit: 650,
+    speed: 1.4
 };
 LEVEL_6.answersCount = LEVEL_6.colors.background.length;
 
