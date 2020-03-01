@@ -3,9 +3,9 @@ const LEVEL_7 = {
     level: 7,
     colors: {
         background: [
-            '#000000'
+            '#8c3d9d'
         ],
-        foreground: '#452f48'
+        foreground: '#210128'
     },
     operations: ['+', '-', '*', '/'],
     limit: 950,

@@ -8,7 +8,7 @@ class LoadingScene extends Scene {
 
     preload() {
         this.facebook.once('startgame', () => {
-            this.facebook.getLeaderboard('test5');
+            this.facebook.getLeaderboard('leaderboard-stg');
             this.facebook.on('getleaderboard', leaderboard => {
                 this.facebook.on('savedata', data => {
                     this.facebook.getData(['levelId']);
@@ -135,8 +135,7 @@ class LoadingScene extends Scene {
         addAudio('level5Audio', this, true, 'music');
         addAudio('level6Audio', this, true, 'music');
 
-        // setAudioType(2, 'menuAudio');
-        setAudioType(0, 'menuAudio');
+        setAudioType(2, 'menuAudio');
     }
 }
 
